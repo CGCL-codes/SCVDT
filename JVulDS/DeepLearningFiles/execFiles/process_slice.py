@@ -20,14 +20,14 @@ def get_sentences(inputPath, corpusPath, mapType):
         if sentences[0] == '\r' or sentences[0] == '':
             del sentences[0]
         if not sentences:
-            print("文件为空")
+            print("file is null")
             continue
         if sentences[-1] == '':
             del sentences[-1]
         if sentences[-1] == '\r':
             del sentences[-1]
         if sentences[-1] != '0' and sentences[-1] != '1':
-            print("文件没有标签" + inputPath)
+            print("file no label" + inputPath)
             # sys.exit()
             continue
         label = int(sentences[-1])  
