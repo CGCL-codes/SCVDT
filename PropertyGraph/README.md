@@ -17,4 +17,5 @@ $ java -jar PropertyGraph.jar [-d <projectPath>] [-p] [-c] [-a]
 -a: choose to generate AST
 ```
 **Example**
+
 `java -jar PropertyGraph.jar -d test/src -p -c -a`
