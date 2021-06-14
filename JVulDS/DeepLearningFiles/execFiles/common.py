@@ -8,7 +8,7 @@ username = "neo4j"
 password = "snail"
 
 
-# 连接数据库
+# connect database
 def connect_neo4j():
     graph = Graph(url, username=username, password=password)
     return graph
