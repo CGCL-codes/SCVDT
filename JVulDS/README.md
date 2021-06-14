@@ -13,13 +13,14 @@ JVulDS is used for Linux or Mac os.
 
 1. Install [Neo4j database](https://neo4j.com/download/) and open Neo4j database
 ```
-$ cd ./neo4j/bin
+$ cd neo4j/bin
 $ ./neo4j console
 ```
 2. Run PDG framework
 ```
-$ maven clean package
-$ cd PDG/target
+$ cd JVulDS/PDG
+$ mvn clean package
+$ cd target
 $ java -jar demo-0.0.1-SNAPSHOT.jar
 ```
 3. Run StaticService
@@ -28,7 +29,8 @@ $ java -jar demo-0.0.1-SNAPSHOT.jar
 * modify Config class (as shown StaticService/README.md)
 
 ```
-$ maven clean package
-$ cd StaticService/target
+$ cd StaticService
+$ mvn clean package
+$ cd target
 $ java -jar demo-0.0.1-SNAPSHOT.jar -d projectPath
 ```
