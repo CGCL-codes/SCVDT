@@ -83,7 +83,7 @@ def get_input_dl(corpusPath, w2v_model_path, vectorPath):
             f_corpus = open(corpus_path, 'rb')
             data = pickle.load(f_corpus)
             f_corpus.close()
-            data[0] = generate_corpus_v2(w2v_model_path, data[0])  # 转化为向量
+            data[0] = generate_corpus_v2(w2v_model_path, data[0])  
             vector_path = os.path.join(vectorPath, corpusFiles, corpusFile)
             f_vector = open(vector_path, 'wb')
             pickle.dump(data, f_vector, protocol=pickle.HIGHEST_PROTOCOL)
@@ -114,26 +114,5 @@ def get_all_dl(vectorPath, dlCorpusPath):
         f_train.close()
         del test_set
         gc.collect()
-# argv[1]: 待检测文件夹路径
-# argv[2]: 已经准备好的corpus
-
-# basePath = sys.argv[1]
-# dec_tokenFlaw_path = [basePath + os.path.sep + 'corpus', sys.argv[2]]
-# w2v_model_path = basePath + os.path.sep + 'model'
-# print(dec_tokenFlaw_path)
-# print(w2v_model_path)
-# generate_w2vModel(dec_tokenFlaw_path, w2v_model_path)
-#
-# corpusPath = basePath + os.path.sep + 'corpus'
-# vectorPath = basePath + os.path.sep + 'vector'
-# print(corpusPath)
-# print(vectorPath)
-# if __name__ == '__main__':
-#     corpusPath = "/Users/ke/Documents/snail/graduate/platform/serverTest/Test/test_v2/corpus"
-#     vectorPath = "/Users/ke/Documents/snail/graduate/platform/serverTest/Test/test_v2/vector"
-#     w2v_model_path = "/Users/ke/Documents/snail/graduate/platform/serverTest/Test_v2/test/model"
-#     get_input_dl(corpusPath, w2v_model_path, vectorPath)
-#     dl_path = "/Users/ke/Documents/snail/graduate/platform/serverTest/Test/test/dlCorpus"
-#     get_all_dl(vectorPath, dl_path)
 
 
