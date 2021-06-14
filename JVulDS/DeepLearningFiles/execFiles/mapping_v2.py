@@ -7,15 +7,15 @@ import re
 import xlrd
 
 space = '\s'
-identifier = '[^_a-zA-Z0-9$]'  # 非标识符 关键字
-function = '^[_a-zA-Z\$][_a-zA-Z0-9\$]*$'  # 标识符  $ 怎么加进去
+identifier = '[^_a-zA-Z0-9$]' 
+function = '^[_a-zA-Z\$][_a-zA-Z0-9\$]*$' 
 variable = '^[_a-zA-Z][_a-zA-Z0-9\$(\.)?]*$'
 number = '[0-9]+'
 stringConst = '(^\'[\s|\S]*\'$)|(^"[\s|\S]*"$)'
 
 
 constValue = ['null', 'false', 'true']
-# 关键字 不带括号
+
 keywords = ('public', 'default', 'private', 'protected', 'implement', 'extends', 'interface', 'class', 'package',
             'boolean', 'short', 'int', 'long', 'float', 'double', 'byte', 'char', 'String', 'Object',
             'abstract', 'void', 'strcftp', 'native',
@@ -40,21 +40,21 @@ keywords_2 = ('readLine', 'trim', 'close', 'add', 'remove', 'put', 'get', 'write
               'getHeader', 'abs', 'write', 'getByteBuffer', 'closeEntry', 'method', 'addHeaders', 'append', 'trim',
               'getLoader', 'getClassLoader', 'newInstance', 'indexOf'
               )
-keywords_3 = ('System.out.print*', 'print*')   # 模糊匹配类型
-keywords_4 = []  # 需要补充之处 存于excel
+keywords_3 = ('System.out.print*', 'print*')  
+keywords_4 = [] 
 # TODO
 xread = xlrd.open_workbook('function.xls')
 for sheet in xread.sheets():
     col = sheet.col_values(0)[1:]
     keywords_4 += col
 
-keywords_5 = [] # 机动组
+keywords_5 = [] 
 keywords_6 = ['IO', 'Vector', 'Byte', 'LinkedList', 'HashMap', 'Integer', 'byte', 'short', 'Short', 'nextLong', 'long',
               'Long', 'int', 'Integer', 'String', 'IOException', 'XMLConstants', 'T', 'boolean', 'Boolean', 'char',
               'Char', 'length', 'object', 'Object', 'this', 'Class']
 
 
-keywords_7 = []   # 主要是.部分的过滤
+keywords_7 = []   
 # TODO
 xread = xlrd.open_workbook('function1.xls')
 for sheet in xread.sheets():
@@ -62,7 +62,6 @@ for sheet in xread.sheets():
     keywords_7 += col
 
 
-# 是否是空格
 def is_phor(pattern, param):
     m = re.search(pattern, param)
     if m is not None:
@@ -70,8 +69,8 @@ def is_phor(pattern, param):
     return False
 
 
-def var(param):  # 识别标识符
-    m = re.match(function, param)  # re.match只匹配字符串的开始
+def var(param):  
+    m = re.match(function, param)  
     if m is not None:
         return True
     else:
@@ -125,10 +124,10 @@ def mapping_v2(list_sentence):
     while index < len(list_code):
         string = []
         token = []
-        str1 = copy.copy(list_code[index])  # 存储一行代码: byte data;
+        str1 = copy.copy(list_code[index])  
         i = 0
         j = 0
-        tag = 0  # 字符串
+        tag = 0  
         strtemp = ''
         while i < len(str1):  # str1 : byte data
             if tag == 0:
@@ -140,11 +139,11 @@ def mapping_v2(list_sentence):
                         j = i + 1
                     i += 1
 
-                elif i == len(str1)-1:       # 最后一个字符
+                elif i == len(str1)-1:      
                     string.append(str1[j:i + 1])
                     break
 
-                elif is_phor(identifier, str1[i]):  # 懒得改了...
+                elif is_phor(identifier, str1[i]): 
                     if i + 1 < len(str1) and str1[i] == '-' and str1[i + 1] == '>':
                         string.append(str1[i] + str1[i + 1])
                         j = i + 2
@@ -228,7 +227,7 @@ def mapping_v2(list_sentence):
                         string.append(str1[i])
                         j = i + 1
                         i += 1
-                else:  # 是标识符
+                else:  
                     i += 1
             elif tag == 1:
                 if str1[i] != '"':
@@ -260,13 +259,13 @@ def mapping_v2(list_sentence):
         for i in range(count):
             string.remove('')
 
-        createVariable(string, token) # 啥也没干？？？
+        createVariable(string, token) 
         # print(token)
         # mapping function and variable
         j = 0
         while j < len(token):
             word = token[j]
-            if word in constValue:  # 字面量
+            if word in constValue:  
                 j += 1
             elif j < len(token) and is_phor(variable, word):
                 if word in keywords:
@@ -274,27 +273,27 @@ def mapping_v2(list_sentence):
                 # new
                 elif j - 1 >= 0 and j + 1 < len(token) and token[j - 1] == 'new' and token[j + 1] == '[':
                     j += 2
-                elif j + 1 < len(token) and token[j + 1] == '(':  # 后面是( 则证明可能是方法
+                elif j + 1 < len(token) and token[j + 1] == '(': 
                     # print(token[j])
                     if index == 0:
                         list_func.append(word)
                     if word in keywords_1:
                         j = j + 2
-                    elif word in keywords_2:  # keywords_2 应该是函数的调用 TODO 需要增加
+                    elif word in keywords_2:  
                         j = j + 2
-                    elif isInKeyword_3(token[j]):  # keywords_3 模糊匹配 TODO 需要增加
+                    elif isInKeyword_3(token[j]):  
                         j = j + 2
-                    elif word in keywords_4:  # TODO
+                    elif word in keywords_4:  
                         j = j + 2
-                    elif word in keywords_5:  # 机动组
+                    elif word in keywords_5:  
                         j = j + 2
 
                     else:
-                        if 'good' in word or 'bad' in word:  # SARD中的函数特有的标志
+                        if 'good' in word or 'bad' in word:  
                             # print(token[j])
                             list_func.append(str(word))
-                        if token[j] in _func_dict.keys():  # 已存入  key:old value:new
-                            token[j] = _func_dict[token[j]]  # word -> 转化之后的
+                        if token[j] in _func_dict.keys():  # key:old value:new
+                            token[j] = _func_dict[token[j]]  # word -> 
                             j += 2
                         else:
                             if 'good' not in word and 'bad' not in word and 'privateReturns' not in word:
@@ -321,14 +320,14 @@ def mapping_v2(list_sentence):
                         token[j] = _variable_dict[token[j]]
                         j += 2
                         continue
-                    elif token[j+1] == '.':        # 处理.的情况 可能需要改正
+                    elif token[j+1] == '.':        
                         token1 = token[j+2:]
                         str2 = word + '.'
                         m = j + 2
                         for t in token1:
                             if t != '.' and not is_phor(function, t):
                                 break
-                            if is_phor(function, t) and token[m - 1] != '.':  # 后面是空格
+                            if is_phor(function, t) and token[m - 1] != '.':  
                                 break
                             str2 = str2 + t
                             m += 1
@@ -392,14 +391,13 @@ def mapping_v2(list_sentence):
                 temp = temp + token[i] + ' '
             i += 1
 
-        list_code[index] = temp  # 转化为fun variable之后的字符串的形式
+        list_code[index] = temp  
         index += 1
         # print(temp)
 
     return list_code, list_func
 
 
-# 因为需要改一些
 def mapping_v3(list_sentence):
     list_code = []
     list_func = []
@@ -418,14 +416,14 @@ def mapping_v3(list_sentence):
     while index < len(list_code):
         string = []
         token = []
-        str1 = copy.copy(list_code[index])  # 存储一行代码: byte data;
+        str1 = copy.copy(list_code[index])  
         i = 0
         j = 0
-        tag = 0  # 字符串
+        tag = 0  
         strtemp = ''
         while i < len(str1):  # str1 : byte data
             if tag == 0:
-                if is_phor(space, str1[i]):  # 空格
+                if is_phor(space, str1[i]):  
                     if i > 0:
                         string.append(str1[j:i])
                         j = i + 1
@@ -433,11 +431,11 @@ def mapping_v3(list_sentence):
                         j = i + 1
                     i += 1
 
-                elif i == len(str1) - 1:  # 最后一个字符
+                elif i == len(str1) - 1:  
                     string.append(str1[j:i + 1])
                     break
 
-                elif is_phor(identifier, str1[i]):  # 懒得改了...
+                elif is_phor(identifier, str1[i]):  
                     if i + 1 < len(str1) and str1[i] == '-' and str1[i + 1] == '>':
                         string.append(str1[i] + str1[i + 1])
                         j = i + 2
@@ -511,7 +509,7 @@ def mapping_v3(list_sentence):
                     elif str1[i] == '"':
                         strtemp = strtemp + str1[i]
                         i += 1
-                        tag = 1  # 字符串
+                        tag = 1  
 
                     elif str1[i] == '\'':
                         strtemp = strtemp + str1[i]
@@ -522,7 +520,7 @@ def mapping_v3(list_sentence):
                         string.append(str1[i])
                         j = i + 1
                         i += 1
-                else:  # 是标识符
+                else:  
                     i += 1
             elif tag == 1:
                 if str1[i] != '"':
@@ -560,7 +558,7 @@ def mapping_v3(list_sentence):
         j = 0
         while j < len(token):
             word = token[j]
-            if word in constValue:  # 字面量
+            if word in constValue:  
                 j += 1
             elif j < len(token) and is_phor(variable, word):
                 if word in keywords:
@@ -568,15 +566,15 @@ def mapping_v3(list_sentence):
                 # new
                 elif j - 1 >= 0 and j + 1 < len(token) and token[j - 1] == 'new' and token[j + 1] == '[':
                     j += 2
-                elif j + 1 < len(token) and token[j + 1] == '(':  # 后面是( 则证明可能是方法
+                elif j + 1 < len(token) and token[j + 1] == '(':  
                     # print(token[j])
                     if index == 0:
                         list_func.append(token[j])
                     if 'doPost' in token[j] or 'doGet' in token[j]:
                         list_func.append(token[j])
                     if token[j] == 'doSomething' or token[j] == 'getNextNumber' or "good" in token[j] or "bad" in token[j] or 'privateReturns' in word:
-                        if token[j] in _func_dict.keys():  # 已存入  key:old value:new
-                            token[j] = _func_dict[token[j]]  # word -> 转化之后的
+                        if token[j] in _func_dict.keys(): 
+                            token[j] = _func_dict[token[j]]  
                             j += 2
                         else:
                             list_values = _func_dict.values()
@@ -602,14 +600,14 @@ def mapping_v3(list_sentence):
                         token[j] = _variable_dict[token[j]]
                         j += 2
                         continue
-                    elif token[j + 1] == '.':  # 处理.的情况 可能需要改正
+                    elif token[j + 1] == '.':  
                         token1 = token[j + 2:]
                         str2 = word + '.'
                         m = j + 2
                         for t in token1:
                             if t != '.' and not is_phor(function, t):
                                 break
-                            if is_phor(function, t) and token[m-1] != '.':  # 后面是空格
+                            if is_phor(function, t) and token[m-1] != '.':  
                                 break
                             str2 = str2 + t
                             m += 1
@@ -659,7 +657,7 @@ def mapping_v3(list_sentence):
                             _variable_dict[token[j]] = 'variable_' + str(_max + 1)
                             token[j] = _variable_dict[token[j]]
                         break
-                elif j + 1 < len(token) and is_phor(variable, token[j + 1]):  # 碰到 x instanceof y 的情况 hj
+                elif j + 1 < len(token) and is_phor(variable, token[j + 1]): 
                     # print("1:" + token[j])
                     # print("2:" + token[j + 1])
                     if token[j] in _variable_dict.keys():
@@ -682,7 +680,7 @@ def mapping_v3(list_sentence):
                 temp = temp + token[i] + ' '
             i += 1
 
-        list_code[index] = temp  # 转化为fun variable之后的字符串的形式
+        list_code[index] = temp  
         index += 1
         # print(temp)
 
