@@ -25,7 +25,7 @@ public class UserController {
         }
         else path = Config.uploadBasePath + File.separator + fileName;
         File dest = new File(Config.uploadBasePath + File.separator + fileName);
-        // 判断路径是否存在，如果不存在则创建
+       
         if(!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }
@@ -36,10 +36,10 @@ public class UserController {
         }
 
         try {
-            // 保存到服务器中
+           
             file.transferTo(dest);
 
-            //判断是不是压缩包
+            
             if (!fileName.endsWith(".java")) {
                 unzip(fileName);
             }
@@ -48,14 +48,14 @@ public class UserController {
             e.printStackTrace();
         }
         //UserController.dest = dest;
-        return "上传失败";
+        return "upload fail";
     }
 
     public  void unzip(String fileName){
 
         String suffixName = fileName.substring(fileName.indexOf("."));
         String filePath = Config.uploadBasePath + File.separator;
-        //System.out.println(filePath);
+      
 
         String command = "";
         switch (suffixName){
@@ -66,7 +66,7 @@ public class UserController {
                 command += "tar -zxvf " + filePath + fileName  + " -C " + filePath + "/";
                 break;
             case ".gz":
-                //判断是否是.tar.gz
+                
                 System.out.println(fileName);
                 String[] values = fileName.split("\\.");
 //                for(String value:values){
@@ -78,7 +78,7 @@ public class UserController {
                     command += "gunzip " + filePath + fileName;
                 break;
             case ".xz":
-                //判断是否是.tar.xz
+                
                 System.out.println(fileName);
                 String[] values2 = fileName.split("\\.");
 //                for(String value:values){
@@ -130,7 +130,7 @@ public class UserController {
         }
 //        System.out.println(rt);
     }
-    //先生成图 再下载
+  
     @RequestMapping("download/")
     public String download(HttpServletResponse response) throws Exception {
         //String filePath = "/home/wk/fuzzing_test/software/upload/" + fileName;
@@ -140,17 +140,15 @@ public class UserController {
         }
 
         for (final File file : list) {
-            // 文件地址，真实环境是存放在数据库中的
-            //File file = new File(filePath);
-            // 创建输入对象
+           
             FileInputStream fis = new FileInputStream(file);
-            // 设置相关格式
+           
             response.setContentType("application/force-download");
-            // 设置下载后的文件名以及header
+           
             response.addHeader("Content-disposition", "attachment;fileName=" + file.getName());
-            // 创建输出对象
+           
             OutputStream os = response.getOutputStream();
-            // 常规操作
+           
             byte[] buf = new byte[1024];
             int len = 0;
             while ((len = fis.read(buf)) != -1) {
