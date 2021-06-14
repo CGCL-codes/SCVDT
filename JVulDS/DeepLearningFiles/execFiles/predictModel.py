@@ -1,7 +1,7 @@
 import sys
 import csv
 """
-测试模型
+test
 """
 
 
@@ -20,16 +20,15 @@ from preprocess_dl_Input_version5 import *
 import tensorflow as tf
 
 
-RANDOMSEED = 2018  # for reproducibility  TODO 干啥的
+RANDOMSEED = 2018  # for reproducibility  
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
-# TODO 序贯模型
 def build_model(maxlen, vector_dim, layers, dropout):
     print('Build model...')
     model = Sequential()
-    model.add(Masking(mask_value=0.0, input_shape=(maxlen, vector_dim)))  # ？ 跳过某些层
+    model.add(Masking(mask_value=0.0, input_shape=(maxlen, vector_dim)))  
 
     for i in range(1, layers):
         model.add(Bidirectional(
@@ -61,7 +60,7 @@ def predict_type(testdataSetPath, weightPath, resultPath, batchSize, maxLen, vec
         if not filename.endswith(".pkl"):
             continue
         f = open(os.path.join(testdataSetPath, filename), "rb")
-        datasetfile, labelsfile, linesfile, funcsfiles, filenamesfile, contextfiles, slicename_file = pickle.load(f)  # 第三个参数没啥用
+        datasetfile, labelsfile, linesfile, funcsfiles, filenamesfile, contextfiles, slicename_file = pickle.load(f)  
         # datasetfile, labelsfile, linesfile, funcsfiles, filenamesfile = pickle.load(f)
         f.close()
 
@@ -91,11 +90,11 @@ def predict_type(testdataSetPath, weightPath, resultPath, batchSize, maxLen, vec
     num = 0
     for i in range(math.floor(len(dataset) / batch_size)):
         print("\r", i, "/", math.floor(len(dataset) / batch_size), end="")
-        # 测试输入
+       
         test_input = next(test_generator)
-        # 深度学习模型的序列输出
+        
         layer_output = model.predict_on_batch([test_input[0]])
-        # 测试结果
+     
         for index in range(batch_size):
             y_pred = 1 if layer_output[index] >= 0.5 else 0
             if y_pred == 1:
@@ -148,18 +147,5 @@ def predict(vectorPath, fixFilePath, resultPath):
         write.writerow([lists[0], lists[1], lists[2], lists[3], lists[4], lists[5]])
     w.close()
 
-
-# num = 0
-# batchSize = 32
-# vectorDim = 40
-# maxLen = 800
-# layers = 2
-# dropout = 0.2
-# testdataPath = "/Users/ke/Documents/snail/graduate/2_word2vec_Process/0_sard/_all/AE/vector"
-#
-# if __name__ == '__main__':
-#     dlFilesPath = sys.argv[2]  # 固定文件的位置 为了得到模型的位置
-#     predict()
-#     print(num)
 
 
