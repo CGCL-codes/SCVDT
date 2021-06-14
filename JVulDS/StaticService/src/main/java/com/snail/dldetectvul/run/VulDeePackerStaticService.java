@@ -60,13 +60,12 @@ public class VulDeePackerStaticService {
         JSONObject json = new JSONObject();
         json.put("filePath", project);
 
-        String result = HttpUtils.doPost(Config.fileServiceUrl, json.toString());//result  就是结果
+        String result = HttpUtils.doPost(Config.fileServiceUrl, json.toString());//result  
 
-         //3.获取结果
+        
         detectVul(projectName);
 
-        // 4. 返回flaw
-       // flaws = getFlawsByDL();
+
 
         System.out.println("end deep learning detect.");
         return flaws;
@@ -77,6 +76,10 @@ public class VulDeePackerStaticService {
     }
 
     private static void detectVul(String projectName) {
+        File ff = new File(Config.fixedFilePath + File.separator + "softwareTempFiles");
+         if (!ff.exists()){
+            ff.mkdirs();
+        }
         File file = new File(Config.fixedFilePath + File.separator + "softwareTempFiles" + File.separator + projectName);
         if (!file.exists()){
             file.mkdirs();
@@ -125,7 +128,6 @@ public class VulDeePackerStaticService {
         }
     }
 
-    //以表格的结果输出 重新写
     public static List<Flaw> getFlawsByDL(String codeType){
         List<Flaw> flaws = new ArrayList<>();
 
@@ -168,7 +170,7 @@ public class VulDeePackerStaticService {
                         else flaw.setCategory("Null");
                     }
                     else if (i == 4){
-                        flaw.setFunName(lists[i]); //函数 补充
+                        flaw.setFunName(lists[i]); 
                         break;
                     }
                 }
@@ -197,7 +199,7 @@ public class VulDeePackerStaticService {
         return flaws;
     }
 
-    // 删除所有的文件
+
     private static void deleteFile(File[] files) {
         for (File file : files){
             if (file.isFile()){
