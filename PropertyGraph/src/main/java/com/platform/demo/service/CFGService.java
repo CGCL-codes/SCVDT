@@ -24,10 +24,9 @@ public class CFGService {
     public static long id;
 
     public String toJsonCfg(String path, HttpServletResponse response) throws IOException{
-        //path = "/Users/ke/Documents/snail/graduate/platform/serverTest/GraphTest/A.java";
         final File f = new File(path);
         if (!f.exists()){
-            return "没有上传文件";
+            return "don’t upload file";
         }
 
         final File file = MainTest.getFiles(f).get(0);
@@ -46,7 +45,7 @@ public class CFGService {
         nodes.append("\"nodes\": [" + "\n");
         relationships.append("\"relationships\": [" + "\n");
 
-        //文件节点
+        //file node
         GenerateJson.toFile(file.getName(), nodes, id);
         long fileID = id;
         id++;
@@ -59,12 +58,12 @@ public class CFGService {
             cfg.removeSwitchCases();
             cfg.removeJumpStatements();
 
-            //method节点
+            //method node
             GenerateJson.toMethod(method, nodes, id);
             long methodID = id;
             id++;
 
-            //statement node  TODO 可能是一样的节点？为什么会一样呢。。。
+            //statement node
             final SortedMap<CFGNode<? extends ProgramElementInfo>, Long> map = new TreeMap<>();
             final CFGNode<? extends ProgramElementInfo> enterNode = cfg
                     .getEnterNode();
@@ -83,7 +82,7 @@ public class CFGService {
                 id++;
             }
 
-            //文件与方法之间的关系
+           
             if (flag){
                 GenerateJson.ISClassOf(fileID, methodID, relationships, id);
                 flag = false;
@@ -116,7 +115,7 @@ public class CFGService {
                 id++;
             }
 
-            // 边为空 但是节点不为空 边为空 只有一个节点
+           
             if (edges.size() == 0 && map.size() == 1){
                 relationships.append(",");
                 relationships.append("\n");
