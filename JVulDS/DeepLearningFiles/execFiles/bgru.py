@@ -1,5 +1,5 @@
 """
-用作bgru模型的训练和测试
+used as training and testing for deep learning.
 """
 import math
 import pickle
@@ -20,16 +20,16 @@ from preprocess_dl_Input_version5 import *
 import tensorflow as tf
 import csv
 
-RANDOMSEED = 2018  # for reproducibility  TODO 干啥的
+RANDOMSEED = 2018  # for reproducibility
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
-# TODO 序贯模型
+
 def build_model(maxlen, vector_dim, layers, dropout):
     print('Build model...')
     model = Sequential()
-    model.add(Masking(mask_value=0.0, input_shape=(maxlen, vector_dim)))  # ？ 跳过某些层
+    model.add(Masking(mask_value=0.0, input_shape=(maxlen, vector_dim)))  
 
     for i in range(1, layers):
         model.add(Bidirectional(
@@ -62,14 +62,7 @@ def main(traindataSetPath, weightPath, batchSize, maxlen, vector_dim, layers, dr
             continue
         print(filename)
         f = open(os.path.join(traindataSetPath, filename), "rb")
-        # if 'AE' in filename:
-        # # dataset_file, labels_file, focous_sentences, funcs_file, filenames_file, testcases_file = pickle.load(f)  # 第三个参数没啥用
-        # if filename.startswith("NVD25"):
         dataset_file, labels_file, focus_sentences_line, funcs_file, filenames_file, testcases_file = pickle.load(f)
-        # else:
-        #     dataset_file, labels_file, funcs_file, filenames_file, testcases_file = pickle.load(f)  # 第三个参数没啥用
-        # else:
-        #
         f.close()
         dataset += dataset_file
         labels += labels_file
@@ -118,8 +111,8 @@ if __name__ == "__main__":
     layers = 2
     dropout = 0.2
 
-    traindataSetPath = "/Users/ke/Documents/snail/graduate/2_word2vec_Process/3_nvd/_4_24/all_input"
-    weightPath = '/Users/ke/Documents/snail/graduate/2_word2vec_Process/3_nvd/_4_24/model_dl/model.h5'
+    traindataSetPath = "./all_input"
+    weightPath = './model_dl/model.h5'
 
     main(traindataSetPath, weightPath, batchSize, maxLen, vectorDim, layers, dropout)
 
