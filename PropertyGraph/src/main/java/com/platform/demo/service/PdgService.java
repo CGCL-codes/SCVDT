@@ -106,10 +106,9 @@ public class PdgService {
     }
 
     public String toJson(String path, HttpServletResponse response) {
-        //path = "/Users/ke/Documents/snail/graduate/platform/serverTest/GraphTest/A.java";
         final File f= new File(path);
         if (!f.exists()){
-            return "没有上传文件";
+            return "don't upload file";
         }
 
         final File file = MainTest.getFiles(f).get(0);
@@ -128,7 +127,6 @@ public class PdgService {
         relationship.append("\"relationships\": [" + "\n");
         id = 0;//TODO
 
-        //文件节点
         GenerateJson.toFile(file.getName(),nodes,id);
         long fileID = id;
         id++;
@@ -138,12 +136,10 @@ public class PdgService {
                     new CFGNodeFactory(), true, true, true);
             pdg.build();
 
-            //method节点
             GenerateJson.toMethod(method, nodes, id);
             long methodID = id;
             id++;
 
-            //statement节点
             Map<PDGNode<?>, Long> map = new HashMap<>();
             for (PDGNode pdgNode : pdg.getAllNodes()) {
                 nodes.append(",");
@@ -153,9 +149,7 @@ public class PdgService {
                 id++;
             }
 
-            //关系
-
-            //文件和方法的关系
+         
             if (flag) {
                 GenerateJson.ISClassOf(fileID, methodID, relationship, id);
                 flag = false;
@@ -165,7 +159,7 @@ public class PdgService {
                 GenerateJson.ISClassOf(fileID, methodID, relationship, id);
             }
             id++;
-            //边与边之间的关系
+          
             for (final PDGEdge edge : pdg.getAllEdges()) {
                 if (edge.fromNode instanceof PDGMethodEnterNode){
                     relationship.append(",");
