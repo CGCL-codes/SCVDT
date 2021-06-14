@@ -157,7 +157,7 @@ def load_data_binary(dataSetpath, batch_size, maxlen=None, vector_dim=40, seed=1
     return dataset, _labels
 
 
-# 弄成同一个长度 把向量
+
 def process_sequences_shape(sequences, maxLen, vector_dim):
     samples = len(sequences)
     nb_samples = np.zeros((samples, maxLen, vector_dim))
@@ -175,9 +175,8 @@ def process_sequences_shape(sequences, maxLen, vector_dim):
     return nb_samples
 
 
-# batchSize个数据一组
 def generator_of_data(data, labels, batchsize, maxlen, vector_dim):
-    iter_num = int(len(data) / batchsize)  # data分组  batchSize一组
+    iter_num = int(len(data) / batchsize)  
     i = 0
 
     while iter_num:
