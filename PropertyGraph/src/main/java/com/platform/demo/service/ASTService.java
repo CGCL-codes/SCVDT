@@ -18,7 +18,6 @@ public class ASTService {
     public static long id;
 
     public String toJson(String path, HttpServletResponse response){
-        //path = "/Users/ke/Documents/snail/graduate/platform/serverTest/GraphTest/A.java";
 
         final File f = new File(path);
 
