@@ -38,7 +38,7 @@ public class HttpUtils {
             StringEntity body = new StringEntity(data, "utf-8");
             httpPost.setEntity(body);
         }
-        // 设置回调接口接收的消息头
+        
         httpPost.addHeader("Content-Type", "application/json");
         CloseableHttpResponse response = null;
         try {
