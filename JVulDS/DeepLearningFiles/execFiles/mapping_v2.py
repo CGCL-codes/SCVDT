@@ -1,7 +1,5 @@
 # -*- coding:utf-8 -*-
-"""
-该python文件将函数名和变量名用统一的名称代替
-"""
+
 import copy
 import re
 import xlrd
@@ -131,7 +129,7 @@ def mapping_v2(list_sentence):
         strtemp = ''
         while i < len(str1):  # str1 : byte data
             if tag == 0:
-                if is_phor(space, str1[i]):  # 空格
+                if is_phor(space, str1[i]):  
                     if i > 0:
                         string.append(str1[j:i])
                         j = i + 1
@@ -216,7 +214,7 @@ def mapping_v2(list_sentence):
                     elif str1[i] == '"':
                         strtemp = strtemp + str1[i]
                         i += 1
-                        tag = 1  # 字符串
+                        tag = 1  
 
                     elif str1[i] == '\'':
                         strtemp = strtemp + str1[i]
