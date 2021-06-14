@@ -8,23 +8,22 @@ import java.math.BigDecimal;
 public class Flaw {
 //    private int id;
     private String codeType;
-    //项目名
 //    private String name;
-    //发现漏洞的文件名
+
     private String filename;
-    //对应的漏洞行
+
     private int line;
-    //对应的漏洞列
+
     private String column;
-    //对应的漏洞等级
+
     private String level;
-    //对应的漏洞类型
+
     private String category;
-    //发生漏洞的方法名或变量名
+
     private String funName;
-    //漏洞描述
+   
     private String warning;
-    //漏洞修复建议
+
     private String suggestion;
 
     private BigDecimal reliability;
@@ -37,9 +36,9 @@ public class Flaw {
         this.codeType = codeType;
     }
 
-    //漏洞对应的cwe
+
     private String cwes;
-    //漏洞发生的代码
+
     private String context;
 
 //    public String getName() {
