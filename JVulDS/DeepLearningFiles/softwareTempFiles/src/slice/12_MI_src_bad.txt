@@ -1,0 +1,18 @@
+src /Users/ke/Documents/snail/graduate/open_source/test/src/CWE80_XSS__CWE182_Servlet_File_05.java File file = new File("C:\data.txt"); 46
+public void bad(HttpServletRequest request, HttpServletResponse response) throws Throwable 39
+ 40
+if (privateTrue) 42
+File file = new File("C:\\data.txt"); 46
+streamFileInput = new FileInputStream(file); 53
+readerInputStream = new InputStreamReader(streamFileInput, "UTF-8"); 54
+readerBuffered = new BufferedReader(readerInputStream); 55
+data = readerBuffered.readLine(); 59
+if (readerBuffered != null) 70
+readerBuffered.close(); 72
+if (readerInputStream != null) 82
+readerInputStream.close(); 84
+if (streamFileInput != null) 94
+streamFileInput.close(); 96
+if (data != null) 113
+response.getWriter().println("<br>bad(): data = " + data.replaceAll("(<script>)", "")); 116
+0

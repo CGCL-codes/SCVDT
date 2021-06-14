@@ -1,0 +1,23 @@
+src /Users/ke/Documents/snail/graduate/open_source/test/src/BasicAuthenticator.java password = new String(buf, ( colon + 1 ), ( authorizationCC.getEnd() - colon ) - 1); 150
+public boolean authenticate(Request request, 92
+HttpServletResponse response, 93
+LoginConfig config) 94
+throws IOException 95
+MessageBytes authorization = 128
+request.getCoyoteRequest().getMimeHeaders() 129
+.getValue("authorization"); 130
+if (authorization != null) 132
+authorization.toBytes(); 133
+ByteChunk authorizationBC = authorization.getByteChunk(); 134
+if (authorizationBC.startsWithIgnoreCase("basic ", 0)) 135
+CharChunk authorizationCC = authorization.getCharChunk(); 140
+int colon = authorizationCC.indexOf(':'); 144
+if (colon < 0) 145
+char[] buf = authorizationCC.getBuffer(); 148
+password = new String(buf, colon + 1, 150
+authorizationCC.getEnd() - colon - 1); 151
+principal = context.getRealm().authenticate(username, password); 157
+if (principal != null) 158
+register(request, response, principal, Constants.BASIC_METHOD, 159
+username, password); 160
+0

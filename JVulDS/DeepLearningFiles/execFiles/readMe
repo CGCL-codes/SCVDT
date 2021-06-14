@@ -1,0 +1,6 @@
+1. get_slicing.py 提取切片
+2. process_slice.py 获取word2vec的输入
+3. train_w2vmodel.py word2vec的交叉训练
+4. predictModel.py 预测结果
+
+5. detectVul.py 合在一起

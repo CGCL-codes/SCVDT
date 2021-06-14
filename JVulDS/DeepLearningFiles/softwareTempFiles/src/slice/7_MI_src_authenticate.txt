@@ -1,0 +1,16 @@
+src /Users/ke/Documents/snail/graduate/open_source/test/src/BasicAuthenticator.java response.setHeader(AUTH_HEADER_NAME,value.toString()); 175
+public boolean authenticate(Request request, 92
+HttpServletResponse response, 93
+LoginConfig config) 94
+throws IOException 95
+StringBuilder value = new StringBuilder(16); 165
+value.append("Basic realm=\""); 166
+if (config.getRealmName() == null) 167
+value.append(request.getServerName()); 168
+value.append(':'); 169
+value.append(Integer.toString(request.getServerPort())); 170
+value.append(config.getRealmName()); 172
+value.append('\"'); 174
+response.setHeader(AUTH_HEADER_NAME, value.toString()); 175
+response.sendError(HttpServletResponse.SC_UNAUTHORIZED); 176
+0

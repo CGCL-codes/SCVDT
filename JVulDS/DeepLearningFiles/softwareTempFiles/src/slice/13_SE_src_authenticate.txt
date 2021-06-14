@@ -1,0 +1,11 @@
+src /Users/ke/Documents/snail/graduate/open_source/test/src/BasicAuthenticator.java String password = null; 126
+public boolean authenticate(Request request, 92
+HttpServletResponse response, 93
+LoginConfig config) 94
+throws IOException 95
+String password = null; 126
+principal = context.getRealm().authenticate(username, password); 157
+if (principal != null) 158
+register(request, response, principal, Constants.BASIC_METHOD, 159
+username, password); 160
+0

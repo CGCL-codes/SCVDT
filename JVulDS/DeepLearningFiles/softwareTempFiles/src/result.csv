@@ -1,0 +1,17 @@
+/Users/ke/Documents/snail/graduate/open_source/test/src/CWE190_Integer_Overflow__byte_console_readLine_multiply_71b.java,32,Arithmetic expression,0,badSink,byte result = (byte)(data * 2);
+/Users/ke/Documents/snail/graduate/open_source/test/src/CWE190_Integer_Overflow__byte_console_readLine_multiply_61b.java,118,Library/API function,1,goodB2GSource,String stringNumber = readerBuffered.readLine();
+/Users/ke/Documents/snail/graduate/open_source/test/src/CWE80_XSS__CWE182_Servlet_File_05.java,59,Library/API function,1,bad,data = readerBuffered.readLine();
+/Users/ke/Documents/snail/graduate/open_source/test/src/CWE80_XSS__CWE182_Servlet_File_05.java,46,Library/API function,1,bad,"File file = new File(""C:\\data.txt"");"
+/Users/ke/Documents/snail/graduate/open_source/test/src/CWE80_XSS__CWE182_Servlet_File_07.java,45,Library/API function,1,bad,"File file = new File(""C:\\data.txt"");"
+/Users/ke/Documents/snail/graduate/open_source/test/src/CWE80_XSS__CWE182_Servlet_File_07.java,52,Library/API function,1,bad,streamFileInput = new FileInputStream(file);
+/Users/ke/Documents/snail/graduate/open_source/test/src/BasicAuthenticator.java,175,Library/API function,0,authenticate,"response.setHeader(AUTH_HEADER_NAME, value.toString());"
+/Users/ke/Documents/snail/graduate/open_source/test/src/CWE80_XSS__CWE182_Servlet_File_07.java,58,Library/API function,1,bad,data = readerBuffered.readLine();
+/Users/ke/Documents/snail/graduate/open_source/test/src/BasicAuthenticator.java,176,Library/API function,0,authenticate,response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+/Users/ke/Documents/snail/graduate/open_source/test/src/CWE80_XSS__CWE182_Servlet_File_05.java,116,Library/API function,1,bad,"response.getWriter().println(""<br>bad(): data = "" + data.replaceAll(""(<script>)"", """"));"
+/Users/ke/Documents/snail/graduate/open_source/test/src/CWE80_XSS__CWE182_Servlet_File_07.java,115,Library/API function,1,bad,"response.getWriter().println(""<br>bad(): data = "" + data.replaceAll(""(<script>)"", """"));"
+/Users/ke/Documents/snail/graduate/open_source/test/src/CWE190_Integer_Overflow__byte_console_readLine_multiply_61b.java,45,Library/API function,1,badSource,String stringNumber = readerBuffered.readLine();
+/Users/ke/Documents/snail/graduate/open_source/test/src/CWE80_XSS__CWE182_Servlet_File_05.java,53,Library/API function,1,bad,streamFileInput = new FileInputStream(file);
+/Users/ke/Documents/snail/graduate/open_source/test/src/BasicAuthenticator.java,126,Sensitive exposure,0,authenticate,String password = null;
+/Users/ke/Documents/snail/graduate/open_source/test/src/BasicAuthenticator.java,157,Sensitive exposure,0,authenticate,"principal = context.getRealm().authenticate(username, password);"
+/Users/ke/Documents/snail/graduate/open_source/test/src/BasicAuthenticator.java,150,Sensitive exposure,0,authenticate,"password = new String(buf, colon + 1,"
+/Users/ke/Documents/snail/graduate/open_source/test/src/BasicAuthenticator.java,159,Sensitive exposure,0,authenticate,"register(request, response, principal, Constants.BASIC_METHOD,"

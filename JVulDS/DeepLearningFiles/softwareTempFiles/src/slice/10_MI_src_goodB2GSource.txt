@@ -1,0 +1,12 @@
+src /Users/ke/Documents/snail/graduate/open_source/test/src/CWE190_Integer_Overflow__byte_console_readLine_multiply_61b.java String stringNumber = readerBuffered.readLine(); 118
+public byte goodB2GSource() throws Throwable 104
+ 105
+BufferedReader readerBuffered = null; 112
+InputStreamReader readerInputStream = null; 113
+readerInputStream = new InputStreamReader(System.in, "UTF-8"); 116
+readerBuffered = new BufferedReader(readerInputStream); 117
+String stringNumber = readerBuffered.readLine(); 118
+if (stringNumber != null) 119
+data = Byte.parseByte(stringNumber.trim()); 121
+return data; 162
+0

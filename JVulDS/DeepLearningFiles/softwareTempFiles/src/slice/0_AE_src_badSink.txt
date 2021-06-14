@@ -1,0 +1,8 @@
+src /Users/ke/Documents/snail/graduate/open_source/test/src/CWE190_Integer_Overflow__byte_console_readLine_multiply_71b.java byte result = (byte)( ( data * 2 )); 32
+public void badSink(Object dataObject ) throws Throwable 25
+ 26
+byte data = (Byte)dataObject; 27
+if(data > 0) /* ensure we won't have an underflow */ 29
+byte result = (byte)(data * 2); 32
+IO.writeLine("result: " + result); 33
+0
