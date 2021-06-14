@@ -136,7 +136,7 @@ public class UserController {
         //String filePath = "/home/wk/fuzzing_test/software/upload/" + fileName;
         final List<File> list = Common.getFiles(new File(Config.uploadBasePath + File.separator + "dot"));
         if (list.size() == 0 || list == null){
-            return "先生成树或者图";
+            return "first generate trees or graphs";
         }
 
         for (final File file : list) {
