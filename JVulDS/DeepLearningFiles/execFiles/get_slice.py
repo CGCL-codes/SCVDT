@@ -14,16 +14,15 @@ def sort_up(nodes):
 
 
 def bubbleSort(nums):
-    for i in range(len(nums) - 1):  # 遍历 len(nums)-1 次
-        for j in range(len(nums) - i - 1):  # 已排好序的部分不用再次遍历
+    for i in range(len(nums) - 1):  
+        for j in range(len(nums) - i - 1): 
             if nums[j]['startLine'] > nums[j + 1]['startLine']:
-                nums[j], nums[j + 1] = nums[j + 1], nums[j]  # Python 交换两个数不用中间变量
+                nums[j], nums[j + 1] = nums[j + 1], nums[j]  
             elif nums[j]['startLine'] == nums[j + 1]['startLine'] and nums[j + 1].has_label('METHOD'):
                 nums[j], nums[j + 1] = nums[j + 1], nums[j]
     return nums
 
 
-# 前向的函数依赖返回
 def program_cross_forwards(methodNode, db):
     list_nodes = []
 
@@ -76,8 +75,8 @@ def process_cross_func_backward(list_nodes, db, node_one):
                 list_result = program_slice_backwards(crossNode['a'], db)
 
                 process_cross_func_backward(list_result, db, node)
-        else:  # TODO 待验证
-            # 前向的调用
+        else: 
+           
             cross_forwards = db.run("MATCH (a) -[:DD]->(b:METHOD) where ID(a)="
                                     + str(node.identity) + " return b").data()
             if len(cross_forwards) == 0 or cross_forwards is None:
@@ -86,7 +85,7 @@ def process_cross_func_backward(list_nodes, db, node_one):
                 else:
                     return
             for crossNode in cross_forwards:
-                list_result_forwards = program_cross_forwards(crossNode['b'], db)  # 找到所有的前向
+                list_result_forwards = program_cross_forwards(crossNode['b'], db) 
                 i = 0
                 j = 0
                 for temp in list_results:
@@ -101,11 +100,6 @@ def process_cross_func_backward(list_nodes, db, node_one):
                 temp_list.extend(list_result_forwards)
                 temp_list.extend(last)
                 list_results = temp_list
-
-                # process_cross_func_forward(list_result_forwards, db) TODO 多个sink和source
-
-
-# 初始节点的后向 过程内
 
 
 def sub_slice_backwards(node, db, list_nodes, list_node_id):
@@ -145,16 +139,9 @@ def program_slice_backwards(node, db):
 
     list_nodes.append(node)
     bubbleSort(list_nodes)
-    # for node in list_nodes:
-    #     print(node['startLine'])
-
-    # 程序间
-    # list_result.extend(list_nodes)
-    # process_cross_func(list_nodes, db)
     return list_nodes
 
 
-# 每一个节点的前向数据依赖
 def sub_slice_forwards(node, db, list_nodes, list_nodes_id):
     if node.has_label('METHOD'):
         return
@@ -175,7 +162,6 @@ def sub_slice_forwards(node, db, list_nodes, list_nodes_id):
             sub_slice_forwards(value['b'], db, list_nodes, list_nodes_id)
 
 
-# 关注点的前向数据依赖
 def program_slice_forwards(node, db):
     list_nodes = []
     list_nodes_id = []
@@ -217,8 +203,8 @@ def process_cross_func_forward(result_forwards, db, node_one):
             else:
                 return
         for crossNode in cross_forwards:
-            return_nodes = program_cross_forwards(crossNode['b'], db)  # 获取该函数下的所有节点
-            # 遍历所有的节点 看是否存在前向的函数数据依赖
+            return_nodes = program_cross_forwards(crossNode['b'], db)  
+          
             process_cross_func_forward(return_nodes, db, node)
 
 
@@ -322,7 +308,7 @@ def writeFile(backward_nodes, forward_nodes, node, dir, types, db):
     else:
         type_name = "SE"
 
-    #  types dirName 方法名 id
+    #  types dirName methodName id
     txt = os.path.join(dir, str(id) + "_" + type_name + "_" + dirName + "_" + method[0]['a']['code'] + '.txt')
     if os.path.exists(txt):
         print("path exists")
@@ -335,7 +321,7 @@ def writeFile(backward_nodes, forward_nodes, node, dir, types, db):
         return
     code = node['code'].replace('\n', '\\n')
 
-    # dir名 文件路径 代码 代码位置
+    # 
     f.write(dirName + " " + filePath + " " + code + " " + str(node['startLine']))
     f.write('\n')
 
@@ -358,7 +344,7 @@ def get_slice(db, types, dir):
     # id = 0
     for node in iter(result):
         list_results.clear()
-        # 获取后向依赖
+        #
         # print("backward begin......")
         result_backwards = program_slice_backwards(node, db)
         process_cross_func_backward(result_backwards, db, [])
@@ -367,7 +353,7 @@ def get_slice(db, types, dir):
         list_results.clear()
         # print("backward over!")
 
-        # 获取前向依赖 只有数据依赖
+        #
         # print("forward begin......")
         result_forwards = program_slice_forwards(node, db)
         process_cross_func_forward(result_forwards, db, [])
@@ -388,7 +374,7 @@ username = "neo4j"
 password = "snail"
 
 
-# 连接数据库
+# 
 def connect_neo4j():
     graph = Graph(url, username=username, password=password)
     return graph
@@ -399,16 +385,15 @@ id = 0
 
 
 def start(slicePath):
-    print("获取切片")
+    print("get slice begin")
     db = connect_neo4j()
     lists = [0, 1, 2]
     for types in lists:
         get_slice(db, types, slicePath)
-
-    # 删除所有的数据 标签 CLASS, METHOD, EXPRESSION
+        
     db.run('match (n:CLASS) detach delete n')
     db.run("match (n:METHOD) detach delete n")
     db.run("match (n:EXPRESSION) detach delete n")
     db.run("match (n:DIRECTORY) detach delete n")
 
-    print("获取切片结束")
+    print("get slice over")
