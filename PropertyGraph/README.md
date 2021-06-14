@@ -12,6 +12,7 @@ Main class: com.propertygraph.graphToDot.Write
 $ cd SCVDT
 $ cd PropertyGraph/out/artifacts/PropertyGraph_jar
 $ java -jar PropertyGraph.jar [-d <projectPath>] [-p] [-c] [-a]
+# args
 -d projectPath  
 -p: choose to generate PDG
 -c: choose to generate CFG
