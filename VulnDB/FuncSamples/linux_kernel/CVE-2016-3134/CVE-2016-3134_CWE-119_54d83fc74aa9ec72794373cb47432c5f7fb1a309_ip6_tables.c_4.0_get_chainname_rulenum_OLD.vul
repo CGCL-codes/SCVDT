@@ -1,0 +1,30 @@
+static inline int
+get_chainname_rulenum(const struct ip6t_entry *s, const struct ip6t_entry *e,
+		      const char *hookname, const char **chainname,
+		      const char **comment, unsigned int *rulenum)
+{
+	const struct xt_standard_target *t = (void *)ip6t_get_target_c(s);
+
+	if (strcmp(t->target.u.kernel.target->name, XT_ERROR_TARGET) == 0) {
+		/* Head of user chain: ERROR target with chainname */
+		*chainname = t->target.data;
+		(*rulenum) = 0;
+	} else if (s == e) {
+		(*rulenum)++;
+
+		if (s->target_offset == sizeof(struct ip6t_entry) &&
+		    strcmp(t->target.u.kernel.target->name,
+			   XT_STANDARD_TARGET) == 0 &&
+		    t->verdict < 0 &&
+		    unconditional(&s->ipv6)) {
+			/* Tail of chains: STANDARD target (return/policy) */
+			*comment = *chainname == hookname
+				? comments[NF_IP6_TRACE_COMMENT_POLICY]
+				: comments[NF_IP6_TRACE_COMMENT_RETURN];
+		}
+		return 1;
+	} else
+		(*rulenum)++;
+
+	return 0;
+}

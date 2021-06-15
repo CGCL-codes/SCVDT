@@ -1,0 +1,22 @@
+static int em_jmp_far(struct x86_emulate_ctxt *ctxt)
+{
+	int rc;
+	unsigned short sel;
+	struct desc_struct new_desc;
+	u8 cpl = ctxt->ops->cpl(ctxt);
+
+	memcpy(&sel, ctxt->src.valptr + ctxt->op_bytes, 2);
+
+	rc = __load_segment_descriptor(ctxt, sel, VCPU_SREG_CS, cpl,
+				       X86_TRANSFER_CALL_JMP,
+				       &new_desc);
+	if (rc != X86EMUL_CONTINUE)
+		return rc;
+
+	rc = assign_eip_far(ctxt, ctxt->src.val, &new_desc);
+	/* Error handling is not implemented. */
+	if (rc != X86EMUL_CONTINUE)
+		return X86EMUL_UNHANDLEABLE;
+
+	return rc;
+}

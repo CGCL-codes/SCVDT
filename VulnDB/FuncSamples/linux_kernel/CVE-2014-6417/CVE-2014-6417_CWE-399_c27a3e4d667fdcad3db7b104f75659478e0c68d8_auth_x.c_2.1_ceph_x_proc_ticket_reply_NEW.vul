@@ -1,0 +1,27 @@
+static int ceph_x_proc_ticket_reply(struct ceph_auth_client *ac,
+				    struct ceph_crypto_key *secret,
+				    void *buf, void *end)
+{
+	void *p = buf;
+	u8 reply_struct_v;
+	u32 num;
+	int ret;
+
+	ceph_decode_8_safe(&p, end, reply_struct_v, bad);
+	if (reply_struct_v != 1)
+		return -EINVAL;
+
+	ceph_decode_32_safe(&p, end, num, bad);
+	dout("%d tickets\n", num);
+
+	while (num--) {
+		ret = process_one_ticket(ac, secret, &p, end);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
+
+bad:
+	return -EINVAL;
+}

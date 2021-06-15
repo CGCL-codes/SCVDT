@@ -1,0 +1,21 @@
+static inline int add_post_vars(zval *arr, post_var_data_t *vars, zend_bool eof TSRMLS_DC)
+{
+	uint64_t max_vars = PG(max_input_vars);
+
+	vars->ptr = vars->str.c;
+	vars->end = vars->str.c + vars->str.len;
+	while (add_post_var(arr, vars, eof TSRMLS_CC)) {
+		if (++vars->cnt > max_vars) {
+			php_error_docref(NULL TSRMLS_CC, E_WARNING,
+					"Input variables exceeded %" PRIu64 ". "
+					"To increase the limit change max_input_vars in php.ini.",
+					max_vars);
+			return FAILURE;
+		}
+	}
+
+	if (!eof) {
+		memmove(vars->str.c, vars->ptr, vars->str.len = vars->end - vars->ptr);
+	}
+	return SUCCESS;
+}

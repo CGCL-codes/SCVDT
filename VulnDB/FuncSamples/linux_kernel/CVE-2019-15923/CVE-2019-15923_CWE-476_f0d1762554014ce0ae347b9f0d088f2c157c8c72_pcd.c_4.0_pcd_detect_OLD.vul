@@ -1,0 +1,55 @@
+static int pcd_detect(void)
+{
+	char id[18];
+	int k, unit;
+	struct pcd_unit *cd;
+
+	printk("%s: %s version %s, major %d, nice %d\n",
+	       name, name, PCD_VERSION, major, nice);
+
+	par_drv = pi_register_driver(name);
+	if (!par_drv) {
+		pr_err("failed to register %s driver\n", name);
+		return -1;
+	}
+
+	k = 0;
+	if (pcd_drive_count == 0) { /* nothing spec'd - so autoprobe for 1 */
+		cd = pcd;
+		if (pi_init(cd->pi, 1, -1, -1, -1, -1, -1, pcd_buffer,
+			    PI_PCD, verbose, cd->name)) {
+			if (!pcd_probe(cd, -1, id) && cd->disk) {
+				cd->present = 1;
+				k++;
+			} else
+				pi_release(cd->pi);
+		}
+	} else {
+		for (unit = 0, cd = pcd; unit < PCD_UNITS; unit++, cd++) {
+			int *conf = *drives[unit];
+			if (!conf[D_PRT])
+				continue;
+			if (!pi_init(cd->pi, 0, conf[D_PRT], conf[D_MOD],
+				     conf[D_UNI], conf[D_PRO], conf[D_DLY],
+				     pcd_buffer, PI_PCD, verbose, cd->name)) 
+				continue;
+			if (!pcd_probe(cd, conf[D_SLV], id) && cd->disk) {
+				cd->present = 1;
+				k++;
+			} else
+				pi_release(cd->pi);
+		}
+	}
+	if (k)
+		return 0;
+
+	printk("%s: No CD-ROM drive found\n", name);
+	for (unit = 0, cd = pcd; unit < PCD_UNITS; unit++, cd++) {
+		blk_cleanup_queue(cd->disk->queue);
+		cd->disk->queue = NULL;
+		blk_mq_free_tag_set(&cd->tag_set);
+		put_disk(cd->disk);
+	}
+	pi_unregister_driver(par_drv);
+	return -1;
+}

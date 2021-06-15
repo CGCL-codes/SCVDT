@@ -1,0 +1,7 @@
+static av_cold int xpm_decode_close(AVCodecContext *avctx)
+{
+    XPMDecContext *x = avctx->priv_data;
+    av_freep(&x->pixels);
+
+    return 0;
+}

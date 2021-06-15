@@ -1,0 +1,31 @@
+static __always_inline int __do_follow_link(struct path *path, struct nameidata *nd)
+{
+	int error;
+	void *cookie;
+	struct dentry *dentry = path->dentry;
+
+	touch_atime(path->mnt, dentry);
+	nd_set_link(nd, NULL);
+
+	if (path->mnt != nd->path.mnt) {
+		path_to_nameidata(path, nd);
+		dget(dentry);
+	}
+	mntget(path->mnt);
+	cookie = dentry->d_inode->i_op->follow_link(dentry, nd);
+	error = PTR_ERR(cookie);
+	if (!IS_ERR(cookie)) {
+		char *s = nd_get_link(nd);
+		error = 0;
+		if (s)
+			error = __vfs_follow_link(nd, s);
+		else if (nd->last_type == LAST_BIND) {
+			error = force_reval_path(&nd->path, nd);
+			if (error)
+				path_put(&nd->path);
+		}
+		if (dentry->d_inode->i_op->put_link)
+			dentry->d_inode->i_op->put_link(dentry, nd, cookie);
+	}
+	return error;
+}

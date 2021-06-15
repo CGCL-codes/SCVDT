@@ -1,0 +1,39 @@
+static int vp8_lossy_decode_frame(AVCodecContext *avctx, AVFrame *p,
+                                  int *got_frame, uint8_t *data_start,
+                                  unsigned int data_size)
+{
+    WebPContext *s = avctx->priv_data;
+    AVPacket pkt;
+    int ret;
+
+    if (!s->initialized) {
+        ff_vp8_decode_init(avctx);
+        s->initialized = 1;
+        if (s->has_alpha)
+            avctx->pix_fmt = AV_PIX_FMT_YUVA420P;
+    }
+    s->lossless = 0;
+
+    if (data_size > INT_MAX) {
+        av_log(avctx, AV_LOG_ERROR, "unsupported chunk size\n");
+        return AVERROR_PATCHWELCOME;
+    }
+
+    av_init_packet(&pkt);
+    pkt.data = data_start;
+    pkt.size = data_size;
+
+    ret = ff_vp8_decode_frame(avctx, p, got_frame, &pkt);
+    if (ret < 0)
+        return ret;
+
+    update_canvas_size(avctx, avctx->width, avctx->height);
+
+    if (s->has_alpha) {
+        ret = vp8_lossy_decode_alpha(avctx, p, s->alpha_data,
+                                     s->alpha_data_size);
+        if (ret < 0)
+            return ret;
+    }
+    return ret;
+}

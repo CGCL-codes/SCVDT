@@ -1,0 +1,7 @@
+static inline const unsigned char *ReadResourceShort(const unsigned char *p,
+  unsigned short *quantum)
+{
+  *quantum=(unsigned short) (*p++ << 8);
+  *quantum|=(unsigned short) (*p++ << 0);
+  return(p);
+}static inline void WriteResourceLong(unsigned char *p,

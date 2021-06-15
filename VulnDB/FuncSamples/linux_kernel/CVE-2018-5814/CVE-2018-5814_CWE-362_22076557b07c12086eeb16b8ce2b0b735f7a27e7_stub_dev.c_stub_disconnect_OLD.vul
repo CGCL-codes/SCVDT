@@ -1,0 +1,54 @@
+static void stub_disconnect(struct usb_device *udev)
+{
+	struct stub_device *sdev;
+	const char *udev_busid = dev_name(&udev->dev);
+	struct bus_id_priv *busid_priv;
+	int rc;
+
+	dev_dbg(&udev->dev, "Enter disconnect\n");
+
+	busid_priv = get_busid_priv(udev_busid);
+	if (!busid_priv) {
+		BUG();
+		return;
+	}
+
+	sdev = dev_get_drvdata(&udev->dev);
+
+	/* get stub_device */
+	if (!sdev) {
+		dev_err(&udev->dev, "could not get device");
+		return;
+	}
+
+	dev_set_drvdata(&udev->dev, NULL);
+
+	/*
+	 * NOTE: rx/tx threads are invoked for each usb_device.
+	 */
+	stub_remove_files(&udev->dev);
+
+	/* release port */
+	rc = usb_hub_release_port(udev->parent, udev->portnum,
+				  (struct usb_dev_state *) udev);
+	if (rc) {
+		dev_dbg(&udev->dev, "unable to release port\n");
+		return;
+	}
+
+	/* If usb reset is called from event handler */
+	if (usbip_in_eh(current))
+		return;
+
+	/* shutdown the current connection */
+	shutdown_busid(busid_priv);
+
+	usb_put_dev(sdev->udev);
+
+	/* free sdev */
+	busid_priv->sdev = NULL;
+	stub_device_free(sdev);
+
+	if (busid_priv->status == STUB_BUSID_ALLOC)
+		busid_priv->status = STUB_BUSID_ADDED;
+}

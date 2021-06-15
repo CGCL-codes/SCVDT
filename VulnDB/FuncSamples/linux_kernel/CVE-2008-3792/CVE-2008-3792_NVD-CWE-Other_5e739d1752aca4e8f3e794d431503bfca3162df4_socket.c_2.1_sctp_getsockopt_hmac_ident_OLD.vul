@@ -1,0 +1,18 @@
+static int sctp_getsockopt_hmac_ident(struct sock *sk, int len,
+				    char __user *optval, int __user *optlen)
+{
+	struct sctp_hmac_algo_param *hmacs;
+	__u16 param_len;
+
+	hmacs = sctp_sk(sk)->ep->auth_hmacs_list;
+	param_len = ntohs(hmacs->param_hdr.length);
+
+	if (len < param_len)
+		return -EINVAL;
+	if (put_user(len, optlen))
+		return -EFAULT;
+	if (copy_to_user(optval, hmacs->hmac_ids, len))
+		return -EFAULT;
+
+	return 0;
+}

@@ -1,0 +1,94 @@
+static bool regsafe(struct bpf_reg_state *rold, struct bpf_reg_state *rcur,
+		    struct idpair *idmap)
+{
+	if (!(rold->live & REG_LIVE_READ))
+		/* explored state didn't use this */
+		return true;
+
+	if (memcmp(rold, rcur, offsetof(struct bpf_reg_state, live)) == 0)
+		return true;
+
+	if (rold->type == NOT_INIT)
+		/* explored state can't have used this */
+		return true;
+	if (rcur->type == NOT_INIT)
+		return false;
+	switch (rold->type) {
+	case SCALAR_VALUE:
+		if (rcur->type == SCALAR_VALUE) {
+			/* new val must satisfy old val knowledge */
+			return range_within(rold, rcur) &&
+			       tnum_in(rold->var_off, rcur->var_off);
+		} else {
+			/* if we knew anything about the old value, we're not
+			 * equal, because we can't know anything about the
+			 * scalar value of the pointer in the new value.
+			 */
+			return rold->umin_value == 0 &&
+			       rold->umax_value == U64_MAX &&
+			       rold->smin_value == S64_MIN &&
+			       rold->smax_value == S64_MAX &&
+			       tnum_is_unknown(rold->var_off);
+		}
+	case PTR_TO_MAP_VALUE:
+		/* If the new min/max/var_off satisfy the old ones and
+		 * everything else matches, we are OK.
+		 * We don't care about the 'id' value, because nothing
+		 * uses it for PTR_TO_MAP_VALUE (only for ..._OR_NULL)
+		 */
+		return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
+		       range_within(rold, rcur) &&
+		       tnum_in(rold->var_off, rcur->var_off);
+	case PTR_TO_MAP_VALUE_OR_NULL:
+		/* a PTR_TO_MAP_VALUE could be safe to use as a
+		 * PTR_TO_MAP_VALUE_OR_NULL into the same map.
+		 * However, if the old PTR_TO_MAP_VALUE_OR_NULL then got NULL-
+		 * checked, doing so could have affected others with the same
+		 * id, and we can't check for that because we lost the id when
+		 * we converted to a PTR_TO_MAP_VALUE.
+		 */
+		if (rcur->type != PTR_TO_MAP_VALUE_OR_NULL)
+			return false;
+		if (memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)))
+			return false;
+		/* Check our ids match any regs they're supposed to */
+		return check_ids(rold->id, rcur->id, idmap);
+	case PTR_TO_PACKET_META:
+	case PTR_TO_PACKET:
+		if (rcur->type != rold->type)
+			return false;
+		/* We must have at least as much range as the old ptr
+		 * did, so that any accesses which were safe before are
+		 * still safe.  This is true even if old range < old off,
+		 * since someone could have accessed through (ptr - k), or
+		 * even done ptr -= k in a register, to get a safe access.
+		 */
+		if (rold->range > rcur->range)
+			return false;
+		/* If the offsets don't match, we can't trust our alignment;
+		 * nor can we be sure that we won't fall out of range.
+		 */
+		if (rold->off != rcur->off)
+			return false;
+		/* id relations must be preserved */
+		if (rold->id && !check_ids(rold->id, rcur->id, idmap))
+			return false;
+		/* new val must satisfy old val knowledge */
+		return range_within(rold, rcur) &&
+		       tnum_in(rold->var_off, rcur->var_off);
+	case PTR_TO_CTX:
+	case CONST_PTR_TO_MAP:
+	case PTR_TO_STACK:
+	case PTR_TO_PACKET_END:
+		/* Only valid matches are exact, which memcmp() above
+		 * would have accepted
+		 */
+	default:
+		/* Don't know what's going on, just say it's not safe */
+		return false;
+	}
+
+	/* Shouldn't get here; if we do, say it's not safe */
+	WARN_ON_ONCE(1);
+	return false;
+}

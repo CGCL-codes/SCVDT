@@ -1,0 +1,8 @@
+static void PTRCALL
+ascii_toUtf8(const ENCODING *enc,
+             const char **fromP, const char *fromLim,
+             char **toP, const char *toLim)
+{
+  while (*fromP != fromLim && *toP != toLim)
+    *(*toP)++ = *(*fromP)++;
+}

@@ -1,0 +1,18 @@
+static struct ip_options *tcp_v4_save_options(struct sock *sk,
+					      struct sk_buff *skb)
+{
+	struct ip_options *opt = &(IPCB(skb)->opt);
+	struct ip_options *dopt = NULL;
+
+	if (opt && opt->optlen) {
+		int opt_size = optlength(opt);
+		dopt = kmalloc(opt_size, GFP_ATOMIC);
+		if (dopt) {
+			if (ip_options_echo(dopt, skb)) {
+				kfree(dopt);
+				dopt = NULL;
+			}
+		}
+	}
+	return dopt;
+}

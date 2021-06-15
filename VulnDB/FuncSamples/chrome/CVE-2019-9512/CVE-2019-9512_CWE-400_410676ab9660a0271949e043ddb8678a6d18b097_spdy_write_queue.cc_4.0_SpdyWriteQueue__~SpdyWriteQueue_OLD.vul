@@ -1,0 +1,3 @@
+SpdyWriteQueue::~SpdyWriteQueue() {
+  Clear();
+}

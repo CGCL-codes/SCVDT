@@ -1,0 +1,608 @@
+#include <xen/lib.h>
+#include <xen/config.h>
+#include <xen/irq.h>
+#include <xen/smp.h>
+#include <xen/time.h>
+#include <xen/spinlock.h>
+#include <xen/guest_access.h>
+#include <xen/preempt.h>
+#include <public/sysctl.h>
+#include <asm/processor.h>
+#include <asm/atomic.h>
+
+#ifndef NDEBUG
+
+static atomic_t spin_debug __read_mostly = ATOMIC_INIT(0);
+
+static void check_lock(struct lock_debug *debug)
+{
+    int irq_safe = !local_irq_is_enabled();
+
+    if ( unlikely(atomic_read(&spin_debug) <= 0) )
+        return;
+
+    /* A few places take liberties with this. */
+    /* BUG_ON(in_irq() && !irq_safe); */
+
+    /*
+     * We partition locks into IRQ-safe (always held with IRQs disabled) and
+     * IRQ-unsafe (always held with IRQs enabled) types. The convention for
+     * every lock must be consistently observed else we can deadlock in
+     * IRQ-context rendezvous functions (a rendezvous which gets every CPU
+     * into IRQ context before any CPU is released from the rendezvous).
+     * 
+     * If we can mix IRQ-disabled and IRQ-enabled callers, the following can
+     * happen:
+     *  * Lock is held by CPU A, with IRQs enabled
+     *  * CPU B is spinning on same lock, with IRQs disabled
+     *  * Rendezvous starts -- CPU A takes interrupt and enters rendezbous spin
+     *  * DEADLOCK -- CPU B will never enter rendezvous, CPU A will never exit
+     *                the rendezvous, and will hence never release the lock.
+     * 
+     * To guard against this subtle bug we latch the IRQ safety of every
+     * spinlock in the system, on first use.
+     */
+    if ( unlikely(debug->irq_safe != irq_safe) )
+    {
+        int seen = cmpxchg(&debug->irq_safe, -1, irq_safe);
+        BUG_ON(seen == !irq_safe);
+    }
+}
+
+static void check_barrier(struct lock_debug *debug)
+{
+    if ( unlikely(atomic_read(&spin_debug) <= 0) )
+        return;
+
+    /*
+     * For a barrier, we have a relaxed IRQ-safety-consistency check.
+     * 
+     * It is always safe to spin at the barrier with IRQs enabled -- that does
+     * not prevent us from entering an IRQ-context rendezvous, and nor are
+     * we preventing anyone else from doing so (since we do not actually
+     * acquire the lock during a barrier operation).
+     * 
+     * However, if we spin on an IRQ-unsafe lock with IRQs disabled then that
+     * is clearly wrong, for the same reason outlined in check_lock() above.
+     */
+    BUG_ON(!local_irq_is_enabled() && (debug->irq_safe == 0));
+}
+
+void spin_debug_enable(void)
+{
+    atomic_inc(&spin_debug);
+}
+
+void spin_debug_disable(void)
+{
+    atomic_dec(&spin_debug);
+}
+
+#else /* defined(NDEBUG) */
+
+#define check_lock(l) ((void)0)
+#define check_barrier(l) ((void)0)
+
+#endif
+
+#ifdef LOCK_PROFILE
+
+#define LOCK_PROFILE_REL                                                     \
+    if (lock->profile)                                                       \
+    {                                                                        \
+        lock->profile->time_hold += NOW() - lock->profile->time_locked;      \
+        lock->profile->lock_cnt++;                                           \
+    }
+#define LOCK_PROFILE_VAR    s_time_t block = 0
+#define LOCK_PROFILE_BLOCK  block = block ? : NOW();
+#define LOCK_PROFILE_GOT                                                     \
+    if (lock->profile)                                                       \
+    {                                                                        \
+        lock->profile->time_locked = NOW();                                  \
+        if (block)                                                           \
+        {                                                                    \
+            lock->profile->time_block += lock->profile->time_locked - block; \
+            lock->profile->block_cnt++;                                      \
+        }                                                                    \
+    }
+
+#else
+
+#define LOCK_PROFILE_REL
+#define LOCK_PROFILE_VAR
+#define LOCK_PROFILE_BLOCK
+#define LOCK_PROFILE_GOT
+
+#endif
+
+void _spin_lock(spinlock_t *lock)
+{
+    LOCK_PROFILE_VAR;
+
+    check_lock(&lock->debug);
+    while ( unlikely(!_raw_spin_trylock(&lock->raw)) )
+    {
+        LOCK_PROFILE_BLOCK;
+        while ( likely(_raw_spin_is_locked(&lock->raw)) )
+            cpu_relax();
+    }
+    LOCK_PROFILE_GOT;
+    preempt_disable();
+}
+
+void _spin_lock_irq(spinlock_t *lock)
+{
+    LOCK_PROFILE_VAR;
+
+    ASSERT(local_irq_is_enabled());
+    local_irq_disable();
+    check_lock(&lock->debug);
+    while ( unlikely(!_raw_spin_trylock(&lock->raw)) )
+    {
+        LOCK_PROFILE_BLOCK;
+        local_irq_enable();
+        while ( likely(_raw_spin_is_locked(&lock->raw)) )
+            cpu_relax();
+        local_irq_disable();
+    }
+    LOCK_PROFILE_GOT;
+    preempt_disable();
+}
+
+unsigned long _spin_lock_irqsave(spinlock_t *lock)
+{
+    unsigned long flags;
+    LOCK_PROFILE_VAR;
+
+    local_irq_save(flags);
+    check_lock(&lock->debug);
+    while ( unlikely(!_raw_spin_trylock(&lock->raw)) )
+    {
+        LOCK_PROFILE_BLOCK;
+        local_irq_restore(flags);
+        while ( likely(_raw_spin_is_locked(&lock->raw)) )
+            cpu_relax();
+        local_irq_save(flags);
+    }
+    LOCK_PROFILE_GOT;
+    preempt_disable();
+    return flags;
+}
+
+void _spin_unlock(spinlock_t *lock)
+{
+    preempt_enable();
+    LOCK_PROFILE_REL;
+    _raw_spin_unlock(&lock->raw);
+}
+
+void _spin_unlock_irq(spinlock_t *lock)
+{
+    preempt_enable();
+    LOCK_PROFILE_REL;
+    _raw_spin_unlock(&lock->raw);
+    local_irq_enable();
+}
+
+void _spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags)
+{
+    preempt_enable();
+    LOCK_PROFILE_REL;
+    _raw_spin_unlock(&lock->raw);
+    local_irq_restore(flags);
+}
+
+int _spin_is_locked(spinlock_t *lock)
+{
+    check_lock(&lock->debug);
+    return _raw_spin_is_locked(&lock->raw);
+}
+
+int _spin_trylock(spinlock_t *lock)
+{
+    check_lock(&lock->debug);
+    if ( !_raw_spin_trylock(&lock->raw) )
+        return 0;
+#ifdef LOCK_PROFILE
+    if (lock->profile)
+        lock->profile->time_locked = NOW();
+#endif
+    preempt_disable();
+    return 1;
+}
+
+void _spin_barrier(spinlock_t *lock)
+{
+#ifdef LOCK_PROFILE
+    s_time_t block = NOW();
+    u64      loop = 0;
+
+    check_barrier(&lock->debug);
+    do { mb(); loop++;} while ( _raw_spin_is_locked(&lock->raw) );
+    if ((loop > 1) && lock->profile)
+    {
+        lock->profile->time_block += NOW() - block;
+        lock->profile->block_cnt++;
+    }
+#else
+    check_barrier(&lock->debug);
+    do { mb(); } while ( _raw_spin_is_locked(&lock->raw) );
+#endif
+    mb();
+}
+
+int _spin_trylock_recursive(spinlock_t *lock)
+{
+    int cpu = smp_processor_id();
+
+    /* Don't allow overflow of recurse_cpu field. */
+    BUILD_BUG_ON(NR_CPUS > 0xfffu);
+
+    check_lock(&lock->debug);
+
+    if ( likely(lock->recurse_cpu != cpu) )
+    {
+        if ( !spin_trylock(lock) )
+            return 0;
+        lock->recurse_cpu = cpu;
+    }
+
+    /* We support only fairly shallow recursion, else the counter overflows. */
+    ASSERT(lock->recurse_cnt < 0xfu);
+    lock->recurse_cnt++;
+
+    return 1;
+}
+
+void _spin_lock_recursive(spinlock_t *lock)
+{
+    while ( !spin_trylock_recursive(lock) )
+        cpu_relax();
+}
+
+void _spin_unlock_recursive(spinlock_t *lock)
+{
+    if ( likely(--lock->recurse_cnt == 0) )
+    {
+        lock->recurse_cpu = 0xfffu;
+        spin_unlock(lock);
+    }
+}
+
+void _read_lock(rwlock_t *lock)
+{
+    check_lock(&lock->debug);
+    while ( unlikely(!_raw_read_trylock(&lock->raw)) )
+    {
+        while ( likely(_raw_rw_is_write_locked(&lock->raw)) )
+            cpu_relax();
+    }
+    preempt_disable();
+}
+
+void _read_lock_irq(rwlock_t *lock)
+{
+    ASSERT(local_irq_is_enabled());
+    local_irq_disable();
+    check_lock(&lock->debug);
+    while ( unlikely(!_raw_read_trylock(&lock->raw)) )
+    {
+        local_irq_enable();
+        while ( likely(_raw_rw_is_write_locked(&lock->raw)) )
+            cpu_relax();
+        local_irq_disable();
+    }
+    preempt_disable();
+}
+
+unsigned long _read_lock_irqsave(rwlock_t *lock)
+{
+    unsigned long flags;
+    local_irq_save(flags);
+    check_lock(&lock->debug);
+    while ( unlikely(!_raw_read_trylock(&lock->raw)) )
+    {
+        local_irq_restore(flags);
+        while ( likely(_raw_rw_is_write_locked(&lock->raw)) )
+            cpu_relax();
+        local_irq_save(flags);
+    }
+    preempt_disable();
+    return flags;
+}
+
+int _read_trylock(rwlock_t *lock)
+{
+    check_lock(&lock->debug);
+    if ( !_raw_read_trylock(&lock->raw) )
+        return 0;
+    preempt_disable();
+    return 1;
+}
+
+void _read_unlock(rwlock_t *lock)
+{
+    preempt_enable();
+    _raw_read_unlock(&lock->raw);
+}
+
+void _read_unlock_irq(rwlock_t *lock)
+{
+    preempt_enable();
+    _raw_read_unlock(&lock->raw);
+    local_irq_enable();
+}
+
+void _read_unlock_irqrestore(rwlock_t *lock, unsigned long flags)
+{
+    preempt_enable();
+    _raw_read_unlock(&lock->raw);
+    local_irq_restore(flags);
+}
+
+void _write_lock(rwlock_t *lock)
+{
+    check_lock(&lock->debug);
+    while ( unlikely(!_raw_write_trylock(&lock->raw)) )
+    {
+        while ( likely(_raw_rw_is_locked(&lock->raw)) )
+            cpu_relax();
+    }
+    preempt_disable();
+}
+
+void _write_lock_irq(rwlock_t *lock)
+{
+    ASSERT(local_irq_is_enabled());
+    local_irq_disable();
+    check_lock(&lock->debug);
+    while ( unlikely(!_raw_write_trylock(&lock->raw)) )
+    {
+        local_irq_enable();
+        while ( likely(_raw_rw_is_locked(&lock->raw)) )
+            cpu_relax();
+        local_irq_disable();
+    }
+    preempt_disable();
+}
+
+unsigned long _write_lock_irqsave(rwlock_t *lock)
+{
+    unsigned long flags;
+    local_irq_save(flags);
+    check_lock(&lock->debug);
+    while ( unlikely(!_raw_write_trylock(&lock->raw)) )
+    {
+        local_irq_restore(flags);
+        while ( likely(_raw_rw_is_locked(&lock->raw)) )
+            cpu_relax();
+        local_irq_save(flags);
+    }
+    preempt_disable();
+    return flags;
+}
+
+int _write_trylock(rwlock_t *lock)
+{
+    check_lock(&lock->debug);
+    if ( !_raw_write_trylock(&lock->raw) )
+        return 0;
+    preempt_disable();
+    return 1;
+}
+
+void _write_unlock(rwlock_t *lock)
+{
+    preempt_enable();
+    _raw_write_unlock(&lock->raw);
+}
+
+void _write_unlock_irq(rwlock_t *lock)
+{
+    preempt_enable();
+    _raw_write_unlock(&lock->raw);
+    local_irq_enable();
+}
+
+void _write_unlock_irqrestore(rwlock_t *lock, unsigned long flags)
+{
+    preempt_enable();
+    _raw_write_unlock(&lock->raw);
+    local_irq_restore(flags);
+}
+
+int _rw_is_locked(rwlock_t *lock)
+{
+    check_lock(&lock->debug);
+    return _raw_rw_is_locked(&lock->raw);
+}
+
+int _rw_is_write_locked(rwlock_t *lock)
+{
+    check_lock(&lock->debug);
+    return _raw_rw_is_write_locked(&lock->raw);
+}
+
+#ifdef LOCK_PROFILE
+
+struct lock_profile_anc {
+    struct lock_profile_qhead *head_q;   /* first head of this type */
+    char                      *name;     /* descriptive string for print */
+};
+
+typedef void lock_profile_subfunc(
+    struct lock_profile *, int32_t, int32_t, void *);
+
+extern struct lock_profile *__lock_profile_start;
+extern struct lock_profile *__lock_profile_end;
+
+static s_time_t lock_profile_start;
+static struct lock_profile_anc lock_profile_ancs[LOCKPROF_TYPE_N];
+static struct lock_profile_qhead lock_profile_glb_q;
+static spinlock_t lock_profile_lock = SPIN_LOCK_UNLOCKED;
+
+static void spinlock_profile_iterate(lock_profile_subfunc *sub, void *par)
+{
+    int i;
+    struct lock_profile_qhead *hq;
+    struct lock_profile *eq;
+
+    spin_lock(&lock_profile_lock);
+    for ( i = 0; i < LOCKPROF_TYPE_N; i++ )
+        for ( hq = lock_profile_ancs[i].head_q; hq; hq = hq->head_q )
+            for ( eq = hq->elem_q; eq; eq = eq->next )
+                sub(eq, i, hq->idx, par);
+    spin_unlock(&lock_profile_lock);
+}
+
+static void spinlock_profile_print_elem(struct lock_profile *data,
+    int32_t type, int32_t idx, void *par)
+{
+    if ( type == LOCKPROF_TYPE_GLOBAL )
+        printk("%s %s:\n", lock_profile_ancs[type].name, data->name);
+    else
+        printk("%s %d %s:\n", lock_profile_ancs[type].name, idx, data->name);
+    printk("  lock:%12"PRId64"(%08X:%08X), block:%12"PRId64"(%08X:%08X)\n",
+           data->lock_cnt, (u32)(data->time_hold >> 32), (u32)data->time_hold,
+           data->block_cnt, (u32)(data->time_block >> 32),
+           (u32)data->time_block);
+}
+
+void spinlock_profile_printall(unsigned char key)
+{
+    s_time_t now = NOW();
+    s_time_t diff;
+
+    diff = now - lock_profile_start;
+    printk("Xen lock profile info SHOW  (now = %08X:%08X, "
+        "total = %08X:%08X)\n", (u32)(now>>32), (u32)now,
+        (u32)(diff>>32), (u32)diff);
+    spinlock_profile_iterate(spinlock_profile_print_elem, NULL);
+}
+
+static void spinlock_profile_reset_elem(struct lock_profile *data,
+    int32_t type, int32_t idx, void *par)
+{
+    data->lock_cnt = 0;
+    data->block_cnt = 0;
+    data->time_hold = 0;
+    data->time_block = 0;
+}
+
+void spinlock_profile_reset(unsigned char key)
+{
+    s_time_t now = NOW();
+
+    if ( key != '\0' )
+        printk("Xen lock profile info RESET (now = %08X:%08X)\n",
+            (u32)(now>>32), (u32)now);
+    lock_profile_start = now;
+    spinlock_profile_iterate(spinlock_profile_reset_elem, NULL);
+}
+
+typedef struct {
+    xen_sysctl_lockprof_op_t *pc;
+    int                      rc;
+} spinlock_profile_ucopy_t;
+
+static void spinlock_profile_ucopy_elem(struct lock_profile *data,
+    int32_t type, int32_t idx, void *par)
+{
+    spinlock_profile_ucopy_t *p = par;
+    xen_sysctl_lockprof_data_t elem;
+
+    if ( p->rc )
+        return;
+
+    if ( p->pc->nr_elem < p->pc->max_elem )
+    {
+        safe_strcpy(elem.name, data->name);
+        elem.type = type;
+        elem.idx = idx;
+        elem.lock_cnt = data->lock_cnt;
+        elem.block_cnt = data->block_cnt;
+        elem.lock_time = data->time_hold;
+        elem.block_time = data->time_block;
+        if ( copy_to_guest_offset(p->pc->data, p->pc->nr_elem, &elem, 1) )
+            p->rc = -EFAULT;
+    }
+
+    if ( !p->rc )
+        p->pc->nr_elem++;
+}
+
+/* Dom0 control of lock profiling */
+int spinlock_profile_control(xen_sysctl_lockprof_op_t *pc)
+{
+    int rc = 0;
+    spinlock_profile_ucopy_t par;
+
+    switch ( pc->cmd )
+    {
+    case XEN_SYSCTL_LOCKPROF_reset:
+        spinlock_profile_reset('\0');
+        break;
+    case XEN_SYSCTL_LOCKPROF_query:
+        pc->nr_elem = 0;
+        par.rc = 0;
+        par.pc = pc;
+        spinlock_profile_iterate(spinlock_profile_ucopy_elem, &par);
+        pc->time = NOW() - lock_profile_start;
+        rc = par.rc;
+        break;
+    default:
+        rc = -EINVAL;
+        break;
+    }
+
+    return rc;
+}
+
+void _lock_profile_register_struct(
+    int32_t type, struct lock_profile_qhead *qhead, int32_t idx, char *name)
+{
+    qhead->idx = idx;
+    spin_lock(&lock_profile_lock);
+    qhead->head_q = lock_profile_ancs[type].head_q;
+    lock_profile_ancs[type].head_q = qhead;
+    lock_profile_ancs[type].name = name;
+    spin_unlock(&lock_profile_lock);
+}
+
+void _lock_profile_deregister_struct(
+    int32_t type, struct lock_profile_qhead *qhead)
+{
+    struct lock_profile_qhead **q;
+
+    spin_lock(&lock_profile_lock);
+    for ( q = &lock_profile_ancs[type].head_q; *q; q = &(*q)->head_q )
+    {
+        if ( *q == qhead )
+        {
+            *q = qhead->head_q;
+            break;
+        }
+    }
+    spin_unlock(&lock_profile_lock);
+}
+
+static int __init lock_prof_init(void)
+{
+    struct lock_profile **q;
+
+    for ( q = &__lock_profile_start; q < &__lock_profile_end; q++ )
+    {
+        (*q)->next = lock_profile_glb_q.elem_q;
+        lock_profile_glb_q.elem_q = *q;
+        (*q)->lock->profile = *q;
+    }
+
+    _lock_profile_register_struct(
+        LOCKPROF_TYPE_GLOBAL, &lock_profile_glb_q,
+        0, "Global lock");
+
+    return 0;
+}
+__initcall(lock_prof_init);
+
+#endif /* LOCK_PROFILE */

@@ -1,0 +1,89 @@
+static int old_codec47(SANMVideoContext *ctx, int top,
+                       int left, int width, int height)
+{
+    int i, j, seq, compr, new_rot, tbl_pos, skip;
+    int stride     = ctx->pitch;
+    uint8_t *dst   = ((uint8_t*)ctx->frm0) + left + top * stride;
+    uint8_t *prev1 = (uint8_t*)ctx->frm1;
+    uint8_t *prev2 = (uint8_t*)ctx->frm2;
+    uint32_t decoded_size;
+
+    tbl_pos = bytestream2_tell(&ctx->gb);
+    seq     = bytestream2_get_le16(&ctx->gb);
+    compr   = bytestream2_get_byte(&ctx->gb);
+    new_rot = bytestream2_get_byte(&ctx->gb);
+    skip    = bytestream2_get_byte(&ctx->gb);
+    bytestream2_skip(&ctx->gb, 9);
+    decoded_size = bytestream2_get_le32(&ctx->gb);
+    bytestream2_skip(&ctx->gb, 8);
+
+    if (decoded_size > height * stride - left - top * stride) {
+        decoded_size = height * stride - left - top * stride;
+        av_log(ctx->avctx, AV_LOG_WARNING, "decoded size is too large\n");
+    }
+
+    if (skip & 1)
+        bytestream2_skip(&ctx->gb, 0x8080);
+    if (!seq) {
+        ctx->prev_seq = -1;
+        memset(prev1, 0, ctx->height * stride);
+        memset(prev2, 0, ctx->height * stride);
+    }
+    av_dlog(ctx->avctx, "compression %d\n", compr);
+    switch (compr) {
+    case 0:
+        if (bytestream2_get_bytes_left(&ctx->gb) < width * height)
+            return AVERROR_INVALIDDATA;
+        for (j = 0; j < height; j++) {
+            bytestream2_get_bufferu(&ctx->gb, dst, width);
+            dst += stride;
+        }
+        break;
+    case 1:
+        if (bytestream2_get_bytes_left(&ctx->gb) < ((width + 1) >> 1) * ((height + 1) >> 1))
+            return AVERROR_INVALIDDATA;
+        for (j = 0; j < height; j += 2) {
+            for (i = 0; i < width; i += 2) {
+                dst[i] = dst[i + 1] =
+                dst[stride + i] = dst[stride + i + 1] = bytestream2_get_byteu(&ctx->gb);
+            }
+            dst += stride * 2;
+        }
+        break;
+    case 2:
+        if (seq == ctx->prev_seq + 1) {
+            for (j = 0; j < height; j += 8) {
+                for (i = 0; i < width; i += 8) {
+                    if (process_block(ctx, dst + i, prev1 + i, prev2 + i, stride,
+                                      tbl_pos + 8, 8))
+                        return AVERROR_INVALIDDATA;
+                }
+                dst   += stride * 8;
+                prev1 += stride * 8;
+                prev2 += stride * 8;
+            }
+        }
+        break;
+    case 3:
+        memcpy(ctx->frm0, ctx->frm2, ctx->pitch * ctx->height);
+        break;
+    case 4:
+        memcpy(ctx->frm0, ctx->frm1, ctx->pitch * ctx->height);
+        break;
+    case 5:
+        if (rle_decode(ctx, dst, decoded_size))
+            return AVERROR_INVALIDDATA;
+        break;
+    default:
+        av_log(ctx->avctx, AV_LOG_ERROR,
+               "subcodec 47 compression %d not implemented\n", compr);
+        return AVERROR_PATCHWELCOME;
+    }
+    if (seq == ctx->prev_seq + 1)
+        ctx->rotate_code = new_rot;
+    else
+        ctx->rotate_code = 0;
+    ctx->prev_seq = seq;
+
+    return 0;
+}

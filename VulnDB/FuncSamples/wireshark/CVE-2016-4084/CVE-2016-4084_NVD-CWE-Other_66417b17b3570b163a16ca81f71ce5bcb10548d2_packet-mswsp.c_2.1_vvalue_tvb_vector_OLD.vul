@@ -1,0 +1,5 @@
+static int vvalue_tvb_vector(tvbuff_t *tvb, int offset, struct vt_vector *val, struct vtype_data *type)
+{
+	const int num = tvb_get_letohl(tvb, offset);
+	return 4 + vvalue_tvb_vector_internal(tvb, offset+4, val, type, num);
+}

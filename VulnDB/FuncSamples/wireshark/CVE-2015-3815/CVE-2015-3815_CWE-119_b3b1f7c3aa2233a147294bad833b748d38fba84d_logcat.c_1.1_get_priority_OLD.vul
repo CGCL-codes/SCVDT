@@ -1,0 +1,8 @@
+static gchar get_priority(const guint8 *priority) {
+    static gchar priorities[] = "??VDIWEFS";
+
+    if (*priority >= (guint8) sizeof(priorities))
+        return '?';
+
+    return priorities[(int) *priority];
+}

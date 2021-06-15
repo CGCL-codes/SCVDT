@@ -1,0 +1,258 @@
+static INT Dot11DecryptScanForKeys(
+    PDOT11DECRYPT_CONTEXT ctx,
+    const guint8 *data,
+    const guint mac_header_len,
+    const guint tot_len,
+    DOT11DECRYPT_SEC_ASSOCIATION_ID id
+)
+{
+    const UCHAR *addr;
+    guint bodyLength;
+    PDOT11DECRYPT_SEC_ASSOCIATION sta_sa;
+    PDOT11DECRYPT_SEC_ASSOCIATION sa;
+    guint offset = 0;
+    const guint8 dot1x_header[] = {
+        0xAA,             /* DSAP=SNAP */
+        0xAA,             /* SSAP=SNAP */
+        0x03,             /* Control field=Unnumbered frame */
+        0x00, 0x00, 0x00, /* Org. code=encaps. Ethernet */
+        0x88, 0x8E        /* Type: 802.1X authentication */
+    };
+    const guint8 bt_dot1x_header[] = {
+        0xAA,             /* DSAP=SNAP */
+        0xAA,             /* SSAP=SNAP */
+        0x03,             /* Control field=Unnumbered frame */
+        0x00, 0x19, 0x58, /* Org. code=Bluetooth SIG */
+        0x00, 0x03        /* Type: Bluetooth Security */
+    };
+    const guint8 tdls_header[] = {
+        0xAA,             /* DSAP=SNAP */
+        0xAA,             /* SSAP=SNAP */
+        0x03,             /* Control field=Unnumbered frame */
+        0x00, 0x00, 0x00, /* Org. code=encaps. Ethernet */
+        0x89, 0x0D,       /* Type: 802.11 - Fast Roaming Remote Request */
+        0x02,             /* Payload Type: TDLS */
+        0X0C              /* Action Category: TDLS */
+    };
+
+    const EAPOL_RSN_KEY *pEAPKey;
+#ifdef DOT11DECRYPT_DEBUG
+#define MSGBUF_LEN 255
+    CHAR msgbuf[MSGBUF_LEN];
+#endif
+    DOT11DECRYPT_DEBUG_TRACE_START("Dot11DecryptScanForKeys");
+
+    /* Callers provide these guarantees, so let's make them explicit. */
+    DISSECTOR_ASSERT(tot_len >= mac_header_len + DOT11DECRYPT_CRYPTED_DATA_MINLEN);
+    DISSECTOR_ASSERT(tot_len <= DOT11DECRYPT_MAX_CAPLEN);
+
+    /* cache offset in the packet data */
+    offset = mac_header_len;
+
+    /* check if the packet has an LLC header and the packet is 802.1X authentication (IEEE 802.1X-2004, pg. 24) */
+    if (memcmp(data+offset, dot1x_header, 8) == 0 || memcmp(data+offset, bt_dot1x_header, 8) == 0) {
+
+        DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "Authentication: EAPOL packet", DOT11DECRYPT_DEBUG_LEVEL_3);
+
+        /* skip LLC header */
+        offset+=8;
+
+        /* check if the packet is a EAPOL-Key (0x03) (IEEE 802.1X-2004, pg. 25) */
+        if (data[offset+1]!=3) {
+            DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "Not EAPOL-Key", DOT11DECRYPT_DEBUG_LEVEL_3);
+            return DOT11DECRYPT_RET_NO_VALID_HANDSHAKE;
+        }
+
+        /* get and check the body length (IEEE 802.1X-2004, pg. 25) */
+        bodyLength=pntoh16(data+offset+2);
+        if (((tot_len-offset-4) < bodyLength) || (bodyLength < sizeof(EAPOL_RSN_KEY))) { /* Only check if frame is long enough for eapol header, ignore tailing garbage, see bug 9065 */
+            DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "EAPOL body too short", DOT11DECRYPT_DEBUG_LEVEL_3);
+            return DOT11DECRYPT_RET_NO_VALID_HANDSHAKE;
+        }
+
+        /* skip EAPOL MPDU and go to the first byte of the body */
+        offset+=4;
+
+        pEAPKey = (const EAPOL_RSN_KEY *) (data+offset);
+
+        /* check if the key descriptor type is valid (IEEE 802.1X-2004, pg. 27) */
+        if (/*pEAPKey->type!=0x1 &&*/ /* RC4 Key Descriptor Type (deprecated) */
+            pEAPKey->type != DOT11DECRYPT_RSN_WPA2_KEY_DESCRIPTOR &&             /* IEEE 802.11 Key Descriptor Type  (WPA2) */
+            pEAPKey->type != DOT11DECRYPT_RSN_WPA_KEY_DESCRIPTOR)           /* 254 = RSN_KEY_DESCRIPTOR - WPA,              */
+        {
+            DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "Not valid key descriptor type", DOT11DECRYPT_DEBUG_LEVEL_3);
+            return DOT11DECRYPT_RET_NO_VALID_HANDSHAKE;
+        }
+
+        /* start with descriptor body */
+        offset+=1;
+
+        /* search for a cached Security Association for current BSSID and AP */
+        sa = Dot11DecryptGetSaPtr(ctx, &id);
+        if (sa == NULL){
+            DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "No SA for BSSID found", DOT11DECRYPT_DEBUG_LEVEL_3);
+            return DOT11DECRYPT_RET_REQ_DATA;
+        }
+
+        /* It could be a Pairwise Key exchange, check */
+        if (Dot11DecryptRsna4WHandshake(ctx, data, sa, offset, tot_len) == DOT11DECRYPT_RET_SUCCESS_HANDSHAKE)
+            return DOT11DECRYPT_RET_SUCCESS_HANDSHAKE;
+
+        if (mac_header_len + GROUP_KEY_PAYLOAD_LEN_MIN > tot_len) {
+            DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "Message too short for Group Key", DOT11DECRYPT_DEBUG_LEVEL_3);
+            return DOT11DECRYPT_RET_NO_VALID_HANDSHAKE;
+        }
+
+        /* Verify the bitfields: Key = 0(groupwise) Mic = 1 Ack = 1 Secure = 1 */
+        if (DOT11DECRYPT_EAP_KEY(data[offset+1])!=0 ||
+            DOT11DECRYPT_EAP_ACK(data[offset+1])!=1 ||
+            DOT11DECRYPT_EAP_MIC(data[offset]) != 1 ||
+            DOT11DECRYPT_EAP_SEC(data[offset]) != 1){
+
+            DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "Key bitfields not correct for Group Key", DOT11DECRYPT_DEBUG_LEVEL_3);
+            return DOT11DECRYPT_RET_NO_VALID_HANDSHAKE;
+        }
+
+        /* force STA address to be the broadcast MAC so we create an SA for the groupkey */
+        memcpy(id.sta, broadcast_mac, DOT11DECRYPT_MAC_LEN);
+
+        /* get the Security Association structure for the broadcast MAC and AP */
+        sa = Dot11DecryptGetSaPtr(ctx, &id);
+        if (sa == NULL){
+            return DOT11DECRYPT_RET_REQ_DATA;
+        }
+
+        /* Get the SA for the STA, since we need its pairwise key to decrpyt the group key */
+
+        /* get STA address */
+        if ( (addr=Dot11DecryptGetStaAddress((const DOT11DECRYPT_MAC_FRAME_ADDR4 *)(data))) != NULL) {
+            memcpy(id.sta, addr, DOT11DECRYPT_MAC_LEN);
+#ifdef DOT11DECRYPT_DEBUG
+            g_snprintf(msgbuf, MSGBUF_LEN, "ST_MAC: %2X.%2X.%2X.%2X.%2X.%2X\t", id.sta[0],id.sta[1],id.sta[2],id.sta[3],id.sta[4],id.sta[5]);
+#endif
+            DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", msgbuf, DOT11DECRYPT_DEBUG_LEVEL_3);
+        } else {
+            DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "SA not found", DOT11DECRYPT_DEBUG_LEVEL_5);
+            return DOT11DECRYPT_RET_REQ_DATA;
+        }
+
+        sta_sa = Dot11DecryptGetSaPtr(ctx, &id);
+        if (sta_sa == NULL){
+            return DOT11DECRYPT_RET_REQ_DATA;
+        }
+
+        /* Try to extract the group key and install it in the SA */
+        return (Dot11DecryptDecryptWPABroadcastKey(pEAPKey, sta_sa->wpa.ptk+16, sa, tot_len-offset+1));
+
+    } else if (memcmp(data+offset, tdls_header, 10) == 0) {
+        const guint8 *initiator, *responder;
+        guint8 action;
+        guint status, offset_rsne = 0, offset_fte = 0, offset_link = 0, offset_timeout = 0;
+        DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "Authentication: TDLS Action Frame", DOT11DECRYPT_DEBUG_LEVEL_3);
+
+        /* Skip LLC header, after this we have at least
+         * DOT11DECRYPT_CRYPTED_DATA_MINLEN-10 = 7 bytes in "data[offset]". That
+         * TDLS payload contains a TDLS Action field (802.11-2016 9.6.13) */
+        offset+=10;
+
+        /* check if the packet is a TDLS response or confirm */
+        action = data[offset];
+        if (action!=1 && action!=2) {
+            DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "Not Response nor confirm", DOT11DECRYPT_DEBUG_LEVEL_3);
+            return DOT11DECRYPT_RET_NO_VALID_HANDSHAKE;
+        }
+        offset++;
+
+        /* Check for SUCCESS (0) or SUCCESS_POWER_SAVE_MODE (85) Status Code */
+        status=pntoh16(data+offset);
+        if (status != 0 && status != 85) {
+            DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "TDLS setup not successfull", DOT11DECRYPT_DEBUG_LEVEL_3);
+            return DOT11DECRYPT_RET_NO_VALID_HANDSHAKE;
+        }
+
+        /* skip Token + capabilities */
+        offset+=5;
+
+        /* search for RSN, Fast BSS Transition, Link Identifier and Timeout Interval IEs */
+
+        while(offset < (tot_len - 2)) {
+            guint8 element_id = data[offset];
+            guint8 length = data[offset + 1];
+            guint min_length = length;
+            switch (element_id) {
+            case 48:    /* RSN (802.11-2016 9.4.2.35) */
+                offset_rsne = offset;
+                min_length = 1;
+                break;
+            case 55:    /* FTE (802.11-2016 9.4.2.48) */
+                offset_fte = offset;
+                /* Plus variable length optional parameter(s) */
+                min_length = 2 + 16 + 32 + 32;
+                break;
+            case 56:    /* Timeout Interval (802.11-2016 9.4.2.49) */
+                offset_timeout = offset;
+                min_length = 1 + 4;
+                break;
+            case 101:   /* Link Identifier (802.11-2016 9.4.2.62) */
+                offset_link = offset;
+                min_length = 6 + 6 + 6;
+                break;
+            }
+
+            if (length < min_length || tot_len < offset + 2 + length) {
+                return DOT11DECRYPT_RET_NO_VALID_HANDSHAKE;
+            }
+            offset += 2 + length;
+        }
+
+        if (offset_rsne == 0 || offset_fte == 0 ||
+            offset_timeout == 0 || offset_link == 0)
+        {
+            DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "Cannot Find all necessary IEs", DOT11DECRYPT_DEBUG_LEVEL_3);
+            return DOT11DECRYPT_RET_NO_VALID_HANDSHAKE;
+        }
+
+        DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "Found RSNE/Fast BSS/Timeout Interval/Link IEs", DOT11DECRYPT_DEBUG_LEVEL_3);
+
+        /* Will create a Security Association between 2 STA. Need to get both MAC address */
+        initiator = &data[offset_link + 8];
+        responder = &data[offset_link + 14];
+
+        if (memcmp(initiator, responder, DOT11DECRYPT_MAC_LEN) < 0) {
+            memcpy(id.sta, initiator, DOT11DECRYPT_MAC_LEN);
+            memcpy(id.bssid, responder, DOT11DECRYPT_MAC_LEN);
+        } else {
+            memcpy(id.sta, responder, DOT11DECRYPT_MAC_LEN);
+            memcpy(id.bssid, initiator, DOT11DECRYPT_MAC_LEN);
+        }
+
+        sa = Dot11DecryptGetSaPtr(ctx, &id);
+        if (sa == NULL){
+            return DOT11DECRYPT_RET_REQ_DATA;
+        }
+
+        if (sa->validKey) {
+            if (memcmp(sa->wpa.nonce, data + offset_fte + 52, DOT11DECRYPT_WPA_NONCE_LEN) == 0) {
+                /* Already have valid key for this SA, no need to redo key derivation */
+                return DOT11DECRYPT_RET_SUCCESS_HANDSHAKE;
+            } else {
+                /* We are opening a new session with the same two STA, save previous sa  */
+                DOT11DECRYPT_SEC_ASSOCIATION *tmp_sa = g_new(DOT11DECRYPT_SEC_ASSOCIATION, 1);
+                memcpy(tmp_sa, sa, sizeof(DOT11DECRYPT_SEC_ASSOCIATION));
+                sa->next=tmp_sa;
+                sa->validKey = FALSE;
+            }
+        }
+
+        if (Dot11DecryptTDLSDeriveKey(sa, data, offset_rsne, offset_fte, offset_timeout, offset_link, action)
+            == DOT11DECRYPT_RET_SUCCESS) {
+            DOT11DECRYPT_DEBUG_TRACE_END("Dot11DecryptScanForKeys");
+            return DOT11DECRYPT_RET_SUCCESS_HANDSHAKE;
+        }
+    } else {
+        DOT11DECRYPT_DEBUG_PRINT_LINE("Dot11DecryptScanForKeys", "Skipping: not an EAPOL packet", DOT11DECRYPT_DEBUG_LEVEL_3);
+    }
+
+    DOT11DECRYPT_DEBUG_TRACE_END("Dot11DecryptScanForKeys");
+    return DOT11DECRYPT_RET_NO_VALID_HANDSHAKE;
+}

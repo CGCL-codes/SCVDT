@@ -1,0 +1,45 @@
+static size_t exif_convert_any_to_int(void *value, int format, int motorola_intel TSRMLS_DC)
+{
+	int 		s_den;
+	unsigned 	u_den;
+
+	switch(format) {
+		case TAG_FMT_SBYTE:     return *(signed char *)value;
+		case TAG_FMT_BYTE:      return *(uchar *)value;
+
+		case TAG_FMT_USHORT:    return php_ifd_get16u(value, motorola_intel);
+		case TAG_FMT_ULONG:     return php_ifd_get32u(value, motorola_intel);
+
+		case TAG_FMT_URATIONAL:
+			u_den = php_ifd_get32u(4+(char *)value, motorola_intel);
+			if (u_den == 0) {
+				return 0;
+			} else {
+				return php_ifd_get32u(value, motorola_intel) / u_den;
+			}
+
+		case TAG_FMT_SRATIONAL:
+			s_den = php_ifd_get32s(4+(char *)value, motorola_intel);
+			if (s_den == 0) {
+				return 0;
+			} else {
+				return (size_t)((double)php_ifd_get32s(value, motorola_intel) / s_den);
+			}
+
+		case TAG_FMT_SSHORT:    return php_ifd_get16u(value, motorola_intel);
+		case TAG_FMT_SLONG:     return php_ifd_get32s(value, motorola_intel);
+
+		/* Not sure if this is correct (never seen float used in Exif format) */
+		case TAG_FMT_SINGLE:
+#ifdef EXIF_DEBUG
+			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Found value of type single");
+#endif
+			return (size_t)*(float *)value;
+		case TAG_FMT_DOUBLE:
+#ifdef EXIF_DEBUG
+			php_error_docref(NULL TSRMLS_CC, E_NOTICE, "Found value of type double");
+#endif
+			return (size_t)*(double *)value;
+	}
+	return 0;
+}

@@ -1,0 +1,12 @@
+int fscrypt_get_encryption_info(struct inode *inode)
+{
+	struct fscrypt_info *ci = inode->i_crypt_info;
+
+	if (!ci ||
+		(ci->ci_keyring_key &&
+		 (ci->ci_keyring_key->flags & ((1 << KEY_FLAG_INVALIDATED) |
+					       (1 << KEY_FLAG_REVOKED) |
+					       (1 << KEY_FLAG_DEAD)))))
+		return fscrypt_get_crypt_info(inode);
+	return 0;
+}

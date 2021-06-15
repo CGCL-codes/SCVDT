@@ -1,0 +1,19 @@
+static void PTRCALL
+unknown_toUtf16(const ENCODING *enc,
+                const char **fromP, const char *fromLim,
+                unsigned short **toP, const unsigned short *toLim)
+{
+  const struct unknown_encoding *uenc = AS_UNKNOWN_ENCODING(enc);
+  while (*fromP != fromLim && *toP != toLim) {
+    unsigned short c = uenc->utf16[(unsigned char)**fromP];
+    if (c == 0) {
+      c = (unsigned short)
+          uenc->convert(uenc->userData, *fromP);
+      *fromP += (AS_NORMAL_ENCODING(enc)->type[(unsigned char)**fromP]
+                 - (BT_LEAD2 - 2));
+    }
+    else
+      (*fromP)++;
+    *(*toP)++ = c;
+  }
+}

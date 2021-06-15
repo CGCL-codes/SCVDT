@@ -1,0 +1,9 @@
+void net_rx_pkt_dump(struct NetRxPkt *pkt)
+{
+#ifdef NET_RX_PKT_DEBUG
+    assert(pkt);
+
+    printf("RX PKT: tot_len: %d, vlan_stripped: %d, vlan_tag: %d\n",
+              pkt->tot_len, pkt->vlan_stripped, pkt->tci);
+#endif
+}

@@ -1,0 +1,87 @@
+static int cms_RecipientInfo_ktri_decrypt(CMS_ContentInfo *cms,
+                                          CMS_RecipientInfo *ri)
+{
+    CMS_KeyTransRecipientInfo *ktri = ri->d.ktri;
+    EVP_PKEY *pkey = ktri->pkey;
+    unsigned char *ek = NULL;
+    size_t eklen;
+    int ret = 0;
+    size_t fixlen = 0;
+    CMS_EncryptedContentInfo *ec;
+    ec = cms->d.envelopedData->encryptedContentInfo;
+
+    if (ktri->pkey == NULL) {
+        CMSerr(CMS_F_CMS_RECIPIENTINFO_KTRI_DECRYPT, CMS_R_NO_PRIVATE_KEY);
+        return 0;
+    }
+
+    if (cms->d.envelopedData->encryptedContentInfo->havenocert
+            && !cms->d.envelopedData->encryptedContentInfo->debug) {
+        X509_ALGOR *calg = ec->contentEncryptionAlgorithm;
+        const EVP_CIPHER *ciph = EVP_get_cipherbyobj(calg->algorithm);
+
+        if (ciph == NULL) {
+            CMSerr(CMS_F_CMS_RECIPIENTINFO_KTRI_DECRYPT, CMS_R_UNKNOWN_CIPHER);
+            return 0;
+        }
+
+        fixlen = EVP_CIPHER_key_length(ciph);
+    }
+
+    ktri->pctx = EVP_PKEY_CTX_new(pkey, NULL);
+    if (!ktri->pctx)
+        return 0;
+
+    if (EVP_PKEY_decrypt_init(ktri->pctx) <= 0)
+        goto err;
+
+    if (!cms_env_asn1_ctrl(ri, 1))
+        goto err;
+
+    if (EVP_PKEY_CTX_ctrl(ktri->pctx, -1, EVP_PKEY_OP_DECRYPT,
+                          EVP_PKEY_CTRL_CMS_DECRYPT, 0, ri) <= 0) {
+        CMSerr(CMS_F_CMS_RECIPIENTINFO_KTRI_DECRYPT, CMS_R_CTRL_ERROR);
+        goto err;
+    }
+
+    if (EVP_PKEY_decrypt(ktri->pctx, NULL, &eklen,
+                         ktri->encryptedKey->data,
+                         ktri->encryptedKey->length) <= 0)
+        goto err;
+
+    ek = OPENSSL_malloc(eklen);
+
+    if (ek == NULL) {
+        CMSerr(CMS_F_CMS_RECIPIENTINFO_KTRI_DECRYPT, ERR_R_MALLOC_FAILURE);
+        goto err;
+    }
+
+    if (EVP_PKEY_decrypt(ktri->pctx, ek, &eklen,
+                         ktri->encryptedKey->data,
+                         ktri->encryptedKey->length) <= 0
+            || eklen == 0
+            || (fixlen != 0 && eklen != fixlen)) {
+        CMSerr(CMS_F_CMS_RECIPIENTINFO_KTRI_DECRYPT, CMS_R_CMS_LIB);
+        goto err;
+    }
+
+    ret = 1;
+
+    if (ec->key) {
+        OPENSSL_cleanse(ec->key, ec->keylen);
+        OPENSSL_free(ec->key);
+    }
+
+    ec->key = ek;
+    ec->keylen = eklen;
+
+ err:
+    if (ktri->pctx) {
+        EVP_PKEY_CTX_free(ktri->pctx);
+        ktri->pctx = NULL;
+    }
+    if (!ret && ek)
+        OPENSSL_free(ek);
+
+    return ret;
+}

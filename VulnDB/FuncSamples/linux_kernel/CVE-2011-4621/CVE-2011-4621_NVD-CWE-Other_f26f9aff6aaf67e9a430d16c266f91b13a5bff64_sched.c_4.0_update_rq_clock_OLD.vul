@@ -1,0 +1,14 @@
+inline void update_rq_clock(struct rq *rq)
+{
+	if (!rq->skip_clock_update) {
+		int cpu = cpu_of(rq);
+		u64 irq_time;
+
+		rq->clock = sched_clock_cpu(cpu);
+		irq_time = irq_time_cpu(cpu);
+		if (rq->clock - irq_time > rq->clock_task)
+			rq->clock_task = rq->clock - irq_time;
+
+		sched_irq_time_avg_update(rq, irq_time);
+	}
+}

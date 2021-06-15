@@ -1,0 +1,22 @@
+static int
+format_amqp_0_10_str(tvbuff_t *tvb,
+                     guint offset, guint bound, guint length,
+                     const char **value)
+{
+    guint string_length;
+
+    if (length == 1)
+        string_length = tvb_get_guint8(tvb, offset);
+    else if (length == 2)
+        string_length = tvb_get_ntohs(tvb, offset);
+    else if (length == 4)
+        string_length = tvb_get_ntohl(tvb, offset);
+    else {
+        *value = wmem_strdup_printf(wmem_packet_scope(), "Invalid string length size %d!", length);
+        return length;
+    }
+    AMQP_INCREMENT(offset, length, bound);
+    *value = tvb_get_string_enc(wmem_packet_scope(), tvb, offset, string_length, ENC_UTF_8|ENC_NA);
+    AMQP_INCREMENT(offset, string_length, bound);
+    return (string_length + length);
+}

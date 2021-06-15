@@ -1,0 +1,33 @@
+static void PTRCALL
+unknown_toUtf8(const ENCODING *enc,
+               const char **fromP, const char *fromLim,
+               char **toP, const char *toLim)
+{
+  const struct unknown_encoding *uenc = AS_UNKNOWN_ENCODING(enc);
+  char buf[XML_UTF8_ENCODE_MAX];
+  for (;;) {
+    const char *utf8;
+    int n;
+    if (*fromP == fromLim)
+      break;
+    utf8 = uenc->utf8[(unsigned char)**fromP];
+    n = *utf8++;
+    if (n == 0) {
+      int c = uenc->convert(uenc->userData, *fromP);
+      n = XmlUtf8Encode(c, buf);
+      if (n > toLim - *toP)
+        break;
+      utf8 = buf;
+      *fromP += (AS_NORMAL_ENCODING(enc)->type[(unsigned char)**fromP]
+                 - (BT_LEAD2 - 2));
+    }
+    else {
+      if (n > toLim - *toP)
+        break;
+      (*fromP)++;
+    }
+    do {
+      *(*toP)++ = *utf8++;
+    } while (--n != 0);
+  }
+}

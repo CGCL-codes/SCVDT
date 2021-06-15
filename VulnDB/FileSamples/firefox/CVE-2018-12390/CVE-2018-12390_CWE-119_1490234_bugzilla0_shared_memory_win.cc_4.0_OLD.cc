@@ -1,0 +1,125 @@
+/* -*- Mode: C++; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* vim: set ts=8 sts=2 et sw=2 tw=80: */
+// Copyright (c) 2006-2008 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include "base/shared_memory.h"
+
+#include "base/logging.h"
+#include "base/win_util.h"
+#include "base/string_util.h"
+#include "mozilla/ipc/ProtocolUtils.h"
+
+namespace base {
+
+SharedMemory::SharedMemory()
+    : mapped_file_(NULL),
+      memory_(NULL),
+      read_only_(false),
+      max_size_(0) {
+}
+
+SharedMemory::~SharedMemory() {
+  Close();
+}
+
+bool SharedMemory::SetHandle(SharedMemoryHandle handle, bool read_only) {
+  DCHECK(mapped_file_ == NULL);
+
+  mapped_file_ = handle;
+  read_only_ = read_only;
+  return true;
+}
+
+// static
+bool SharedMemory::IsHandleValid(const SharedMemoryHandle& handle) {
+  return handle != NULL;
+}
+
+// static
+SharedMemoryHandle SharedMemory::NULLHandle() {
+  return NULL;
+}
+
+bool SharedMemory::Create(size_t size) {
+  DCHECK(mapped_file_ == NULL);
+  read_only_ = false;
+  mapped_file_ = CreateFileMapping(INVALID_HANDLE_VALUE, NULL,
+      PAGE_READWRITE, 0, static_cast<DWORD>(size), NULL);
+  if (!mapped_file_)
+    return false;
+
+  max_size_ = size;
+  return true;
+}
+
+bool SharedMemory::Map(size_t bytes) {
+  if (mapped_file_ == NULL)
+    return false;
+
+  memory_ = MapViewOfFile(mapped_file_,
+      read_only_ ? FILE_MAP_READ : FILE_MAP_ALL_ACCESS, 0, 0, bytes);
+  if (memory_ != NULL) {
+    return true;
+  }
+  return false;
+}
+
+bool SharedMemory::Unmap() {
+  if (memory_ == NULL)
+    return false;
+
+  UnmapViewOfFile(memory_);
+  memory_ = NULL;
+  return true;
+}
+
+bool SharedMemory::ShareToProcessCommon(ProcessId processId,
+                                        SharedMemoryHandle *new_handle,
+                                        bool close_self) {
+  *new_handle = 0;
+  DWORD access = STANDARD_RIGHTS_REQUIRED | FILE_MAP_READ;
+  DWORD options = 0;
+  HANDLE mapped_file = mapped_file_;
+  HANDLE result;
+  if (!read_only_)
+    access |= FILE_MAP_WRITE;
+  if (close_self) {
+    // DUPLICATE_CLOSE_SOURCE causes DuplicateHandle to close mapped_file.
+    options = DUPLICATE_CLOSE_SOURCE;
+    mapped_file_ = NULL;
+    Unmap();
+  }
+
+  if (processId == GetCurrentProcId() && close_self) {
+    *new_handle = mapped_file;
+    return true;
+  }
+
+  if (!mozilla::ipc::DuplicateHandle(mapped_file, processId, &result, access,
+                                     options)) {
+    return false;
+  }
+
+  *new_handle = result;
+  return true;
+}
+
+
+void SharedMemory::Close(bool unmap_view) {
+  if (unmap_view) {
+    Unmap();
+  }
+
+  if (mapped_file_ != NULL) {
+    CloseHandle(mapped_file_);
+    mapped_file_ = NULL;
+  }
+}
+
+SharedMemoryHandle SharedMemory::handle() const {
+  return mapped_file_;
+}
+
+}  // namespace base

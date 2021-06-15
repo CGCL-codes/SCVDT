@@ -1,0 +1,49 @@
+static const guint8*
+unicode_to_bytes(tvbuff_t *tvb, int offset, int length, gboolean endianness)
+{
+    const guint8 *ascii_text = tvb_get_string_enc(wmem_packet_scope(), tvb, offset, length, ENC_ASCII);
+    int           i, j       = 0;
+    guint8        c_char, c_char1;
+    guint8       *byte_array;
+
+    /* XXX - Is this the correct behavior? */
+    if (length < 1)
+        return "";
+
+    if (endianness) {
+        byte_array = (guint8 *)wmem_alloc(wmem_packet_scope(), length*2 + 1);
+        for (i = length; i > 0; i--) {
+            c_char = ascii_text[i];
+            if (c_char != 0) {
+                if (i == 0)
+                    break;
+                i--;
+                c_char1 = ascii_text[i];
+                if (c_char1 == 0) {
+                    if (i == 0)
+                        break;
+                    i--;
+                    c_char1 = ascii_text[i];
+                }
+                byte_array[j] = c_char1;
+                j++;
+                byte_array[j] = c_char;
+                j++;
+            }
+        }
+    }
+    else
+    {
+        byte_array = (guint8 *)wmem_alloc(wmem_packet_scope(), length + 1);
+        for (i = 0; i < length; i++) {
+            c_char = ascii_text[i];
+            if (c_char != 0) {
+                byte_array[j] = c_char;
+                j++;
+            }
+        }
+    }
+
+    byte_array[j]=0;
+    return byte_array;
+}

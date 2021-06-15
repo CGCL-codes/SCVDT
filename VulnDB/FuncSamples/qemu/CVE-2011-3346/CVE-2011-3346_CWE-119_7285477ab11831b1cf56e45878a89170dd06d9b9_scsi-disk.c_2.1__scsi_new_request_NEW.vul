@@ -1,0 +1,9 @@
+static SCSIRequest *scsi_new_request(SCSIDevice *d, uint32_t tag,
+                                     uint32_t lun, void *hba_private)
+{
+    SCSIDiskState *s = DO_UPCAST(SCSIDiskState, qdev, d);
+    SCSIRequest *req;
+
+    req = scsi_req_alloc(&scsi_disk_reqops, &s->qdev, tag, lun, hba_private);
+    return req;
+}

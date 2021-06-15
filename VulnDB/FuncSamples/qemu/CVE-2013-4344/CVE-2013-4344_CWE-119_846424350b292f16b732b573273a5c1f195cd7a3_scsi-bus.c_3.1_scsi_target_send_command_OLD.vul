@@ -1,0 +1,40 @@
+static int32_t scsi_target_send_command(SCSIRequest *req, uint8_t *buf)
+{
+    SCSITargetReq *r = DO_UPCAST(SCSITargetReq, req, req);
+
+    switch (buf[0]) {
+    case REPORT_LUNS:
+        if (!scsi_target_emulate_report_luns(r)) {
+            goto illegal_request;
+        }
+        break;
+    case INQUIRY:
+        if (!scsi_target_emulate_inquiry(r)) {
+            goto illegal_request;
+        }
+        break;
+    case REQUEST_SENSE:
+        r->len = scsi_device_get_sense(r->req.dev, r->buf,
+                                       MIN(req->cmd.xfer, sizeof r->buf),
+                                       (req->cmd.buf[1] & 1) == 0);
+        if (r->req.dev->sense_is_ua) {
+            scsi_device_unit_attention_reported(req->dev);
+            r->req.dev->sense_len = 0;
+            r->req.dev->sense_is_ua = false;
+        }
+        break;
+    default:
+        scsi_req_build_sense(req, SENSE_CODE(LUN_NOT_SUPPORTED));
+        scsi_req_complete(req, CHECK_CONDITION);
+        return 0;
+    illegal_request:
+        scsi_req_build_sense(req, SENSE_CODE(INVALID_FIELD));
+        scsi_req_complete(req, CHECK_CONDITION);
+        return 0;
+    }
+
+    if (!r->len) {
+        scsi_req_complete(req, GOOD);
+    }
+    return r->len;
+}

@@ -1,0 +1,214 @@
+static int l2cap_parse_conf_req(struct l2cap_chan *chan, void *data, size_t data_size)
+{
+	struct l2cap_conf_rsp *rsp = data;
+	void *ptr = rsp->data;
+	void *endptr = data + data_size;
+	void *req = chan->conf_req;
+	int len = chan->conf_len;
+	int type, hint, olen;
+	unsigned long val;
+	struct l2cap_conf_rfc rfc = { .mode = L2CAP_MODE_BASIC };
+	struct l2cap_conf_efs efs;
+	u8 remote_efs = 0;
+	u16 mtu = L2CAP_DEFAULT_MTU;
+	u16 result = L2CAP_CONF_SUCCESS;
+	u16 size;
+
+	BT_DBG("chan %p", chan);
+
+	while (len >= L2CAP_CONF_OPT_SIZE) {
+		len -= l2cap_get_conf_opt(&req, &type, &olen, &val);
+
+		hint  = type & L2CAP_CONF_HINT;
+		type &= L2CAP_CONF_MASK;
+
+		switch (type) {
+		case L2CAP_CONF_MTU:
+			mtu = val;
+			break;
+
+		case L2CAP_CONF_FLUSH_TO:
+			chan->flush_to = val;
+			break;
+
+		case L2CAP_CONF_QOS:
+			break;
+
+		case L2CAP_CONF_RFC:
+			if (olen == sizeof(rfc))
+				memcpy(&rfc, (void *) val, olen);
+			break;
+
+		case L2CAP_CONF_FCS:
+			if (val == L2CAP_FCS_NONE)
+				set_bit(CONF_RECV_NO_FCS, &chan->conf_state);
+			break;
+
+		case L2CAP_CONF_EFS:
+			remote_efs = 1;
+			if (olen == sizeof(efs))
+				memcpy(&efs, (void *) val, olen);
+			break;
+
+		case L2CAP_CONF_EWS:
+			if (!(chan->conn->local_fixed_chan & L2CAP_FC_A2MP))
+				return -ECONNREFUSED;
+
+			set_bit(FLAG_EXT_CTRL, &chan->flags);
+			set_bit(CONF_EWS_RECV, &chan->conf_state);
+			chan->tx_win_max = L2CAP_DEFAULT_EXT_WINDOW;
+			chan->remote_tx_win = val;
+			break;
+
+		default:
+			if (hint)
+				break;
+
+			result = L2CAP_CONF_UNKNOWN;
+			*((u8 *) ptr++) = type;
+			break;
+		}
+	}
+
+	if (chan->num_conf_rsp || chan->num_conf_req > 1)
+		goto done;
+
+	switch (chan->mode) {
+	case L2CAP_MODE_STREAMING:
+	case L2CAP_MODE_ERTM:
+		if (!test_bit(CONF_STATE2_DEVICE, &chan->conf_state)) {
+			chan->mode = l2cap_select_mode(rfc.mode,
+						       chan->conn->feat_mask);
+			break;
+		}
+
+		if (remote_efs) {
+			if (__l2cap_efs_supported(chan->conn))
+				set_bit(FLAG_EFS_ENABLE, &chan->flags);
+			else
+				return -ECONNREFUSED;
+		}
+
+		if (chan->mode != rfc.mode)
+			return -ECONNREFUSED;
+
+		break;
+	}
+
+done:
+	if (chan->mode != rfc.mode) {
+		result = L2CAP_CONF_UNACCEPT;
+		rfc.mode = chan->mode;
+
+		if (chan->num_conf_rsp == 1)
+			return -ECONNREFUSED;
+
+		l2cap_add_conf_opt(&ptr, L2CAP_CONF_RFC, sizeof(rfc),
+				   (unsigned long) &rfc, endptr - ptr);
+	}
+
+	if (result == L2CAP_CONF_SUCCESS) {
+		/* Configure output options and let the other side know
+		 * which ones we don't like. */
+
+		if (mtu < L2CAP_DEFAULT_MIN_MTU)
+			result = L2CAP_CONF_UNACCEPT;
+		else {
+			chan->omtu = mtu;
+			set_bit(CONF_MTU_DONE, &chan->conf_state);
+		}
+		l2cap_add_conf_opt(&ptr, L2CAP_CONF_MTU, 2, chan->omtu, endptr - ptr);
+
+		if (remote_efs) {
+			if (chan->local_stype != L2CAP_SERV_NOTRAFIC &&
+			    efs.stype != L2CAP_SERV_NOTRAFIC &&
+			    efs.stype != chan->local_stype) {
+
+				result = L2CAP_CONF_UNACCEPT;
+
+				if (chan->num_conf_req >= 1)
+					return -ECONNREFUSED;
+
+				l2cap_add_conf_opt(&ptr, L2CAP_CONF_EFS,
+						   sizeof(efs),
+						   (unsigned long) &efs, endptr - ptr);
+			} else {
+				/* Send PENDING Conf Rsp */
+				result = L2CAP_CONF_PENDING;
+				set_bit(CONF_LOC_CONF_PEND, &chan->conf_state);
+			}
+		}
+
+		switch (rfc.mode) {
+		case L2CAP_MODE_BASIC:
+			chan->fcs = L2CAP_FCS_NONE;
+			set_bit(CONF_MODE_DONE, &chan->conf_state);
+			break;
+
+		case L2CAP_MODE_ERTM:
+			if (!test_bit(CONF_EWS_RECV, &chan->conf_state))
+				chan->remote_tx_win = rfc.txwin_size;
+			else
+				rfc.txwin_size = L2CAP_DEFAULT_TX_WINDOW;
+
+			chan->remote_max_tx = rfc.max_transmit;
+
+			size = min_t(u16, le16_to_cpu(rfc.max_pdu_size),
+				     chan->conn->mtu - L2CAP_EXT_HDR_SIZE -
+				     L2CAP_SDULEN_SIZE - L2CAP_FCS_SIZE);
+			rfc.max_pdu_size = cpu_to_le16(size);
+			chan->remote_mps = size;
+
+			__l2cap_set_ertm_timeouts(chan, &rfc);
+
+			set_bit(CONF_MODE_DONE, &chan->conf_state);
+
+			l2cap_add_conf_opt(&ptr, L2CAP_CONF_RFC,
+					   sizeof(rfc), (unsigned long) &rfc, endptr - ptr);
+
+			if (test_bit(FLAG_EFS_ENABLE, &chan->flags)) {
+				chan->remote_id = efs.id;
+				chan->remote_stype = efs.stype;
+				chan->remote_msdu = le16_to_cpu(efs.msdu);
+				chan->remote_flush_to =
+					le32_to_cpu(efs.flush_to);
+				chan->remote_acc_lat =
+					le32_to_cpu(efs.acc_lat);
+				chan->remote_sdu_itime =
+					le32_to_cpu(efs.sdu_itime);
+				l2cap_add_conf_opt(&ptr, L2CAP_CONF_EFS,
+						   sizeof(efs),
+						   (unsigned long) &efs, endptr - ptr);
+			}
+			break;
+
+		case L2CAP_MODE_STREAMING:
+			size = min_t(u16, le16_to_cpu(rfc.max_pdu_size),
+				     chan->conn->mtu - L2CAP_EXT_HDR_SIZE -
+				     L2CAP_SDULEN_SIZE - L2CAP_FCS_SIZE);
+			rfc.max_pdu_size = cpu_to_le16(size);
+			chan->remote_mps = size;
+
+			set_bit(CONF_MODE_DONE, &chan->conf_state);
+
+			l2cap_add_conf_opt(&ptr, L2CAP_CONF_RFC, sizeof(rfc),
+					   (unsigned long) &rfc, endptr - ptr);
+
+			break;
+
+		default:
+			result = L2CAP_CONF_UNACCEPT;
+
+			memset(&rfc, 0, sizeof(rfc));
+			rfc.mode = chan->mode;
+		}
+
+		if (result == L2CAP_CONF_SUCCESS)
+			set_bit(CONF_OUTPUT_DONE, &chan->conf_state);
+	}
+	rsp->scid   = cpu_to_le16(chan->dcid);
+	rsp->result = cpu_to_le16(result);
+	rsp->flags  = cpu_to_le16(0);
+
+	return ptr - data;
+}
