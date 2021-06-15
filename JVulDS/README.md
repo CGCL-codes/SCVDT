@@ -17,6 +17,8 @@ $ cd neo4j/bin
 $ ./neo4j console
 ```
 2. Run PDG framework
+
+* modify Configuration (as shown PDG/README.md)
 ```
 $ cd JVulDS/PDG
 $ mvn clean package
