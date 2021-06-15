@@ -1,5 +1,5 @@
 # Introduction
-The vulnerable code database (Vulncode-DB) is a database for vulnerabilities and their corresponding source code. The database contains data from open-source projects `Asterisk`, `Chrome`, `FFmpeg`, `Firefox`, `ImagaMagick`, `LibPNG`, `LibTIFF`, `Linux Kernel`, `OpenSSL`, `OpenStack`, `PHP-SRC`, `Pidgin`, `QEMU`, `VLC Player`, `Wireshark`, `Xen`, `Binutils`, `JasPer` and `Libming`.
+The vulnerable code database (VulnDB) is a database for vulnerability patch files and their corresponding vulnerable source code and non-vulnerable source code. The database contains data from open-source projects `Asterisk`, `Chrome`, `FFmpeg`, `Firefox`, `ImagaMagick`, `LibPNG`, `LibTIFF`, `Linux Kernel`, `OpenSSL`, `OpenStack`, `PHP-SRC`, `Pidgin`, `QEMU`, `VLC Player`, `Wireshark`, `Xen`, `Binutils`, `JasPer` and `Libming`.
 
 # Diffs
 `TypeDiffs.zip` is a collection of diffs obtained by crawling and flitering commits from GitHub. There are several types of diffs, and different types represent the correlation between diffs and vulnerabilities. The diff name contains the CVE number, CWE type, patch file name and patch type.
