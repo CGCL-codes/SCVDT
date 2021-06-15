@@ -1,0 +1,1 @@
+Object.seal(0);

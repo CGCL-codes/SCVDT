@@ -1,0 +1,1 @@
+Object.getOwnPropertyNames(0);

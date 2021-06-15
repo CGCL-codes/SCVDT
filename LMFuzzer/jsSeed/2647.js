@@ -1,0 +1,1 @@
+Function('eval', 'return;');

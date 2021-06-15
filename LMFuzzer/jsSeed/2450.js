@@ -1,0 +1,1 @@
+''.replace(RegExp(), Array.reduce);

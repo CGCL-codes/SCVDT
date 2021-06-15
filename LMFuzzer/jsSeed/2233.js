@@ -1,0 +1,1 @@
+Object.isSealed(0);

@@ -1,0 +1,2 @@
+assert.throws(SyntaxError, function () {
+});

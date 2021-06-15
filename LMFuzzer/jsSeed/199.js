@@ -1,0 +1,1 @@
+Object.isExtensible(undefined);

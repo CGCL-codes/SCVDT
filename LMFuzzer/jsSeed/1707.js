@@ -1,0 +1,1 @@
+'' + { toString: Date.prototype.toJSON };

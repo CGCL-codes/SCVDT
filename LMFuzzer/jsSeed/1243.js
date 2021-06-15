@@ -1,0 +1,1 @@
+print('\u10FFFF');

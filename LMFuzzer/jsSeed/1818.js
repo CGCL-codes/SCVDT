@@ -1,0 +1,2 @@
+Object.getOwnPropertyDescriptor(function () {
+}, 'caller');

@@ -1,0 +1,10 @@
+var v0 = { x: 2 };
+var v1 = { y: 2 };
+v1.__proto__ = v0;
+var v2 = [];
+var v3 = new Date();
+v3.__proto__ = v1;
+v0.__proto__ = [];
+v2.__proto__ = v3;
+v2;
+WScript.Echo('PASSED');

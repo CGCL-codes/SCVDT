@@ -1,0 +1,12 @@
+v0 = '15.4.3.1-2.js';
+var v1 = '15.4.3.1-1';
+var v2 = 'ECMA_1';
+startTest();
+var v3 = 'Array.prototype';
+writeHeaderToLog(v1 + ' ' + v3);
+var v4 = Array.prototype;
+new TestCase(v1, 'var props = \'\'; for ( p in Array  ) { props += p } props', '', eval('var props = \'\'; for ( p in Array  ) { props += p } props'));
+new TestCase(v1, 'Array.prototype = null; Array.prototype', v4, eval('Array.prototype = null; Array.prototype'));
+new TestCase(v1, 'delete Array.prototype', false, delete Array.prototype);
+new TestCase(v1, 'delete Array.prototype; Array.prototype', v4, eval('delete Array.prototype; Array.prototype'));
+test();

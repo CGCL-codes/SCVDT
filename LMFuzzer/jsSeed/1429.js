@@ -1,0 +1,3 @@
+with ({}) {
+    'use strict';
+}

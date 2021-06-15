@@ -1,0 +1,4 @@
+try {
+    assertUnreachable();
+} catch (e) {
+}

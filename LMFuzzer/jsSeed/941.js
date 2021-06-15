@@ -1,0 +1,1 @@
+Object.preventExtensions(0);

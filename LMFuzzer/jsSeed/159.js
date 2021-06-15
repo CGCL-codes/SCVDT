@@ -1,0 +1,1 @@
+Object.isFrozen(0);

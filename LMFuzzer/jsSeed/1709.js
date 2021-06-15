@@ -1,0 +1,2 @@
+'caller' in function () {
+};

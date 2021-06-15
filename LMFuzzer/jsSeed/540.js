@@ -1,0 +1,2 @@
+class S extends Symbol {
+}
