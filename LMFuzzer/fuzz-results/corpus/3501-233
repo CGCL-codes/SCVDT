@@ -1,1 +1,0 @@
-var a = true ; ( function ( ) { if ( a ) { function bar ( ) { "use strict" ; a ? a [ ( { a : 1 , a : 1 } >= 0 ? { a : 1 , a : 1 } : 0 ) & 15 ] = 'x' : a } ; bar ( ) ; } } ) ( ) ; 

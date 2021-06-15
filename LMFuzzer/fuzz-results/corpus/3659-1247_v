@@ -1,1 +1,0 @@
-function test ( ) { var cs = "a" ; for ( var i = 0 ; i < 10 ; i ++ ) { cs += i ; } var a = function i ( a ) { a ? a . cs ( i , 'prop0' , { a : function ( ) { ; } } ) : a ( ) += "level3" ; } + "blahblahblah" ; cs += "Z" ; print ( a ) ; } test ( ) ; test ( ) ; 

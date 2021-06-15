@@ -1,8 +1,0 @@
-edu/berkeley/cs/jqf/fuzz/ei/ExecutionIndexingTest.class
-edu/berkeley/cs/jqf/fuzz/util/CoverageTest.class
-edu/berkeley/cs/jqf/fuzz/util/NonZeroCachingCountersTest.class
-edu/berkeley/cs/jqf/fuzz/util/CountersTest.class
-edu/berkeley/cs/jqf/fuzz/guidance/GuidanceTest$GuidanceTestFuzzer.class
-edu/berkeley/cs/jqf/fuzz/afl/RedundancyTest.class
-edu/berkeley/cs/jqf/fuzz/ei/ExecutionIndexingGuidanceTest.class
-edu/berkeley/cs/jqf/fuzz/guidance/GuidanceTest.class

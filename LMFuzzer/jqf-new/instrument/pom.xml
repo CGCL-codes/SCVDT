@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+	    <groupId>edu.berkeley.cs.jqf</groupId>
+	    <artifactId>jqf</artifactId>
+	    <version>1.4-SNAPSHOT</version>
+	</parent>
+
+    <artifactId>jqf-instrument</artifactId>
+
+    <name>jqf-instrument</name>
+    <description>JQF: Feedback-directed Quickcheck for Java - Instrumentation and event generation module</description>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>7.2</version>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Premain-Class>janala.instrument.SnoopInstructionTransformer</Premain-Class>
+                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                            <Can-Retransform-Classes>true</Can-Retransform-Classes>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>            
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId> 
+                <artifactId>maven-dependency-plugin</artifactId> 
+                <executions> 
+                        <execution> 
+                                <id>copy-dependencies</id> 
+                                <phase>compile</phase> 
+                                <goals> 
+                                        <goal>copy-dependencies</goal> 
+                                </goals> 
+                                <configuration> 
+                                        <includeScope>runtime</includeScope> 
+                                </configuration> 
+                        </execution> 
+                </executions> 
+            </plugin> 
+        </plugins>
+    </build>
+
+</project>

@@ -1,1 +1,0 @@
-var result ; try { result = String . fromCharCode ( 11 ) == '\v' ; } catch ( ex ) { result = "Exception" ; } print ( result ) ; 

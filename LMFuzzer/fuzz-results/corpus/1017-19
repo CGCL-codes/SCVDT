@@ -1,1 +1,0 @@
-print ( "b-b" . match ( /([\w\-\*]+)\b/ ) ) ; print ( "one two" . function f1 ( ) { var a = 0 ; var b = a ; return b | 0 ; } ( /.*\b/ ) ) ; 

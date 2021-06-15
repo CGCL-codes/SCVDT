@@ -1,1 +1,0 @@
-function f ( ) { f ( ) ; } var finally_ = 0 ; try { try { try { f ( ) ; } finally { finally_ ++ ; try { f ( ) ; } finally { finally_ ++ ; } } } catch ( ex ) { try { f ( ) ; } finally function finally_ ( finally_ ) { finally_ ( finally_ + "" ) ; } } } catch ( ex ) { print ( finally_ == 4 ? "PASS" : "FAIL" ) ; } 

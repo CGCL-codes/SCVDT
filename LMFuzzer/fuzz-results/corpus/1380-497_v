@@ -1,1 +1,0 @@
-var a = [ elementList ] ; for ( var i = 0 ; i < 100 ; i ++ ) { a . push ( "const x;" + 0.123 ) ; } var b = a . slice ( 0 , { valueOf : function ( ) { a . length = 0 ; return 10 ; } } ) ; 

@@ -1,1 +1,0 @@
-function test0 ( x ) { for ( var i = 0 ; i < 2 ; ++ i ) { x ? o . length : function i ( i ) { try { i ( ) ; } catch ( i ) { i ( i ) ; } } ; x ? 0 : 1 ; } } ; test0 ( 1 ) ; 

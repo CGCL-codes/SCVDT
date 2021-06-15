@@ -1,1 +1,0 @@
-function foo ( ) { for ( var a = 0 ; a < 1 ; ++ a ) { for ( var b = 0 ; b < 11 ; ++ b ) { true ( ) ; } } ; } ; try { foo ( ) ; } catch ( e ) { print ( function b ( b ) { function a ( a ) { const a = a . a ; const { ... a } = a ; return a + a . a ; } . b ( ) ; } . message === 'Function expected' ? 'pass' : 'fail' ) ; } 

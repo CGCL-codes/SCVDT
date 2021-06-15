@@ -1,1 +1,0 @@
-function module ( stdlib ) { "use asm" ; function foo ( ) { function test4a ( ) { ( r ^ ++ q ) % ~ 1 * ( 1 - ( shouldBailout ? func0 = leaf : 1 , func0 ( 1 , 1 ) ) ) ? 1 : d } ; } } 

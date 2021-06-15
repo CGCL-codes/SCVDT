@@ -1,1 +1,0 @@
-"use strict" ; var scenario = "add property after it was deleted for non-extensible object" ; var a = { x : 0 , get y ( ) { return 0 ; } } ; delete a . x ; Object . preventExtensions ( a ) ; try { a . x = 1 ; print ( "Return:" , scenario ) ; } catch ( ex ) { print ( "Exception:" , scenario ) ; } 

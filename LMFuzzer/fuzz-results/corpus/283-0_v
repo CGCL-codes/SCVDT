@@ -1,1 +1,0 @@
-var a = 0 ; var Failed = 0 ; function foo ( num ) { if ( num == null ) { Failed ++ ; } if ( num * 1.1 == null ) { Failed ++ ; } } a = 0.1 ; for ( var i = 0 ; i < 1000 ; i ++ ) { foo ( 100 * a ) ; } a = 0 ; foo ( 100 * a ) ; if ( Failed ) { print ( "FAILED\n" ) ; } else { print ( "Passed\n" ) ; } 

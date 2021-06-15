@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>edu.berkeley.cs.jqf</groupId>
+    <artifactId>jqf</artifactId>
+    <version>1.4-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>jqf</name>
+    <description>JQF: Feedback-directed Quickcheck for Java</description>
+    <url>https://github.com/rohanpadhye/jqf</url>
+    <licenses>
+        <license>
+            <name>FreeBSD License</name>
+            <url>https://opensource.org/licenses/BSD-2-Clause</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Rohan Padhye</name>
+            <email>rohanpadhye@cs.berkeley.edu</email>
+            <organization>University of California, Berkeley</organization>
+            <url>https://people.eecs.berkeley.edu/~rohanpadhye</url>
+        </developer>
+        <developer>
+            <name>Caroline Lemieux</name>
+            <email>clemieux@cs.berkeley.edu</email>
+            <organization>University of California, Berkeley</organization>
+            <url>http://www.carolemieux.com</url>
+        </developer>
+        <developer>
+            <name>Yevgeny Pats</name>
+            <email>yp@fuzzit.dev</email>
+            <url>https://fuzzit.dev</url>
+        </developer>
+    </developers>
+
+    <contributors>
+        <contributor>
+            <name>Koushik Sen</name>
+            <email>ksen@cs.berkeley.edu</email>
+            <organization>University of California, Berkeley</organization>
+            <url>https://people.eecs.berkeley.edu/~rohanpadhye/</url>
+        </contributor>
+        <contributor>
+            <name>Floyd</name>
+            <url>http://www.floyd.ch</url>
+        </contributor>
+    </contributors>
+
+    <scm>
+        <connection>scm:git:git@github.com:rohanpadhye/jqf.git</connection>
+        <url>https://github.com/rohanpadhye/jqf</url>
+      <tag>HEAD</tag>
+  </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/rohanpadhye/jqf/issues</url>
+    </issueManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+        <module>fuzz</module>
+        <module>instrument</module>
+        <module>examples</module>
+        <module>maven-plugin</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pholser</groupId>
+                <artifactId>junit-quickcheck-core</artifactId>
+                <version>0.8</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pholser</groupId>
+                <artifactId>junit-quickcheck-generators</artifactId>
+                <version>0.8</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>2.23.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-library</artifactId>
+                <version>1.3</version>
+            </dependency>
+            <dependency>
+                <groupId>edu.berkeley.cs.jqf</groupId>
+                <artifactId>jqf-fuzz</artifactId>
+                <version>1.4-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>edu.berkeley.cs.jqf</groupId>
+                <artifactId>jqf-instrument</artifactId>
+                <version>1.4-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.7.0</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <configuration>
+                        <links>
+                            <link>http://junit.org/junit4/javadoc/latest/</link>
+                            <link>https://pholser.github.io/junit-quickcheck/site/0.7/junit-quickcheck-core/apidocs/</link>
+                            <link>https://pholser.github.io/junit-quickcheck/site/0.7/junit-quickcheck-generators/apidocs/</link>
+                        </links>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>aggregate</id>
+                            <goals>
+                                <goal>aggregate</goal>
+                            </goals>
+                            <phase>site</phase>
+                            <configuration>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.21.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>3.5.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>edu.berkeley.cs.jqf</groupId>
+                    <artifactId>jqf-maven-plugin</artifactId>
+                    <version>1.4</version>
+                </plugin>
+
+                
+    
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.0.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <checkModificationExcludes>
+                        <checkModificationExclude>README.md</checkModificationExclude>
+                        <checkModificationExclude>scripts/jqf-driver.sh</checkModificationExclude>
+                    </checkModificationExcludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <name>OSSRH Snapshots Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <name>OSSRH Releases Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+        <downloadUrl>https://oss.sonatype.org/content/groups/public</downloadUrl>
+    </distributionManagement>
+
+    <profiles>
+        <profile>
+            <id>release-profile</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

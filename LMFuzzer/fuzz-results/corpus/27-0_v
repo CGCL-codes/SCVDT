@@ -1,1 +1,0 @@
-function f ( ) { var x = { y : 0 } ; g . escape ( ) ; function g ( ) { return x . y ; } } var foo ; Function . prototype . escape = function ( ) { foo = this ; } ; f ( ) ; foo ( ) === 0 ; 

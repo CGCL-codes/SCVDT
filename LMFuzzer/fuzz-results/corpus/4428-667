@@ -1,1 +1,0 @@
-OldObject = Object ; Object = function ( ) { this . hello = "yay" ; } ; var o = new Object ( ) ; print ( o . hello ) ; var o2 = { o ( o2 ) ? "-0.0" : o2 : "yay2" } ; print ( o2 . hello ) ; print ( o2 . hello2 ) ; 

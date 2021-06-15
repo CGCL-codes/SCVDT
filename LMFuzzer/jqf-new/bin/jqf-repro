@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Figure out script absolute path
+pushd `dirname $0` > /dev/null
+BIN_DIR=`pwd`
+popd > /dev/null
+
+ROOT_DIR=`dirname $BIN_DIR`
+
+print_usage() {
+  echo "Usage: $0 [-c CLASSPATH] [-i] [-v] [-r] TEST_CLASS TEST_METHOD INPUT_FILE.."
+}
+
+while getopts ":c:ivr" opt; do
+  case $opt in
+    /?)
+      echo "Invalid option: -$OPTARG" >&2
+      print_usage >&1
+      exit 1
+      ;;
+    c)
+      export CLASSPATH="$OPTARG"
+      ;;
+    i)
+      instrument=1
+      ;;
+    r)
+      results=1
+      ;;
+    v)
+      export JVM_OPTS="$JVM_OPTS -Djqf.logCoverage=true -Djanala.verbose=true"
+      ;;
+  esac
+done
+shift $((OPTIND-1))
+
+if [ -n "$instrument" -o -n "$results" ]; then
+  export JVM_OPTS="-Djqf.repro.traceDir=. $JVM_OPTS"
+fi
+
+if [ -z "$instrument" ]; then
+  export JQF_DISABLE_INSTRUMENTATION=1
+fi
+
+# Check arguments
+if [ $# -lt 3 ]; then
+  print_usage >&1
+  exit 1
+fi
+
+
+# Run the repro input driver
+$ROOT_DIR/scripts/jqf-driver.sh edu.berkeley.cs.jqf.fuzz.repro.ReproDriver $@

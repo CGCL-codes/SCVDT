@@ -1,1 +1,0 @@
-print ( "Setting condition to true..." ) ; var cond = true ; print ( cond ? "True" : "False" ) ; print ( "Setting condition to false..." ) ; cond = false ; print ( cond ? "True" : "False" ) ; 

