@@ -1,0 +1,1 @@
+function oos ( ) { oos ( ) ; } try { try { oos ( ) ; } finally { try { oos ( ) ; } catch ( e ) { ; } finally { ; } } } catch ( e ) { if ( e ) { print ( "pass" ) ; } } 

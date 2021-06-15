@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: edu.berkeley.cs.jqf.fuzz.afl.RedundancyTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.022 s - in edu.berkeley.cs.jqf.fuzz.afl.RedundancyTest

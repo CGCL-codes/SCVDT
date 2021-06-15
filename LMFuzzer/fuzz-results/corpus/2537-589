@@ -1,0 +1,1 @@
+var o = { } ; var i ; for ( i = 0 ; i < 65530 ; ++ i ) { o [ "p" + i ] = 0 ; } var add ; for ( ; i < 65540 ; ++ i ) { add = true ; for ( var p in o ) { if ( add ) { add = false ; print ( i ) ; ( add > add . add ? add . add ^ o : + add . add ) & 29205 ? add ^ add . add : ( add . p ^ add ) + ( ( add . add | - 33206 ) & ( add . p & 45406 ) ) [ "p" + i ] = 0 ; } } } 

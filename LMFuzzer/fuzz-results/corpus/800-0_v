@@ -1,0 +1,1 @@
+const crossSiteDate = { x : function ( ) { new Date ( ) ; } } ; Object . getOwnPropertyNames ( Date . prototype ) . filter ( name => ! name . match ( /^set/ ) ) . forEach ( name => { console . log ( name ) ; try { console . log ( Date . prototype [ name ] . call ( crossSiteDate ) ) ; } catch ( e ) { ; } } ) ; 

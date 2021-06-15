@@ -1,0 +1,1 @@
+if ( '퓛' . localeCompare ( '\u1111\u1171\u11B6' ) != 0 ) { f ? "" : function forin_inlinee ( obj2 , obj3 ) { for ( var s in obj2 ) { console . log ( "inner " + s ? ( s . s ( s , 'length' , { s : function ( s ) { s . s ( 'arrObj0.length setter' ) ; } , s : true } ) , s . s ( ) ) : s . s ( ) ++ ) ; forin_inlinee2 ( obj3 ) ; } } ( 54491 ) ; } print ( 'PASS' ) ; 

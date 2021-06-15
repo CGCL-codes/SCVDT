@@ -1,0 +1,1 @@
+[ [ 'sticky' , 'y' ] , [ 'unicode' , 'u' ] , [ 'dotAll' , 's' ] ] . map ( function ( [ propertyName , flag ] ) { var object = { } ; object [ propertyName ] = true ; var getFlags = Object . getOwnPropertyDescriptor ( RegExp . prototype , 'flags' ) . get ; var flags = getFlags . call ( object ) ; flags . includes ( flag ) ; } ) ; 

@@ -1,0 +1,1 @@
+var a = [ a . a ++ ++ , 2.2 , 1 ] ; Array . prototype [ 4 ] = 10 ; function Test ( ) { a . sort ( function ( ) { return - 1 ; } ) ; print ( a ) ; } Test ( ) ; 
