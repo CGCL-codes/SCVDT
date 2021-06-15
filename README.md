@@ -12,3 +12,9 @@ HDVerify is a system that can find the input that trigger the suspicious vulnera
 
 ## VulnDB
 The vulnerable code database (VulnDB) is a database for vulnerability patch files and their corresponding vulnerable source code and non-vulnerable source code. 
+
+## VKGGen
+VKGGen is a tool to collect and process data, and generate vulnerability knowledge graph.
+
+## VKGServe
+VKGServe is a background program that performs vulnerability knowledge graph operations. It completes CARD operations on vulnerability knowledge through the form of the Restful API interface.
