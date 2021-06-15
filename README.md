@@ -9,3 +9,6 @@ A library to generate Abstract Syntax Trees, Control Flow Graphs, Program Depend
 
 ## HDVerify
 HDVerify is a system that can find the input that trigger the suspicious vulnerability in C/C++ open-source software obtained by static tools based on improved directed grey-box fuzzing.
+
+## VulnDB
+The vulnerable code database (VulnDB) is a database for vulnerability patch files and their corresponding vulnerable source code and non-vulnerable source code. 
