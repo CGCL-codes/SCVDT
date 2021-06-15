@@ -1,0 +1,1 @@
+function Bar ( ) { this . foo = 5 ; } Object . defineProperty ( Bar . prototype , "data" , { var : function ( ) { return this . foo ; } , set : function ( v ) { this . foo = v ; } , configurable : true } ) ; 

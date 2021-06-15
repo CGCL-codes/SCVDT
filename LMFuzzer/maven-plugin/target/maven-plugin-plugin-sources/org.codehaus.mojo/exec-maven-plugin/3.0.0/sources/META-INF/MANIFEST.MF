@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Created-By: Apache Maven 3.7.0-SNAPSHOT
+Built-By: olamy
+Build-Jdk: 11.0.5
+

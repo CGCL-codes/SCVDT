@@ -1,0 +1,77 @@
+Saving new input (at run 1): input #0 of size 1449; total coverage = 5
+Saved - fuzz-results/corpus/id_000000 random +count+cov+valid
+Saving new input (at run 48): input #1 of size 1357; total coverage = 5
+Saved - fuzz-results/corpus/id_000001 src:000000,havoc:10 +count
+Saving new input (at run 96): input #2 of size 725; total coverage = 5
+Saved - fuzz-results/corpus/id_000002 src:000000,havoc:10 +count
+Saving new input (at run 106): input #3 of size 1449; total coverage = 7
+Saved - fuzz-results/corpus/id_000003 src:000000,havoc:19 +count+cov+valid
+Saving new input (at run 121): input #4 of size 134; total coverage = 7
+Saved - fuzz-results/corpus/id_000004 src:000000,havoc:8 +count
+Saving new input (at run 150): input #5 of size 800; total coverage = 7
+Saved - fuzz-results/corpus/id_000005 src:000000,havoc:14 +count
+Saving new input (at run 174): input #6 of size 1425; total coverage = 9
+Saved - fuzz-results/corpus/id_000006 src:000000,havoc:10 +count+cov+valid
+Saving new input (at run 276): input #7 of size 696; total coverage = 9
+Saved - fuzz-results/corpus/id_000007 src:000000,havoc:28 +count
+Saving new input (at run 333): input #8 of size 410; total coverage = 9
+Saved - fuzz-results/corpus/id_000008 src:000000,havoc:9 +count
+Saving new input (at run 456): input #9 of size 289; total coverage = 9
+Saved - fuzz-results/corpus/id_000009 src:000000,havoc:28 +count
+Saving new input (at run 528): input #10 of size 1449; total coverage = 9
+Saved - fuzz-results/corpus/id_000010 src:000000,havoc:32 +count
+Saving new input (at run 622): input #11 of size 1449; total coverage = 9
+Saved - fuzz-results/corpus/id_000011 src:000003,havoc:13 +count
+Saving new input (at run 780): input #12 of size 1449; total coverage = 9
+Saved - fuzz-results/corpus/id_000012 src:000003,havoc:20 +count
+Saving new input (at run 798): input #13 of size 1437; total coverage = 9
+Saved - fuzz-results/corpus/id_000013 src:000003,havoc:44 +count
+Saving new input (at run 870): input #14 of size 117; total coverage = 9
+Saved - fuzz-results/corpus/id_000014 src:000003,havoc:13 +count
+Saving new input (at run 925): input #15 of size 209; total coverage = 9
+Saved - fuzz-results/corpus/id_000015 src:000003,havoc:19 +count
+Saving new input (at run 1269): input #16 of size 1449; total coverage = 13
+Saved - fuzz-results/corpus/id_000016 src:000003,havoc:15 +count+cov+valid
+Found crash: class java.lang.AssertionError - java.util.GregorianCalendar[time=-62132415661232,areFieldsSet=true,areAllFieldsSet=true,lenient=true,zone=sun.util.calendar.ZoneInfo[id="Europe/Ulyanovsk",offset=14400000,dstSavings=0,useDaylight=false,transitions=68,lastRule=null],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=1,YEAR=1,MONTH=1,WEEK_OF_YEAR=7,WEEK_OF_MONTH=2,DAY_OF_MONTH=8,DAY_OF_YEAR=39,DAY_OF_WEEK=3,DAY_OF_WEEK_IN_MONTH=2,AM_PM=1,HOUR=11,HOUR_OF_DAY=23,MINUTE=38,SECOND=58,MILLISECOND=768,ZONE_OFFSET=14400000,DST_OFFSET=0] should be before java.util.GregorianCalendar[time=-62132422861232,areFieldsSet=true,areAllFieldsSet=true,lenient=true,zone=sun.util.calendar.ZoneInfo[id="Etc/GMT-6",offset=21600000,dstSavings=0,useDaylight=false,transitions=0,lastRule=null],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=1,YEAR=1,MONTH=1,WEEK_OF_YEAR=7,WEEK_OF_MONTH=2,DAY_OF_MONTH=8,DAY_OF_YEAR=39,DAY_OF_WEEK=3,DAY_OF_WEEK_IN_MONTH=2,AM_PM=1,HOUR=11,HOUR_OF_DAY=23,MINUTE=38,SECOND=58,MILLISECOND=768,ZONE_OFFSET=21600000,DST_OFFSET=0]
+Saved - fuzz-results/failures/id_000000 src:000006,havoc:12 +crash
+Saving new input (at run 1945): input #17 of size 2214; total coverage = 13
+Saved - fuzz-results/corpus/id_000017 src:000008,havoc:4 +count
+Saving new input (at run 2289): input #18 of size 1449; total coverage = 14
+Saved - fuzz-results/corpus/id_000018 src:000016,havoc:1 +count+cov+valid
+Saving new input (at run 2333): input #19 of size 1437; total coverage = 14
+Saved - fuzz-results/corpus/id_000019 src:000016,havoc:11 +count
+Saving new input (at run 3030): input #20 of size 1713; total coverage = 14
+Saved - fuzz-results/corpus/id_000020 src:000018,havoc:44 +count
+Saving new input (at run 3131): input #21 of size 1449; total coverage = 14
+Saved - fuzz-results/corpus/id_000021 src:000018,havoc:8 +count
+Saving new input (at run 3164): input #22 of size 1449; total coverage = 14
+Saved - fuzz-results/corpus/id_000022 src:000018,havoc:19 +count
+Saving new input (at run 3680): input #23 of size 1437; total coverage = 14
+Saved - fuzz-results/corpus/id_000023 src:000019,havoc:19 +count
+Saving new input (at run 3785): input #24 of size 1449; total coverage = 14
+Saved - fuzz-results/corpus/id_000024 src:000021,havoc:2 +count
+Saving new input (at run 3856): input #25 of size 1437; total coverage = 14
+Saved - fuzz-results/corpus/id_000025 src:000023,havoc:11 +count
+Saving new input (at run 3934): input #26 of size 1437; total coverage = 14
+Saved - fuzz-results/corpus/id_000026 src:000025,havoc:3 +count
+Saving new input (at run 3989): input #27 of size 1437; total coverage = 14
+Saved - fuzz-results/corpus/id_000027 src:000026,havoc:11 +count
+Saving new input (at run 4042): input #28 of size 1437; total coverage = 14
+Saved - fuzz-results/corpus/id_000028 src:000027,havoc:5 +count
+
+# Cycle 1 completed.
+Here is a list of favored inputs:
+Input 0 is responsible for 5 branches
+Input 3 is responsible for 2 branches
+Input 6 is responsible for 2 branches
+Input 16 is responsible for 4 branches
+Input 18 is responsible for 1 branches
+Total 14 branches covered
+
+
+
+
+Saving new input (at run 4485): input #29 of size 76; total coverage = 14
+Saved - fuzz-results/corpus/id_000029 src:000002,havoc:9 +count
+Saving new input (at run 5000): input #30 of size 66; total coverage = 14
+Saved - fuzz-results/corpus/id_000030 src:000004,havoc:8 +count

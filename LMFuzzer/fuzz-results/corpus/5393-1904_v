@@ -1,0 +1,1 @@
+function test ( x ) { switch ( x ) { case "a" : function foo ( ) { x ( ) ; } function test1 ( ) { try { LABEL2 : while ( h != d ) { try { continue ; } catch ( ex ) { continue ; } finally { return - 1839801917 ; } } } catch ( ex ) { ; } } case "b" : print ( "b" ) ; break ; case "a" : break ; case "b" : print ( "bb" ) ; break ; } } test ( "a" ) ; test ( "b" ) ; 

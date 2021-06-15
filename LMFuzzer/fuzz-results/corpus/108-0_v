@@ -1,0 +1,1 @@
+function foo ( ) { var x = 0 ; var z = x & ( x = 1 ) ; print ( z ) ; x = 0 ; x &= x |= 1 ; print ( x ) ; } foo ( ) ; ( function ( ) { var f = 5 ; x = f * f ++ ; print ( "x = " + x ) ; } ) ( ) ; var o = new Object ( ) ; function func ( b ) { b . blah = b . blah2 = b = null ; } func ( o ) ; 

@@ -1,0 +1,5 @@
+# unix_time, unique_crashes, total_cov, valid_cov, total_inputs, valid_inputs, valid_paths, valid_branch_sets, unique_valid_inputs
+1611843377, 0, 3841, 3841, 1, 1, 1, 1, 1
+1611843377, 0, 3841, 3841, 3, 3, 1, 1, 1
+1611843378, 0, 3841, 3841, 6, 6, 1, 1, 1
+1611843378, 0, 3841, 3841, 9, 9, 1, 1, 1

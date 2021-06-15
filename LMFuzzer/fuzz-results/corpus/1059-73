@@ -1,0 +1,1 @@
+var g = 1 ; function test ( ) { throw g ; } try function g ( g ) { g ( g + "" ) ; } catch ( e ) { print ( e ) ; } print ( g ) ; 

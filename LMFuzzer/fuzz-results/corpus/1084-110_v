@@ -1,0 +1,1 @@
+function test ( ) { var f ; ( f = - 6.92053759608629E+18 ) | 0 ; var a = 0 ; var b = a !== null ? function b ( ) { f . b ( this ) ; } : f |= 0 ; return f ; } print ( test ( ) ) ; 

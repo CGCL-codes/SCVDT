@@ -1,0 +1,11 @@
+var data = new ( data . data ^= ++ data . data ) ? 1701746938.1 : this . data ; for ( i = 0 ; i < data ++ ; i ++ ) { data [ i ] = 0x41 ; } f = new Function ( "\
+vuln=(function(){\
+  \"use asm\";\
+  function f(i){\
+   for(i=0;i<0x10000;i++){\
+     var a= new Uint8Array(data); \
+    with(a[0]){};\
+   }\
+  }\
+  return f;})();\
+" ) ; f ( ) ; vuln ( ) ; vuln ( ) ; 

@@ -1,0 +1,111 @@
+# Input file: /home/wxj/kenlm/kenlm/build/bin/tree.txt
+# Token count: 111
+# Smoothing: Modified Kneser-Ney
+\data\
+ngram 1=26
+ngram 2=35
+ngram 3=35
+
+\1-grams:
+-1.7958801	<unk>	0
+0	<s>	-0.845098
+-0.58693993	</s>	0
+-1.5187621	program	-0.30103
+-1.5187621	sourceElements	-0.30103
+-1.5187621	sourceElement	-0.30103
+-1.5187621	statement	-0.30103
+-1.5187621	variableStatement	-0.30103
+-1.5187621	variableDeclarationList	-0.30103
+-1.5187621	varModifier	-0.30103
+-1.5187621	var	-0.30103
+-1.5187621	variableDeclaration	-0.30103
+-1.5187621	assignable	-0.30103
+-1.3509434	identifier	-0.30103
+-1.5187621	x	-0.30103
+-1.5187621	=	-0.30103
+-1.3509434	singleExpression	-0.30103
+-1.5187621	literal	-0.30103
+-1.5187621	numericLiteral	-0.30103
+-1.5187621	1	-0.30103
+-1.5187621	eos	-0.30103
+-1.5187621	;	-0.30103
+-1.5187621	y	-0.30103
+-1.5187621	+	-0.30103
+-1.5187621	2	-0.30103
+-1.5187621	<EOF>	-0.30103
+
+\2-grams:
+-1.1385021	<s> </s>	0
+-0.20105354	var </s>	0
+-0.20105354	x </s>	0
+-0.20105354	= </s>	0
+-0.20105354	1 </s>	0
+-0.20105354	; </s>	0
+-0.20105354	y </s>	0
+-0.20105354	+ </s>	0
+-0.20105354	2 </s>	0
+-0.20105354	<EOF> </s>	0
+-0.083148725	<s> program	-0.81291336
+-0.5765201	program sourceElements	-0.90309
+-0.28807232	sourceElements sourceElement	-0.90309
+-0.28807232	sourceElement statement	-0.90309
+-0.28807232	statement variableStatement	-0.6812413
+-0.5765201	variableStatement variableDeclarationList	-0.60206
+-0.5765201	variableDeclarationList varModifier	-0.30103
+-0.28807232	varModifier var	-0.30103
+-0.5765201	variableDeclarationList variableDeclaration	-0.35902193
+-0.7403834	variableDeclaration assignable	-0.30103
+-0.2820919	assignable identifier	-0.30103
+-0.91262424	singleExpression identifier	-0.30103
+-0.45782685	identifier x	-0.30103
+-0.7403834	variableDeclaration =	-0.30103
+-0.7236476	variableDeclaration singleExpression	-0.30103
+-0.91262424	singleExpression singleExpression	-0.30103
+-0.66727304	singleExpression literal	-0.30103
+-0.28807232	literal numericLiteral	-0.30103
+-0.5765201	numericLiteral 1	-0.30103
+-0.5765201	variableStatement eos	-0.30103
+-0.28807232	eos ;	-0.30103
+-0.7403834	identifier y	-0.30103
+-0.93876296	singleExpression +	-0.30103
+-0.5765201	numericLiteral 2	-0.30103
+-0.5765201	program <EOF>	-0.30103
+
+\3-grams:
+-0.08899465	varModifier var </s>
+-0.08899465	identifier x </s>
+-0.08899465	variableDeclaration = </s>
+-0.08899465	numericLiteral 1 </s>
+-0.08899465	eos ; </s>
+-0.08899465	identifier y </s>
+-0.08899465	singleExpression + </s>
+-0.08899465	numericLiteral 2 </s>
+-0.08899465	program <EOF> </s>
+-0.071356595	<s> program sourceElements
+-0.027152743	program sourceElements sourceElement
+-0.027152743	sourceElements sourceElement statement
+-0.027152743	sourceElement statement variableStatement
+-0.11715036	statement variableStatement variableDeclarationList
+-0.779145	variableStatement variableDeclarationList varModifier
+-0.120576404	variableDeclarationList varModifier var
+-0.14491372	variableStatement variableDeclarationList variableDeclaration
+-0.6892182	variableDeclarationList variableDeclaration assignable
+-0.118533835	variableDeclaration assignable identifier
+-0.50704014	singleExpression singleExpression identifier
+-0.37239033	assignable identifier x
+-0.17118672	singleExpression identifier x
+-0.6892182	variableDeclarationList variableDeclaration =
+-0.4032197	variableDeclarationList variableDeclaration singleExpression
+-0.50704014	variableDeclaration singleExpression singleExpression
+-0.63344365	variableDeclaration singleExpression literal
+-0.4466372	singleExpression singleExpression literal
+-0.120576404	singleExpression literal numericLiteral
+-0.41728747	literal numericLiteral 1
+-0.8583263	statement variableStatement eos
+-0.120576404	variableStatement eos ;
+-0.46736693	assignable identifier y
+-0.73856723	variableDeclaration singleExpression +
+-0.41728747	literal numericLiteral 2
+-1.1009856	<s> program <EOF>
+
+\end\

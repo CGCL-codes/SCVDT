@@ -1,0 +1,1 @@
+for ( var b in [ 1 ] ) { NaN += b ; } print ( NaN ) ; var x = 4 ; Object . defineProperty ( this , "x" , { writable : false } ) ; x = 3 ; print ( x ) ; 

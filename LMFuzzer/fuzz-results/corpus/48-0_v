@@ -1,0 +1,1 @@
+function test ( ) { try { new RegExp ( "(ab)" . repeat ( 0x7ffe ) ) ; } catch ( e ) { ; } try { new RegExp ( "(ab)" . repeat ( 0x8000 ) ) ; } catch ( e ) { ; } } test ( ) ; 

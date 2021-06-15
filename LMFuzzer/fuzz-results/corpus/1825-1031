@@ -1,0 +1,1 @@
+function module ( ) { "use asm" ; function foo ( ) { h : { switch ( 1 ) { obj ++ } } } return foo ; } var obj = module ( ) ; obj ( ) ; print ( "Pass" ) ; 

@@ -1,0 +1,1 @@
+function f ( ) { ; } delete f . desc ++ ; var desc = Object . getOwnPropertyDescriptor ( f , 'prototype' ) ; print ( desc ) ; 
