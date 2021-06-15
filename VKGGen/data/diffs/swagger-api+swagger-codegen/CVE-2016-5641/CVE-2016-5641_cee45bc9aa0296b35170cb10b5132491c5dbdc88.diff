@@ -1,0 +1,951 @@
+diff --git a/modules/swagger-codegen/src/main/java/io/swagger/codegen/languages/AbstractCSharpCodegen.java b/modules/swagger-codegen/src/main/java/io/swagger/codegen/languages/AbstractCSharpCodegen.java
+index 8c8b2d77730..f2db3b5e095 100644
+--- a/modules/swagger-codegen/src/main/java/io/swagger/codegen/languages/AbstractCSharpCodegen.java
++++ b/modules/swagger-codegen/src/main/java/io/swagger/codegen/languages/AbstractCSharpCodegen.java
+@@ -669,7 +669,7 @@ public String escapeQuotationMark(String input) {
+ 
+     @Override
+     public String escapeUnsafeCharacters(String input) {
+-        return input.replace("*/", "*_/").replace("/*", "/_*");
++        return input.replace("*/", "*_/").replace("/*", "/_*").replace("--", "- -");
+     }
+ 
+ }
+diff --git a/modules/swagger-codegen/src/main/java/io/swagger/codegen/languages/CSharpClientCodegen.java b/modules/swagger-codegen/src/main/java/io/swagger/codegen/languages/CSharpClientCodegen.java
+index 708ffda2c43..c898ee4ebe5 100644
+--- a/modules/swagger-codegen/src/main/java/io/swagger/codegen/languages/CSharpClientCodegen.java
++++ b/modules/swagger-codegen/src/main/java/io/swagger/codegen/languages/CSharpClientCodegen.java
+@@ -414,10 +414,10 @@ public String toEnumVarName(String value, String datatype) {
+ 
+         // string
+         String var = value.replaceAll("_", " ");
+-        var = WordUtils.capitalizeFully(var);
++        //var = WordUtils.capitalizeFully(var);
++        var = camelize(var);
+         var = var.replaceAll("\\W+", "");
+ 
+-
+         if (var.matches("\\d.*")) {
+             return "_" + var;
+         } else {
+diff --git a/modules/swagger-codegen/src/test/resources/2_0/petstore-security-test.yaml b/modules/swagger-codegen/src/test/resources/2_0/petstore-security-test.yaml
+index 6a201ba7b3d..16bce94ac7d 100644
+--- a/modules/swagger-codegen/src/test/resources/2_0/petstore-security-test.yaml
++++ b/modules/swagger-codegen/src/test/resources/2_0/petstore-security-test.yaml
+@@ -1,68 +1,68 @@
+ swagger: '2.0'
+ info:
+-  description: "This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  */ ' \" =end \r\n \n \r"
+-  version: 1.0.0 */ ' " =end \r\n \n \r
+-  title: Swagger Petstore */ ' " =end \r\n \n \r
+-  termsOfService: http://swagger.io/terms/ */ ' " =end \r\n \n \r
++  description: "This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  */ ' \" =end -- \r\n \n \r"
++  version: 1.0.0 */ ' " =end -- \r\n \n \r
++  title: Swagger Petstore */ ' " =end -- \r\n \n \r
++  termsOfService: http://swagger.io/terms/ */ ' " =end -- \r\n \n \r
+   contact:
+-    email: apiteam@swagger.io */ ' " =end \r\n \n \r
++    email: apiteam@swagger.io */ ' " =end -- \r\n \n \r
+   license:
+-    name: Apache 2.0 */ ' " =end \r\n \n \r
+-    url: http://www.apache.org/licenses/LICENSE-2.0.html */ ' " =end \r\n \n \r
+-host: petstore.swagger.io */ ' " =end \r\n \n \r
+-basePath: /v2 */ ' " =end \r\n \n \r
++    name: Apache 2.0 */ ' " =end -- \r\n \n \r
++    url: http://www.apache.org/licenses/LICENSE-2.0.html */ ' " =end -- \r\n \n \r
++host: petstore.swagger.io */ ' " =end -- \r\n \n \r
++basePath: /v2 */ ' " =end -- \r\n \n \r
+ tags:
+   - name: fake
+-    description: Everything about your Pets */ ' " =end \r\n \n \r
++    description: Everything about your Pets */ ' " =end -- \r\n \n \r
+     externalDocs:
+-      description: Find out more */ ' " =end \r\n \n \r
++      description: Find out more */ ' " =end -- \r\n \n \r
+       url: 'http://swagger.io'
+ schemes:
+-  - http */ ' " =end \r\n \n \r
++  - http */ ' " =end -- \r\n \n \r
+ paths:
+   /fake:
+     put:
+       tags:
+         - fake
+-      summary: To test code injection */ ' " =end \r\n \n \r
+-      descriptions:  To test code injection */ ' " =end \r\n \n \r
+-      operationId: testCodeInject */ ' " =end \r\n \n \r
++      summary: To test code injection */ ' " =end -- \r\n \n \r
++      descriptions:  To test code injection */ ' " =end -- \r\n \n \r
++      operationId: testCodeInject */ ' " =end -- \r\n \n \r
+       consumes:
+         - application/json
+-        - "*/ ' \" =end \r\n \n \r"
++        - "*/ ' \" =end -- \r\n \n \r"
+       produces:
+         - application/json
+-        - "*/ ' \" =end \r\n \n \r"
++        - "*/ ' \" =end -- \r\n \n \r"
+       parameters:
+-        - name: test code inject */ ' " =end \r\n \n \r
++        - name: test code inject */ ' " =end -- \r\n \n \r
+           type: string
+           in: formData 
+-          description: To test code injection */ ' " =end \r\n \n \r
++          description: To test code injection */ ' " =end -- \r\n \n \r
+       responses:
+         '400':
+-          description: To test code injection */ ' " =end \r\n \n \r
++          description: To test code injection */ ' " =end -- \r\n \n \r
+ securityDefinitions:
+   petstore_auth:
+     type: oauth2
+     authorizationUrl: 'http://petstore.swagger.io/api/oauth/dialog'
+     flow: implicit
+     scopes:
+-      'write:pets': modify pets in your account  */ ' " =end \r\n \n \r
+-      'read:pets': read your pets  */ ' " =end \r\n \n \r
++      'write:pets': modify pets in your account  */ ' " =end -- \r\n \n \r
++      'read:pets': read your pets  */ ' " =end -- \r\n \n \r
+   api_key:
+     type: apiKey
+-    name: api_key  */ ' " =end \r\n \n \r
++    name: api_key  */ ' " =end -- \r\n \n \r
+     in: header
+ definitions:
+   Return:
+-    description: Model for testing reserved words  */ ' " =end \r\n \n \r
++    description: Model for testing reserved words  */ ' " =end -- \r\n \n \r
+     properties:
+       return:
+-        description: property description  */ ' " =end \r\n \n \r
++        description: property description  */ ' " =end -- \r\n \n \r
+         type: integer
+         format: int32
+     xml:
+       name: Return
+ externalDocs:
+-  description: Find out more about Swagger  */ ' " =end \r\n \n \r
++  description: Find out more about Swagger  */ ' " =end -- \r\n \n \r
+   url: 'http://swagger.io'
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.sln b/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.sln
+index 3f6c7053bf8..8dcf7f24348 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.sln
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.sln
+@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
+ # Visual Studio 2012
+ VisualStudioVersion = 12.0.0.0
+ MinimumVisualStudioVersion = 10.0.0.1
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Swagger", "src\IO.Swagger\IO.Swagger.csproj", "{29125490-71E4-47ED-B0D7-34505F58103C}"
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Swagger", "src\IO.Swagger\IO.Swagger.csproj", "{8CE139DF-64BC-4591-85F8-8506C2B67514}"
+ EndProject
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Swagger.Test", "src\IO.Swagger.Test\IO.Swagger.Test.csproj", "{19F1DEBC-DE5E-4517-8062-F000CD499087}"
+ EndProject
+@@ -12,10 +12,10 @@ Debug|Any CPU = Debug|Any CPU
+ Release|Any CPU = Release|Any CPU
+ EndGlobalSection
+ GlobalSection(ProjectConfigurationPlatforms) = postSolution
+-{29125490-71E4-47ED-B0D7-34505F58103C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-{29125490-71E4-47ED-B0D7-34505F58103C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-{29125490-71E4-47ED-B0D7-34505F58103C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-{29125490-71E4-47ED-B0D7-34505F58103C}.Release|Any CPU.Build.0 = Release|Any CPU
++{8CE139DF-64BC-4591-85F8-8506C2B67514}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++{8CE139DF-64BC-4591-85F8-8506C2B67514}.Debug|Any CPU.Build.0 = Debug|Any CPU
++{8CE139DF-64BC-4591-85F8-8506C2B67514}.Release|Any CPU.ActiveCfg = Release|Any CPU
++{8CE139DF-64BC-4591-85F8-8506C2B67514}.Release|Any CPU.Build.0 = Release|Any CPU
+ {19F1DEBC-DE5E-4517-8062-F000CD499087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+ {19F1DEBC-DE5E-4517-8062-F000CD499087}.Debug|Any CPU.Build.0 = Debug|Any CPU
+ {19F1DEBC-DE5E-4517-8062-F000CD499087}.Release|Any CPU.ActiveCfg = Release|Any CPU
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.userprefs b/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.userprefs
+index 39b58c92731..eaf83ecaeae 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.userprefs
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.userprefs
+@@ -1,9 +1,9 @@
+-﻿<Properties>
++﻿<Properties StartupItem="src/IO.Swagger/IO.Swagger.csproj">
+   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+   <MonoDevelop.Ide.Workbench ActiveDocument="src/IO.Swagger/Client/Configuration.cs">
+     <Files>
+-      <File FileName="src/IO.Swagger/Client/ApiClient.cs" Line="72" Column="77" />
+-      <File FileName="src/IO.Swagger/Client/Configuration.cs" Line="311" Column="58" />
++      <File FileName="src/IO.Swagger/Client/ApiClient.cs" Line="1" Column="1" />
++      <File FileName="src/IO.Swagger/Client/Configuration.cs" Line="22" Column="1" />
+     </Files>
+   </MonoDevelop.Ide.Workbench>
+   <MonoDevelop.Ide.DebuggingService.Breakpoints>
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/README.md b/samples/client/petstore-security-test/csharp/SwaggerClient/README.md
+index dc258722110..44f3ab7c368 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/README.md
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/README.md
+@@ -1,12 +1,12 @@
+-# IO.Swagger - the C# library for the Swagger Petstore  &#39; \&quot; &#x3D;end
++# IO.Swagger - the C# library for the Swagger Petstore *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r
+ 
+-This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  *_/ ' \" =end - -       
+ 
+ This C# SDK is automatically generated by the [Swagger Codegen](https://github.com/swagger-api/swagger-codegen) project:
+ 
+-- API version: 1.0.0  &#39; \&quot; &#x3D;end
++- API version: 1.0.0 *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r
+ - SDK version: 1.0.0
+-- Build date: 2016-06-29T22:47:27.264+08:00
++- Build date: 2016-07-13T18:16:08.689+08:00
+ - Build package: class io.swagger.codegen.languages.CSharpClientCodegen
+ 
+ ## Frameworks supported
+@@ -14,8 +14,8 @@ This C# SDK is automatically generated by the [Swagger Codegen](https://github.c
+ - Windows Phone 7.1 (Mango)
+ 
+ ## Dependencies
+-- [RestSharp] (https://www.nuget.org/packages/RestSharp) - 105.1.0 or later
+-- [Json.NET] (https://www.nuget.org/packages/Newtonsoft.Json/) - 7.0.0 or later
++- [RestSharp](https://www.nuget.org/packages/RestSharp) - 105.1.0 or later
++- [Json.NET](https://www.nuget.org/packages/Newtonsoft.Json/) - 7.0.0 or later
+ 
+ The DLLs included in the package may not be the latest version. We recommned using [NuGet] (https://docs.nuget.org/consume/installing-nuget) to obtain the latest version of the packages:
+ ```
+@@ -54,31 +54,33 @@ namespace Example
+         {
+             
+             var apiInstance = new FakeApi();
+-            var testCodeInjectEnd = testCodeInjectEnd_example;  // string | To test code injection  ' \" =end (optional) 
++            var testCodeInjectEndRnNR = testCodeInjectEndRnNR_example;  // string | To test code injection *_/ ' \" =end - - \\r\\n \\n \\r (optional) 
+ 
+             try
+             {
+-                // To test code injection  ' \" =end
+-                apiInstance.TestCodeInjectEnd(testCodeInjectEnd);
++                // To test code injection *_/ ' \" =end - - \\r\\n \\n \\r
++                apiInstance.TestCodeInjectEndRnNR(testCodeInjectEndRnNR);
+             }
+             catch (Exception e)
+             {
+-                Debug.Print("Exception when calling FakeApi.TestCodeInjectEnd: " + e.Message );
++                Debug.Print("Exception when calling FakeApi.TestCodeInjectEndRnNR: " + e.Message );
+             }
+         }
+     }
+ }
+ ```
+ 
++<a name="documentation-for-api-endpoints"></a>
+ ## Documentation for API Endpoints
+ 
+-All URIs are relative to *https://petstore.swagger.io  ' \" =end/v2  ' \" =end*
++All URIs are relative to *https://petstore.swagger.io *_/ ' \" =end - - \\r\\n \\n \\r/v2 *_/ ' \" =end - - \\r\\n \\n \\r*
+ 
+ Class | Method | HTTP request | Description
+ ------------ | ------------- | ------------- | -------------
+-*FakeApi* | [**TestCodeInjectEnd**](docs/FakeApi.md#testcodeinjectend) | **PUT** /fake | To test code injection  ' \" =end
++*FakeApi* | [**TestCodeInjectEndRnNR**](docs/FakeApi.md#testcodeinjectendrnnr) | **PUT** /fake | To test code injection *_/ ' \" =end - - \\r\\n \\n \\r
+ 
+ 
++<a name="documentation-for-models"></a>
+ ## Documentation for Models
+ 
+  - [Model.ModelReturn](docs/ModelReturn.md)
+@@ -86,11 +88,10 @@ Class | Method | HTTP request | Description
+ 
+ ## Documentation for Authorization
+ 
+-
+ ### api_key
+ 
+ - **Type**: API key
+-- **API key parameter name**: api_key  */ &#39; &quot; &#x3D;end
++- **API key parameter name**: api_key  */ &#39; &quot; &#x3D;end -- \r\n \n \r
+ - **Location**: HTTP header
+ 
+ ### petstore_auth
+@@ -99,6 +100,6 @@ Class | Method | HTTP request | Description
+ - **Flow**: implicit
+ - **Authorization URL**: http://petstore.swagger.io/api/oauth/dialog
+ - **Scopes**: 
+-  - write:pets: modify pets in your account  */ &#39; &quot; &#x3D;end
+-  - read:pets: read your pets  */ &#39; &quot; &#x3D;end
++  - write:pets: modify pets in your account  */ &#39; &quot; &#x3D;end -- \r\n \n \r
++  - read:pets: read your pets  */ &#39; &quot; &#x3D;end -- \r\n \n \r
+ 
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/docs/FakeApi.md b/samples/client/petstore-security-test/csharp/SwaggerClient/docs/FakeApi.md
+index 962ba5fc6e0..39a951cbede 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/docs/FakeApi.md
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/docs/FakeApi.md
+@@ -1,16 +1,17 @@
+ # IO.Swagger.Api.FakeApi
+ 
+-All URIs are relative to *https://petstore.swagger.io  ' \" =end/v2  ' \" =end*
++All URIs are relative to *https://petstore.swagger.io *_/ ' \" =end - - \\r\\n \\n \\r/v2 *_/ ' \" =end - - \\r\\n \\n \\r*
+ 
+ Method | HTTP request | Description
+ ------------- | ------------- | -------------
+-[**TestCodeInjectEnd**](FakeApi.md#testcodeinjectend) | **PUT** /fake | To test code injection  &#39; \&quot; &#x3D;end
++[**TestCodeInjectEndRnNR**](FakeApi.md#testcodeinjectendrnnr) | **PUT** /fake | To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r
+ 
+ 
+-# **TestCodeInjectEnd**
+-> void TestCodeInjectEnd (string testCodeInjectEnd = null)
++<a name="testcodeinjectendrnnr"></a>
++# **TestCodeInjectEndRnNR**
++> void TestCodeInjectEndRnNR (string testCodeInjectEndRnNR = null)
+ 
+-To test code injection  ' \" =end
++To test code injection *_/ ' \" =end - - \\r\\n \\n \\r
+ 
+ ### Example
+ ```csharp
+@@ -22,22 +23,22 @@ using IO.Swagger.Model;
+ 
+ namespace Example
+ {
+-    public class TestCodeInjectEndExample
++    public class TestCodeInjectEndRnNRExample
+     {
+         public void main()
+         {
+             
+             var apiInstance = new FakeApi();
+-            var testCodeInjectEnd = testCodeInjectEnd_example;  // string | To test code injection  ' \" =end (optional) 
++            var testCodeInjectEndRnNR = testCodeInjectEndRnNR_example;  // string | To test code injection *_/ ' \" =end - - \\r\\n \\n \\r (optional) 
+ 
+             try
+             {
+-                // To test code injection  ' \" =end
+-                apiInstance.TestCodeInjectEnd(testCodeInjectEnd);
++                // To test code injection *_/ ' \" =end - - \\r\\n \\n \\r
++                apiInstance.TestCodeInjectEndRnNR(testCodeInjectEndRnNR);
+             }
+             catch (Exception e)
+             {
+-                Debug.Print("Exception when calling FakeApi.TestCodeInjectEnd: " + e.Message );
++                Debug.Print("Exception when calling FakeApi.TestCodeInjectEndRnNR: " + e.Message );
+             }
+         }
+     }
+@@ -48,7 +49,7 @@ namespace Example
+ 
+ Name | Type | Description  | Notes
+ ------------- | ------------- | ------------- | -------------
+- **testCodeInjectEnd** | **string**| To test code injection  &#39; \&quot; &#x3D;end | [optional] 
++ **testCodeInjectEndRnNR** | **string**| To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r | [optional] 
+ 
+ ### Return type
+ 
+@@ -60,8 +61,8 @@ No authorization required
+ 
+ ### HTTP request headers
+ 
+- - **Content-Type**: application/json, */ '  =end
+- - **Accept**: application/json, */ '  =end
++ - **Content-Type**: application/json, *_/ '  =end - -       
++ - **Accept**: application/json, *_/ '  =end - -       
+ 
+ [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+ 
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/docs/ModelReturn.md b/samples/client/petstore-security-test/csharp/SwaggerClient/docs/ModelReturn.md
+index 57af1de2bdc..ba83e94b8ce 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/docs/ModelReturn.md
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/docs/ModelReturn.md
+@@ -3,7 +3,7 @@
+ 
+ Name | Type | Description | Notes
+ ------------ | ------------- | ------------- | -------------
+-**_Return** | **int?** | property description   &#39; \&quot; &#x3D;end | [optional] 
++**_Return** | **int?** | property description  *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r | [optional] 
+ 
+ [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+ 
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/IO.Swagger.Test.csproj b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/IO.Swagger.Test.csproj
+index 35bf372e00a..dc7be6546d9 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/IO.Swagger.Test.csproj
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/IO.Swagger.Test.csproj
+@@ -1,11 +1,11 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <!--
+-Swagger Petstore  ' \" =end
++Swagger Petstore *_/ ' \" =end - - \\r\\n \\n \\r
+ 
+-This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  *_/ ' \" =end - -       
+ 
+-OpenAPI spec version: 1.0.0  ' \" =end
+-Contact: apiteam@swagger.io  ' \" =end
++OpenAPI spec version: 1.0.0 *_/ ' \" =end - - \\r\\n \\n \\r
++Contact: apiteam@swagger.io *_/ ' \" =end - - \\r\\n \\n \\r
+ Generated by: https://github.com/swagger-api/swagger-codegen.git
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+@@ -86,7 +86,7 @@ limitations under the License.
+   <Import Project="$(MsBuildToolsPath)\Microsoft.CSharp.targets" />
+   <ItemGroup>
+       <ProjectReference Include="..\IO.Swagger\IO.Swagger.csproj">
+-          <Project>{29125490-71E4-47ED-B0D7-34505F58103C}</Project>
++          <Project>{8CE139DF-64BC-4591-85F8-8506C2B67514}</Project>
+           <Name>IO.Swagger</Name>
+       </ProjectReference>
+   </ItemGroup>
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Api/FakeApi.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Api/FakeApi.cs
+index 8d6d0d22c05..6e318d45644 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Api/FakeApi.cs
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Api/FakeApi.cs
+@@ -1,10 +1,10 @@
+ /* 
+- * Swagger Petstore  ' \" =end
++ * Swagger Petstore *_/ ' \" =end - - \\r\\n \\n \\r
+  *
+- * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  *_/ ' \" =end - -       
+  *
+- * OpenAPI spec version: 1.0.0  ' \" =end
+- * Contact: apiteam@swagger.io  ' \" =end
++ * OpenAPI spec version: 1.0.0 *_/ ' \" =end - - \\r\\n \\n \\r
++ * Contact: apiteam@swagger.io *_/ ' \" =end - - \\r\\n \\n \\r
+  * Generated by: https://github.com/swagger-api/swagger-codegen.git
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+@@ -36,49 +36,49 @@ public interface IFakeApi : IApiAccessor
+     {
+         #region Synchronous Operations
+         /// <summary>
+-        /// To test code injection  &#39; \&quot; &#x3D;end
++        /// To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r
+         /// </summary>
+         /// <remarks>
+         /// 
+         /// </remarks>
+         /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
+-        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <param name="testCodeInjectEndRnNR">To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r (optional)</param>
+         /// <returns></returns>
+-        void TestCodeInjectEnd (string testCodeInjectEnd = null);
++        void TestCodeInjectEndRnNR (string testCodeInjectEndRnNR = null);
+ 
+         /// <summary>
+-        /// To test code injection  &#39; \&quot; &#x3D;end
++        /// To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r
+         /// </summary>
+         /// <remarks>
+         /// 
+         /// </remarks>
+         /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
+-        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <param name="testCodeInjectEndRnNR">To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r (optional)</param>
+         /// <returns>ApiResponse of Object(void)</returns>
+-        ApiResponse<Object> TestCodeInjectEndWithHttpInfo (string testCodeInjectEnd = null);
++        ApiResponse<Object> TestCodeInjectEndRnNRWithHttpInfo (string testCodeInjectEndRnNR = null);
+         #endregion Synchronous Operations
+         #region Asynchronous Operations
+         /// <summary>
+-        /// To test code injection  &#39; \&quot; &#x3D;end
++        /// To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r
+         /// </summary>
+         /// <remarks>
+         /// 
+         /// </remarks>
+         /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
+-        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <param name="testCodeInjectEndRnNR">To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r (optional)</param>
+         /// <returns>Task of void</returns>
+-        System.Threading.Tasks.Task TestCodeInjectEndAsync (string testCodeInjectEnd = null);
++        System.Threading.Tasks.Task TestCodeInjectEndRnNRAsync (string testCodeInjectEndRnNR = null);
+ 
+         /// <summary>
+-        /// To test code injection  &#39; \&quot; &#x3D;end
++        /// To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r
+         /// </summary>
+         /// <remarks>
+         /// 
+         /// </remarks>
+         /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
+-        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <param name="testCodeInjectEndRnNR">To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r (optional)</param>
+         /// <returns>Task of ApiResponse</returns>
+-        System.Threading.Tasks.Task<ApiResponse<Object>> TestCodeInjectEndAsyncWithHttpInfo (string testCodeInjectEnd = null);
++        System.Threading.Tasks.Task<ApiResponse<Object>> TestCodeInjectEndRnNRAsyncWithHttpInfo (string testCodeInjectEndRnNR = null);
+         #endregion Asynchronous Operations
+     }
+ 
+@@ -192,23 +192,23 @@ public void AddDefaultHeader(string key, string value)
+         }
+ 
+         /// <summary>
+-        /// To test code injection  &#39; \&quot; &#x3D;end 
++        /// To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r 
+         /// </summary>
+         /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
+-        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <param name="testCodeInjectEndRnNR">To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r (optional)</param>
+         /// <returns></returns>
+-        public void TestCodeInjectEnd (string testCodeInjectEnd = null)
++        public void TestCodeInjectEndRnNR (string testCodeInjectEndRnNR = null)
+         {
+-             TestCodeInjectEndWithHttpInfo(testCodeInjectEnd);
++             TestCodeInjectEndRnNRWithHttpInfo(testCodeInjectEndRnNR);
+         }
+ 
+         /// <summary>
+-        /// To test code injection  &#39; \&quot; &#x3D;end 
++        /// To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r 
+         /// </summary>
+         /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
+-        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <param name="testCodeInjectEndRnNR">To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r (optional)</param>
+         /// <returns>ApiResponse of Object(void)</returns>
+-        public ApiResponse<Object> TestCodeInjectEndWithHttpInfo (string testCodeInjectEnd = null)
++        public ApiResponse<Object> TestCodeInjectEndRnNRWithHttpInfo (string testCodeInjectEndRnNR = null)
+         {
+ 
+             var localVarPath = "/fake";
+@@ -222,14 +222,14 @@ public ApiResponse<Object> TestCodeInjectEndWithHttpInfo (string testCodeInjectE
+             // to determine the Content-Type header
+             String[] localVarHttpContentTypes = new String[] {
+                 "application/json", 
+-                "*/ '  =end"
++                "*_/ '  =end - -       "
+             };
+             String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+ 
+             // to determine the Accept header
+             String[] localVarHttpHeaderAccepts = new String[] {
+                 "application/json", 
+-                "*/ '  =end"
++                "*_/ '  =end - -       "
+             };
+             String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+             if (localVarHttpHeaderAccept != null)
+@@ -238,7 +238,7 @@ public ApiResponse<Object> TestCodeInjectEndWithHttpInfo (string testCodeInjectE
+             // set "format" to json by default
+             // e.g. /pet/{petId}.{format} becomes /pet/{petId}.json
+             localVarPathParams.Add("format", "json");
+-            if (testCodeInjectEnd != null) localVarFormParams.Add("test code inject */ &#39; &quot; &#x3D;end", Configuration.ApiClient.ParameterToString(testCodeInjectEnd)); // form parameter
++            if (testCodeInjectEndRnNR != null) localVarFormParams.Add("test code inject */ &#39; &quot; &#x3D;end -- \r\n \n \r", Configuration.ApiClient.ParameterToString(testCodeInjectEndRnNR)); // form parameter
+ 
+ 
+             // make the HTTP request
+@@ -250,7 +250,7 @@ public ApiResponse<Object> TestCodeInjectEndWithHttpInfo (string testCodeInjectE
+ 
+             if (ExceptionFactory != null)
+             {
+-                Exception exception = ExceptionFactory("TestCodeInjectEnd", localVarResponse);
++                Exception exception = ExceptionFactory("TestCodeInjectEndRnNR", localVarResponse);
+                 if (exception != null) throw exception;
+             }
+ 
+@@ -261,24 +261,24 @@ public ApiResponse<Object> TestCodeInjectEndWithHttpInfo (string testCodeInjectE
+         }
+ 
+         /// <summary>
+-        /// To test code injection  &#39; \&quot; &#x3D;end 
++        /// To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r 
+         /// </summary>
+         /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
+-        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <param name="testCodeInjectEndRnNR">To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r (optional)</param>
+         /// <returns>Task of void</returns>
+-        public async System.Threading.Tasks.Task TestCodeInjectEndAsync (string testCodeInjectEnd = null)
++        public async System.Threading.Tasks.Task TestCodeInjectEndRnNRAsync (string testCodeInjectEndRnNR = null)
+         {
+-             await TestCodeInjectEndAsyncWithHttpInfo(testCodeInjectEnd);
++             await TestCodeInjectEndRnNRAsyncWithHttpInfo(testCodeInjectEndRnNR);
+ 
+         }
+ 
+         /// <summary>
+-        /// To test code injection  &#39; \&quot; &#x3D;end 
++        /// To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r 
+         /// </summary>
+         /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
+-        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <param name="testCodeInjectEndRnNR">To test code injection *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r (optional)</param>
+         /// <returns>Task of ApiResponse</returns>
+-        public async System.Threading.Tasks.Task<ApiResponse<Object>> TestCodeInjectEndAsyncWithHttpInfo (string testCodeInjectEnd = null)
++        public async System.Threading.Tasks.Task<ApiResponse<Object>> TestCodeInjectEndRnNRAsyncWithHttpInfo (string testCodeInjectEndRnNR = null)
+         {
+ 
+             var localVarPath = "/fake";
+@@ -292,14 +292,14 @@ public async System.Threading.Tasks.Task<ApiResponse<Object>> TestCodeInjectEndA
+             // to determine the Content-Type header
+             String[] localVarHttpContentTypes = new String[] {
+                 "application/json", 
+-                "*/ '  =end"
++                "*_/ '  =end - -       "
+             };
+             String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
+ 
+             // to determine the Accept header
+             String[] localVarHttpHeaderAccepts = new String[] {
+                 "application/json", 
+-                "*/ '  =end"
++                "*_/ '  =end - -       "
+             };
+             String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
+             if (localVarHttpHeaderAccept != null)
+@@ -308,7 +308,7 @@ public async System.Threading.Tasks.Task<ApiResponse<Object>> TestCodeInjectEndA
+             // set "format" to json by default
+             // e.g. /pet/{petId}.{format} becomes /pet/{petId}.json
+             localVarPathParams.Add("format", "json");
+-            if (testCodeInjectEnd != null) localVarFormParams.Add("test code inject */ &#39; &quot; &#x3D;end", Configuration.ApiClient.ParameterToString(testCodeInjectEnd)); // form parameter
++            if (testCodeInjectEndRnNR != null) localVarFormParams.Add("test code inject */ &#39; &quot; &#x3D;end -- \r\n \n \r", Configuration.ApiClient.ParameterToString(testCodeInjectEndRnNR)); // form parameter
+ 
+ 
+             // make the HTTP request
+@@ -320,7 +320,7 @@ public async System.Threading.Tasks.Task<ApiResponse<Object>> TestCodeInjectEndA
+ 
+             if (ExceptionFactory != null)
+             {
+-                Exception exception = ExceptionFactory("TestCodeInjectEnd", localVarResponse);
++                Exception exception = ExceptionFactory("TestCodeInjectEndRnNR", localVarResponse);
+                 if (exception != null) throw exception;
+             }
+ 
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiClient.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiClient.cs
+index 965816433fe..20335049b73 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiClient.cs
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiClient.cs
+@@ -1,10 +1,10 @@
+ /* 
+- * Swagger Petstore  ' \" =end
++ * Swagger Petstore *_/ ' \" =end - - \\r\\n \\n \\r
+  *
+- * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  *_/ ' \" =end - -       
+  *
+- * OpenAPI spec version: 1.0.0  ' \" =end
+- * Contact: apiteam@swagger.io  ' \" =end
++ * OpenAPI spec version: 1.0.0 *_/ ' \" =end - - \\r\\n \\n \\r
++ * Contact: apiteam@swagger.io *_/ ' \" =end - - \\r\\n \\n \\r
+  * Generated by: https://github.com/swagger-api/swagger-codegen.git
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+@@ -60,17 +60,17 @@ public partial class ApiClient
+ 
+         /// <summary>
+         /// Initializes a new instance of the <see cref="ApiClient" /> class
+-        /// with default configuration and base path (https://petstore.swagger.io  ' \" =end/v2  ' \" =end).
++        /// with default configuration and base path (https://petstore.swagger.io *_/ ' \" =end - - \\r\\n \\n \\r/v2 *_/ ' \" =end - - \\r\\n \\n \\r).
+         /// </summary>
+         public ApiClient()
+         {
+             Configuration = Configuration.Default;
+-            RestClient = new RestClient("https://petstore.swagger.io  ' \" =end/v2  ' \" =end");
++            RestClient = new RestClient("https://petstore.swagger.io *_/ ' \" =end - - \\r\\n \\n \\r/v2 *_/ ' \" =end - - \\r\\n \\n \\r");
+         }
+ 
+         /// <summary>
+         /// Initializes a new instance of the <see cref="ApiClient" /> class
+-        /// with default base path (https://petstore.swagger.io  ' \" =end/v2  ' \" =end).
++        /// with default base path (https://petstore.swagger.io *_/ ' \" =end - - \\r\\n \\n \\r/v2 *_/ ' \" =end - - \\r\\n \\n \\r).
+         /// </summary>
+         /// <param name="config">An instance of Configuration.</param>
+         public ApiClient(Configuration config = null)
+@@ -80,7 +80,7 @@ public ApiClient(Configuration config = null)
+             else
+                 Configuration = config;
+ 
+-            RestClient = new RestClient("https://petstore.swagger.io  ' \" =end/v2  ' \" =end");
++            RestClient = new RestClient("https://petstore.swagger.io *_/ ' \" =end - - \\r\\n \\n \\r/v2 *_/ ' \" =end - - \\r\\n \\n \\r");
+         }
+ 
+         /// <summary>
+@@ -88,7 +88,7 @@ public ApiClient(Configuration config = null)
+         /// with default configuration.
+         /// </summary>
+         /// <param name="basePath">The base path.</param>
+-        public ApiClient(String basePath = "https://petstore.swagger.io  ' \" =end/v2  ' \" =end")
++        public ApiClient(String basePath = "https://petstore.swagger.io *_/ ' \" =end - - \\r\\n \\n \\r/v2 *_/ ' \" =end - - \\r\\n \\n \\r")
+         {
+            if (String.IsNullOrEmpty(basePath))
+                 throw new ArgumentException("basePath cannot be empty");
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiException.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiException.cs
+index b19e853fcb5..f66ab06f6eb 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiException.cs
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiException.cs
+@@ -1,10 +1,10 @@
+ /* 
+- * Swagger Petstore  ' \" =end
++ * Swagger Petstore *_/ ' \" =end - - \\r\\n \\n \\r
+  *
+- * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  *_/ ' \" =end - -       
+  *
+- * OpenAPI spec version: 1.0.0  ' \" =end
+- * Contact: apiteam@swagger.io  ' \" =end
++ * OpenAPI spec version: 1.0.0 *_/ ' \" =end - - \\r\\n \\n \\r
++ * Contact: apiteam@swagger.io *_/ ' \" =end - - \\r\\n \\n \\r
+  * Generated by: https://github.com/swagger-api/swagger-codegen.git
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiResponse.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiResponse.cs
+index aae1f964a20..14ececaeed0 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiResponse.cs
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiResponse.cs
+@@ -1,10 +1,10 @@
+ /* 
+- * Swagger Petstore  ' \" =end
++ * Swagger Petstore *_/ ' \" =end - - \\r\\n \\n \\r
+  *
+- * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  *_/ ' \" =end - -       
+  *
+- * OpenAPI spec version: 1.0.0  ' \" =end
+- * Contact: apiteam@swagger.io  ' \" =end
++ * OpenAPI spec version: 1.0.0 *_/ ' \" =end - - \\r\\n \\n \\r
++ * Contact: apiteam@swagger.io *_/ ' \" =end - - \\r\\n \\n \\r
+  * Generated by: https://github.com/swagger-api/swagger-codegen.git
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/Configuration.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/Configuration.cs
+index 53144da2bd1..93b6e0f78ec 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/Configuration.cs
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/Configuration.cs
+@@ -1,10 +1,10 @@
+ /* 
+- * Swagger Petstore  ' \" =end
++ * Swagger Petstore *_/ ' \" =end - - \\r\\n \\n \\r
+  *
+- * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  *_/ ' \" =end - -       
+  *
+- * OpenAPI spec version: 1.0.0  ' \" =end
+- * Contact: apiteam@swagger.io  ' \" =end
++ * OpenAPI spec version: 1.0.0 *_/ ' \" =end - - \\r\\n \\n \\r
++ * Contact: apiteam@swagger.io *_/ ' \" =end - - \\r\\n \\n \\r
+  * Generated by: https://github.com/swagger-api/swagger-codegen.git
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+@@ -308,7 +308,7 @@ public static String ToDebugReport()
+                      .GetExecutingAssembly()
+                      .GetReferencedAssemblies()
+                      .Where(x => x.Name == "System.Core").First().Version.ToString()  + "\n";
+-            report += "    Version of the API: 1.0.0  ' \" =end\n";
++            report += "    Version of the API: 1.0.0 *_/ ' \" =end - - \\r\\n \\n \\r\n";
+             report += "    SDK Package Version: 1.0.0\n";
+ 
+             return report;
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ExceptionFactory.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ExceptionFactory.cs
+index 3b848056221..6b9dfb4a29c 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ExceptionFactory.cs
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ExceptionFactory.cs
+@@ -1,10 +1,10 @@
+ /* 
+- * Swagger Petstore  ' \" =end
++ * Swagger Petstore *_/ ' \" =end - - \\r\\n \\n \\r
+  *
+- * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  *_/ ' \" =end - -       
+  *
+- * OpenAPI spec version: 1.0.0  ' \" =end
+- * Contact: apiteam@swagger.io  ' \" =end
++ * OpenAPI spec version: 1.0.0 *_/ ' \" =end - - \\r\\n \\n \\r
++ * Contact: apiteam@swagger.io *_/ ' \" =end - - \\r\\n \\n \\r
+  * Generated by: https://github.com/swagger-api/swagger-codegen.git
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/IApiAccessor.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/IApiAccessor.cs
+index cacade5d15e..ed52eb5c858 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/IApiAccessor.cs
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/IApiAccessor.cs
+@@ -1,10 +1,10 @@
+ /* 
+- * Swagger Petstore  ' \" =end
++ * Swagger Petstore *_/ ' \" =end - - \\r\\n \\n \\r
+  *
+- * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  *_/ ' \" =end - -       
+  *
+- * OpenAPI spec version: 1.0.0  ' \" =end
+- * Contact: apiteam@swagger.io  ' \" =end
++ * OpenAPI spec version: 1.0.0 *_/ ' \" =end - - \\r\\n \\n \\r
++ * Contact: apiteam@swagger.io *_/ ' \" =end - - \\r\\n \\n \\r
+  * Generated by: https://github.com/swagger-api/swagger-codegen.git
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/IO.Swagger.csproj b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/IO.Swagger.csproj
+index 4bc928f6ded..7b80b107d42 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/IO.Swagger.csproj
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/IO.Swagger.csproj
+@@ -1,11 +1,11 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <!--
+-Swagger Petstore  ' \" =end
++Swagger Petstore *_/ ' \" =end - - \\r\\n \\n \\r
+ 
+-This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  *_/ ' \" =end - -       
+ 
+-OpenAPI spec version: 1.0.0  &#39; \&quot; &#x3D;end
+-Contact: apiteam@swagger.io  ' \" =end
++OpenAPI spec version: 1.0.0 *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r
++Contact: apiteam@swagger.io *_/ ' \" =end - - \\r\\n \\n \\r
+ Generated by: https://github.com/swagger-api/swagger-codegen.git
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+@@ -24,7 +24,7 @@ limitations under the License.
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+-    <ProjectGuid>{29125490-71E4-47ED-B0D7-34505F58103C}</ProjectGuid>
++    <ProjectGuid>{8CE139DF-64BC-4591-85F8-8506C2B67514}</ProjectGuid>
+     <OutputType>Library</OutputType>
+     <AppDesignerFolder>Properties</AppDesignerFolder>
+     <RootNamespace>Swagger Library</RootNamespace>
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Model/ModelReturn.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Model/ModelReturn.cs
+index 007a7939816..e8bad487f7d 100644
+--- a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Model/ModelReturn.cs
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Model/ModelReturn.cs
+@@ -1,10 +1,10 @@
+ /* 
+- * Swagger Petstore  ' \" =end
++ * Swagger Petstore *_/ ' \" =end - - \\r\\n \\n \\r
+  *
+- * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\  *_/ ' \" =end - -       
+  *
+- * OpenAPI spec version: 1.0.0  ' \" =end
+- * Contact: apiteam@swagger.io  ' \" =end
++ * OpenAPI spec version: 1.0.0 *_/ ' \" =end - - \\r\\n \\n \\r
++ * Contact: apiteam@swagger.io *_/ ' \" =end - - \\r\\n \\n \\r
+  * Generated by: https://github.com/swagger-api/swagger-codegen.git
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+@@ -34,7 +34,7 @@
+ namespace IO.Swagger.Model
+ {
+     /// <summary>
+-    /// Model for testing reserved words   &#39; \&quot; &#x3D;end
++    /// Model for testing reserved words  *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r
+     /// </summary>
+     [DataContract]
+     public partial class ModelReturn :  IEquatable<ModelReturn>
+@@ -42,16 +42,16 @@ public partial class ModelReturn :  IEquatable<ModelReturn>
+         /// <summary>
+         /// Initializes a new instance of the <see cref="ModelReturn" /> class.
+         /// </summary>
+-        /// <param name="_Return">property description   &#39; \&quot; &#x3D;end.</param>
++        /// <param name="_Return">property description  *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r.</param>
+         public ModelReturn(int? _Return = null)
+         {
+             this._Return = _Return;
+         }
+         
+         /// <summary>
+-        /// property description   &#39; \&quot; &#x3D;end
++        /// property description  *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r
+         /// </summary>
+-        /// <value>property description   &#39; \&quot; &#x3D;end</value>
++        /// <value>property description  *_/ &#39; \&quot; &#x3D;end - - \\r\\n \\n \\r</value>
+         [DataMember(Name="return", EmitDefaultValue=false)]
+         public int? _Return { get; set; }
+         /// <summary>
+diff --git a/samples/client/petstore/csharp/SwaggerClient/IO.Swagger.sln b/samples/client/petstore/csharp/SwaggerClient/IO.Swagger.sln
+index cd5b06faa7a..c10f905241c 100644
+--- a/samples/client/petstore/csharp/SwaggerClient/IO.Swagger.sln
++++ b/samples/client/petstore/csharp/SwaggerClient/IO.Swagger.sln
+@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
+ # Visual Studio 2012
+ VisualStudioVersion = 12.0.0.0
+ MinimumVisualStudioVersion = 10.0.0.1
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Swagger", "src\IO.Swagger\IO.Swagger.csproj", "{D285D0CA-2FEE-4760-8780-E13C90E527E8}"
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Swagger", "src\IO.Swagger\IO.Swagger.csproj", "{4744D957-AA0D-4BF3-A0B6-60A13E6749BB}"
+ EndProject
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Swagger.Test", "src\IO.Swagger.Test\IO.Swagger.Test.csproj", "{19F1DEBC-DE5E-4517-8062-F000CD499087}"
+ EndProject
+@@ -12,10 +12,10 @@ Debug|Any CPU = Debug|Any CPU
+ Release|Any CPU = Release|Any CPU
+ EndGlobalSection
+ GlobalSection(ProjectConfigurationPlatforms) = postSolution
+-{D285D0CA-2FEE-4760-8780-E13C90E527E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-{D285D0CA-2FEE-4760-8780-E13C90E527E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-{D285D0CA-2FEE-4760-8780-E13C90E527E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-{D285D0CA-2FEE-4760-8780-E13C90E527E8}.Release|Any CPU.Build.0 = Release|Any CPU
++{4744D957-AA0D-4BF3-A0B6-60A13E6749BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++{4744D957-AA0D-4BF3-A0B6-60A13E6749BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
++{4744D957-AA0D-4BF3-A0B6-60A13E6749BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
++{4744D957-AA0D-4BF3-A0B6-60A13E6749BB}.Release|Any CPU.Build.0 = Release|Any CPU
+ {19F1DEBC-DE5E-4517-8062-F000CD499087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+ {19F1DEBC-DE5E-4517-8062-F000CD499087}.Debug|Any CPU.Build.0 = Debug|Any CPU
+ {19F1DEBC-DE5E-4517-8062-F000CD499087}.Release|Any CPU.ActiveCfg = Release|Any CPU
+diff --git a/samples/client/petstore/csharp/SwaggerClient/README.md b/samples/client/petstore/csharp/SwaggerClient/README.md
+index e3ab66fcbb5..db0560b134f 100644
+--- a/samples/client/petstore/csharp/SwaggerClient/README.md
++++ b/samples/client/petstore/csharp/SwaggerClient/README.md
+@@ -6,7 +6,7 @@ This C# SDK is automatically generated by the [Swagger Codegen](https://github.c
+ 
+ - API version: 1.0.0
+ - SDK version: 1.0.0
+-- Build date: 2016-07-13T16:19:48.141+08:00
++- Build date: 2016-07-13T19:06:48.432+08:00
+ - Build package: class io.swagger.codegen.languages.CSharpClientCodegen
+ 
+ ## Frameworks supported
+diff --git a/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/IO.Swagger.csproj b/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/IO.Swagger.csproj
+index 702c8080e3b..e03d788d32d 100644
+--- a/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/IO.Swagger.csproj
++++ b/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/IO.Swagger.csproj
+@@ -24,7 +24,7 @@ limitations under the License.
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+-    <ProjectGuid>{D285D0CA-2FEE-4760-8780-E13C90E527E8}</ProjectGuid>
++    <ProjectGuid>{4744D957-AA0D-4BF3-A0B6-60A13E6749BB}</ProjectGuid>
+     <OutputType>Library</OutputType>
+     <AppDesignerFolder>Properties</AppDesignerFolder>
+     <RootNamespace>Swagger Library</RootNamespace>
+diff --git a/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/Model/EnumClass.cs b/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/Model/EnumClass.cs
+index 0adca51169e..215eff11a18 100644
+--- a/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/Model/EnumClass.cs
++++ b/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/Model/EnumClass.cs
+@@ -47,16 +47,16 @@ public enum EnumClass
+         Abc,
+         
+         /// <summary>
+-        /// Enum efg for "-efg"
++        /// Enum Efg for "-efg"
+         /// </summary>
+         [EnumMember(Value = "-efg")]
+-        efg,
++        Efg,
+         
+         /// <summary>
+-        /// Enum xyz for "(xyz)"
++        /// Enum Xyz for "(xyz)"
+         /// </summary>
+         [EnumMember(Value = "(xyz)")]
+-        xyz
++        Xyz
+     }
+ 
+ }
+diff --git a/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/Model/EnumTest.cs b/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/Model/EnumTest.cs
+index 60e26ce02c7..34500e76598 100644
+--- a/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/Model/EnumTest.cs
++++ b/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/Model/EnumTest.cs
+@@ -47,10 +47,10 @@ public enum EnumStringEnum
+         {
+             
+             /// <summary>
+-            /// Enum Upper for "UPPER"
++            /// Enum UPPER for "UPPER"
+             /// </summary>
+             [EnumMember(Value = "UPPER")]
+-            Upper,
++            UPPER,
+             
+             /// <summary>
+             /// Enum Lower for "lower"
+diff --git a/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/Model/MapTest.cs b/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/Model/MapTest.cs
+index 397c65a8de7..7a5bc483802 100644
+--- a/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/Model/MapTest.cs
++++ b/samples/client/petstore/csharp/SwaggerClient/src/IO.Swagger/Model/MapTest.cs
+@@ -48,10 +48,10 @@ public enum InnerEnum
+         {
+             
+             /// <summary>
+-            /// Enum Upper for "UPPER"
++            /// Enum UPPER for "UPPER"
+             /// </summary>
+             [EnumMember(Value = "UPPER")]
+-            Upper,
++            UPPER,
+             
+             /// <summary>
+             /// Enum Lower for "lower"

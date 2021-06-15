@@ -1,0 +1,38 @@
+diff --git a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/security/token/delegation/AbstractDelegationTokenSecretManager.java b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/security/token/delegation/AbstractDelegationTokenSecretManager.java
+index 02b3feafbe5d..ad063473c135 100644
+--- a/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/security/token/delegation/AbstractDelegationTokenSecretManager.java
++++ b/hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/security/token/delegation/AbstractDelegationTokenSecretManager.java
+@@ -22,6 +22,7 @@
+ import java.io.DataInputStream;
+ import java.io.IOException;
+ import java.security.MessageDigest;
++import java.util.Collection;
+ import java.util.HashMap;
+ import java.util.HashSet;
+ import java.util.Iterator;
+@@ -597,6 +598,11 @@ private void removeExpiredToken() throws IOException {
+       }
+     }
+     // don't hold lock on 'this' to avoid edit log updates blocking token ops
++    logExpireTokens(expiredTokens);
++  }
++
++  protected void logExpireTokens(
++      Collection<TokenIdent> expiredTokens) throws IOException {
+     for (TokenIdent ident : expiredTokens) {
+       logExpireToken(ident);
+       removeStoredToken(ident);
+diff --git a/hadoop-hdfs-project/hadoop-hdfs/CHANGES.txt b/hadoop-hdfs-project/hadoop-hdfs/CHANGES.txt
+index f28e281ef7f2..df624919e7a3 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs/CHANGES.txt
++++ b/hadoop-hdfs-project/hadoop-hdfs/CHANGES.txt
+@@ -11,6 +11,9 @@ Release 2.7.6 - UNRELEASED
+     HDFS-11003. Expose XmitsInProgress through DataNodeMXBean.
+     (Brahma Reddy Battula)
+ 
++    HADOOP-15212. Add independent secret manager method for logging expired
++    tokens. (Daryn Sharp via kihwal)
++
+   OPTIMIZATIONS
+ 
+   BUG FIXES

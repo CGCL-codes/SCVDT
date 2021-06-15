@@ -1,0 +1,293 @@
+From 121a3304a0c37ccda0e1b63ddc528cba9121a36e Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Wed, 6 Jul 2016 17:54:18 +0200
+Subject: [PATCH] Additional perm check in Webdav
+
+---
+ apps/dav/lib/connector/sabre/objecttree.php   |   5 +
+ .../tests/unit/connector/sabre/objecttree.php |  82 +++++++++++++
+ .../integration/features/bootstrap/WebDav.php |  28 ++++-
+ .../features/webdav-related.feature           | 111 +++++++++++++++++-
+ 4 files changed, 222 insertions(+), 4 deletions(-)
+
+diff --git a/apps/dav/lib/connector/sabre/objecttree.php b/apps/dav/lib/connector/sabre/objecttree.php
+index f38dfe679c7..b26cc68b262 100644
+--- a/apps/dav/lib/connector/sabre/objecttree.php
++++ b/apps/dav/lib/connector/sabre/objecttree.php
+@@ -281,6 +281,11 @@ public function copy($source, $destination) {
+ 			throw new InvalidPath($ex->getMessage());
+ 		}
+ 
++		// Webdav's copy will implicitly do a delete+create, so only create+delete permissions are required
++		if (!$this->fileView->isCreatable($destinationDir)) {
++			throw new \Sabre\DAV\Exception\Forbidden();
++		}
++
+ 		try {
+ 			$this->fileView->copy($source, $destination);
+ 		} catch (StorageNotAvailableException $e) {
+diff --git a/apps/dav/tests/unit/connector/sabre/objecttree.php b/apps/dav/tests/unit/connector/sabre/objecttree.php
+index e5e858ef17b..a04b501bc6c 100644
+--- a/apps/dav/tests/unit/connector/sabre/objecttree.php
++++ b/apps/dav/tests/unit/connector/sabre/objecttree.php
+@@ -142,6 +142,88 @@ private function moveTest($source, $destination, $updatables, $deletables) {
+ 		$objectTree->move($source, $destination);
+ 	}
+ 
++	public function copyDataProvider() {
++		return [
++			// copy into same dir
++			['a', 'b', ''],
++			// copy into same dir
++			['a/a', 'a/b', 'a'],
++			// copy into another dir
++			['a', 'sub/a', 'sub'],
++		];
++	}
++
++	/**
++	 * @dataProvider copyDataProvider
++	 */
++	public function testCopy($sourcePath, $targetPath, $targetParent) {
++		$view = $this->getMock('\OC\Files\View');
++		$view->expects($this->once())
++			->method('verifyPath')
++			->with($targetParent)
++			->will($this->returnValue(true));
++		$view->expects($this->once())
++			->method('isCreatable')
++			->with($targetParent)
++			->will($this->returnValue(true));
++		$view->expects($this->once())
++			->method('copy')
++			->with($sourcePath, $targetPath)
++			->will($this->returnValue(true));
++
++		$info = new FileInfo('', null, null, array(), null);
++
++		$rootDir = new \OCA\DAV\Connector\Sabre\Directory($view, $info);
++		$objectTree = $this->getMock('\OCA\DAV\Connector\Sabre\ObjectTree',
++			array('nodeExists', 'getNodeForPath'),
++			array($rootDir, $view));
++
++		$objectTree->expects($this->once())
++			->method('getNodeForPath')
++			->with($this->identicalTo($sourcePath))
++			->will($this->returnValue(false));
++
++		/** @var $objectTree \OCA\DAV\Connector\Sabre\ObjectTree */
++		$mountManager = \OC\Files\Filesystem::getMountManager();
++		$objectTree->init($rootDir, $view, $mountManager);
++		$objectTree->copy($sourcePath, $targetPath);
++	}
++
++	/**
++	 * @dataProvider copyDataProvider
++	 * @expectedException \Sabre\DAV\Exception\Forbidden
++	 */
++	public function testCopyFailNotCreatable($sourcePath, $targetPath, $targetParent) {
++		$view = $this->getMock('\OC\Files\View');
++		$view->expects($this->once())
++			->method('verifyPath')
++			->with($targetParent)
++			->will($this->returnValue(true));
++		$view->expects($this->once())
++			->method('isCreatable')
++			->with($targetParent)
++			->will($this->returnValue(false));
++		$view->expects($this->never())
++			->method('copy');
++
++		$info = new FileInfo('', null, null, array(), null);
++
++		$rootDir = new \OCA\DAV\Connector\Sabre\Directory($view, $info);
++		$objectTree = $this->getMock('\OCA\DAV\Connector\Sabre\ObjectTree',
++			array('nodeExists', 'getNodeForPath'),
++			array($rootDir, $view));
++
++		$objectTree->expects($this->once())
++			->method('getNodeForPath')
++			->with($this->identicalTo($sourcePath))
++			->will($this->returnValue(false));
++
++		/** @var $objectTree \OCA\DAV\Connector\Sabre\ObjectTree */
++		$mountManager = \OC\Files\Filesystem::getMountManager();
++		$objectTree->init($rootDir, $view, $mountManager);
++		$objectTree->copy($sourcePath, $targetPath);
++	}
++
+ 	/**
+ 	 * @dataProvider nodeForPathProvider
+ 	 */
+diff --git a/build/integration/features/bootstrap/WebDav.php b/build/integration/features/bootstrap/WebDav.php
+index 0a4624ccc2b..f7861399d76 100644
+--- a/build/integration/features/bootstrap/WebDav.php
++++ b/build/integration/features/bootstrap/WebDav.php
+@@ -61,7 +61,27 @@ public function userMovedFile($user, $fileSource, $fileDestination){
+ 	public function userMovesFile($user, $fileSource, $fileDestination){
+ 		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath;
+ 		$headers['Destination'] = $fullUrl . $fileDestination;
+-		$this->response = $this->makeDavRequest($user, "MOVE", $fileSource, $headers);
++		try {
++			$this->response = $this->makeDavRequest($user, "MOVE", $fileSource, $headers);
++		} catch (\GuzzleHttp\Exception\ClientException $e) {
++			$this->response = $e->getResponse();
++		}
++	}
++
++	/**
++	 * @When /^User "([^"]*)" copies file "([^"]*)" to "([^"]*)"$/
++	 * @param string $user
++	 * @param string $fileSource
++	 * @param string $fileDestination
++	 */
++	public function userCopiesFile($user, $fileSource, $fileDestination){
++		$fullUrl = substr($this->baseUrl, 0, -4) . $this->davPath;
++		$headers['Destination'] = $fullUrl . $fileDestination;
++		try {
++			$this->response = $this->makeDavRequest($user, "COPY", $fileSource, $headers);
++		} catch (\GuzzleHttp\Exception\ClientException $e) {
++			$this->response = $e->getResponse();
++		}
+ 	}
+ 
+ 	/**
+@@ -110,7 +130,11 @@ public function downloadedContentWhenDownloadindShouldBe($fileSource, $range, $c
+ 	 * @When Downloading file :fileName
+ 	 */
+ 	public function downloadingFile($fileName) {
+-		$this->response = $this->makeDavRequest($this->currentUser, 'GET', $fileName, []);
++		try {
++			$this->response = $this->makeDavRequest($this->currentUser, 'GET', $fileName, []);
++		} catch (\GuzzleHttp\Exception\ClientException $e) {
++			$this->response = $e->getResponse();
++		}
+ 	}
+ 
+ 	/**
+diff --git a/build/integration/features/webdav-related.feature b/build/integration/features/webdav-related.feature
+index 45a36499251..eb4bb3aa7bb 100644
+--- a/build/integration/features/webdav-related.feature
++++ b/build/integration/features/webdav-related.feature
+@@ -2,12 +2,119 @@ Feature: webdav-related
+ 	Background:
+ 		Given using api version "1"
+ 
+-	Scenario: moving a file old way
++	Scenario: Moving a file
+ 		Given using dav path "remote.php/webdav"
+ 		And As an "admin"
+ 		And user "user0" exists
+-		When User "user0" moves file "/textfile0.txt" to "/FOLDER/textfile0.txt"
++		And As an "user0"
++		When User "user0" moves file "/welcome.txt" to "/FOLDER/welcome.txt"
+ 		Then the HTTP status code should be "201"
++		And Downloading file "/FOLDER/welcome.txt"
++		And Downloaded content should start with "Welcome to your ownCloud account!"
++
++	Scenario: Moving and overwriting a file old way
++		Given using dav path "remote.php/webdav"
++		And As an "admin"
++		And user "user0" exists
++		And As an "user0"
++		When User "user0" moves file "/welcome.txt" to "/textfile0.txt"
++		Then the HTTP status code should be "204"
++		And Downloading file "/textfile0.txt"
++		And Downloaded content should start with "Welcome to your ownCloud account!"
++
++	Scenario: Moving a file to a folder with no permissions
++		Given using dav path "remote.php/webdav"
++		And As an "admin"
++		And user "user0" exists
++		And user "user1" exists
++		And As an "user1"
++		And user "user1" created a folder "/testshare"
++		And as "user1" creating a share with
++		  | path | testshare |
++		  | shareType | 0 |
++		  | permissions | 1 |
++		  | shareWith | user0 |
++		And As an "user0"
++		When User "user0" moves file "/textfile0.txt" to "/testshare/textfile0.txt"
++		Then the HTTP status code should be "403"
++		And Downloading file "/testshare/textfile0.txt"
++		And the HTTP status code should be "404"
++
++	Scenario: Moving a file to overwrite a file in a folder with no permissions
++		Given using dav path "remote.php/webdav"
++		And As an "admin"
++		And user "user0" exists
++		And user "user1" exists
++		And As an "user1"
++		And user "user1" created a folder "/testshare"
++		And as "user1" creating a share with
++		  | path | testshare |
++		  | shareType | 0 |
++		  | permissions | 1 |
++		  | shareWith | user0 |
++		And User "user1" copies file "/welcome.txt" to "/testshare/overwritethis.txt"
++		And As an "user0"
++		When User "user0" moves file "/textfile0.txt" to "/testshare/overwritethis.txt"
++		Then the HTTP status code should be "403"
++		And Downloading file "/testshare/overwritethis.txt"
++		And Downloaded content should start with "Welcome to your ownCloud account!"
++
++	Scenario: Copying a file
++		Given using dav path "remote.php/webdav"
++		And As an "admin"
++		And user "user0" exists
++		And As an "user0"
++		When User "user0" copies file "/welcome.txt" to "/FOLDER/welcome.txt"
++		Then the HTTP status code should be "201"
++		And Downloading file "/FOLDER/welcome.txt"
++		And Downloaded content should start with "Welcome to your ownCloud account!"
++
++	Scenario: Copying and overwriting a file
++		Given using dav path "remote.php/webdav"
++		And As an "admin"
++		And user "user0" exists
++		And As an "user0"
++		When User "user0" copies file "/welcome.txt" to "/textfile1.txt"
++		Then the HTTP status code should be "204"
++		And Downloading file "/textfile1.txt"
++		And Downloaded content should start with "Welcome to your ownCloud account!"
++
++	Scenario: Copying a file to a folder with no permissions
++		Given using dav path "remote.php/webdav"
++		And As an "admin"
++		And user "user0" exists
++		And user "user1" exists
++		And As an "user1"
++		And user "user1" created a folder "/testshare"
++		And as "user1" creating a share with
++		  | path | testshare |
++		  | shareType | 0 |
++		  | permissions | 1 |
++		  | shareWith | user0 |
++		And As an "user0"
++		When User "user0" copies file "/textfile0.txt" to "/testshare/textfile0.txt"
++		Then the HTTP status code should be "403"
++		And Downloading file "/testshare/textfile0.txt"
++		And the HTTP status code should be "404"
++
++	Scenario: Copying a file to overwrite a file into a folder with no permissions
++		Given using dav path "remote.php/webdav"
++		And As an "admin"
++		And user "user0" exists
++		And user "user1" exists
++		And As an "user1"
++		And user "user1" created a folder "/testshare"
++		And as "user1" creating a share with
++		  | path | testshare |
++		  | shareType | 0 |
++		  | permissions | 1 |
++		  | shareWith | user0 |
++		And User "user1" copies file "/welcome.txt" to "/testshare/overwritethis.txt"
++		And As an "user0"
++		When User "user0" copies file "/textfile0.txt" to "/testshare/overwritethis.txt"
++		Then the HTTP status code should be "403"
++		And Downloading file "/testshare/overwritethis.txt"
++		And Downloaded content should start with "Welcome to your ownCloud account!"
+ 
+ 	Scenario: download a file with range
+ 		Given using dav path "remote.php/webdav"

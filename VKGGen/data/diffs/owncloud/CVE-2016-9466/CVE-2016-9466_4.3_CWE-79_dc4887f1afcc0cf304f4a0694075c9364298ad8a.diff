@@ -1,0 +1,233 @@
+From dc4887f1afcc0cf304f4a0694075c9364298ad8a Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Mon, 24 Oct 2016 11:32:51 +0200
+Subject: [PATCH] [stable9] Merge pull request #707 from
+ owncloud/master-error-messages
+
+[nc] Do not display technical error messages
+---
+ controller/configapicontroller.php            |  2 +-
+ controller/configcontroller.php               |  2 +-
+ controller/filesapicontroller.php             |  2 +-
+ controller/filescontroller.php                |  2 +-
+ controller/httperror.php                      | 22 +++++++++--
+ .../unit/controller/ConfigControllerTest.php  |  8 ++--
+ tests/unit/controller/FilesControllerTest.php |  6 ++-
+ tests/unit/controller/HttpErrorTest.php       | 38 +++++++++++++++----
+ 8 files changed, 62 insertions(+), 20 deletions(-)
+
+diff --git a/controller/configapicontroller.php b/controller/configapicontroller.php
+index 9d180b8d4..98d949e1a 100644
+--- a/controller/configapicontroller.php
++++ b/controller/configapicontroller.php
+@@ -65,7 +65,7 @@ public function get($extramediatypes = false) {
+ 		try {
+ 			return $this->getConfig($extramediatypes);
+ 		} catch (\Exception $exception) {
+-			return $this->jsonError($exception);
++			return $this->jsonError($exception, $this->request, $this->logger);
+ 		}
+ 	}
+ 
+diff --git a/controller/configcontroller.php b/controller/configcontroller.php
+index 07e4a12ca..07688c252 100644
+--- a/controller/configcontroller.php
++++ b/controller/configcontroller.php
+@@ -63,7 +63,7 @@ public function get($extramediatypes = false) {
+ 		try {
+ 			return $this->getConfig($extramediatypes);
+ 		} catch (\Exception $exception) {
+-			return $this->jsonError($exception);
++			return $this->jsonError($exception, $this->request, $this->logger);
+ 		}
+ 	}
+ 
+diff --git a/controller/filesapicontroller.php b/controller/filesapicontroller.php
+index 057b38f03..a8cd5fe3e 100644
+--- a/controller/filesapicontroller.php
++++ b/controller/filesapicontroller.php
+@@ -94,7 +94,7 @@ public function getList($location, $features, $etag, $mediatypes) {
+ 		try {
+ 			return $this->getFiles($location, $featuresArray, $etag, $mediaTypesArray);
+ 		} catch (\Exception $exception) {
+-			return $this->jsonError($exception);
++			return $this->jsonError($exception, $this->request, $this->logger);
+ 		}
+ 	}
+ 
+diff --git a/controller/filescontroller.php b/controller/filescontroller.php
+index 81269bba4..c6c1a0fd5 100644
+--- a/controller/filescontroller.php
++++ b/controller/filescontroller.php
+@@ -97,7 +97,7 @@ public function getList($location, $features, $etag, $mediatypes) {
+ 		try {
+ 			return $this->getFiles($location, $featuresArray, $etag, $mediaTypesArray);
+ 		} catch (\Exception $exception) {
+-			return $this->jsonError($exception);
++			return $this->jsonError($exception, $this->request, $this->logger);
+ 		}
+ 	}
+ 
+diff --git a/controller/httperror.php b/controller/httperror.php
+index a291f547c..73eb97696 100644
+--- a/controller/httperror.php
++++ b/controller/httperror.php
+@@ -16,6 +16,8 @@
+ 
+ use Exception;
+ 
++use OCP\ILogger;
++use OCP\IRequest;
+ use OCP\IURLGenerator;
+ 
+ use OCP\AppFramework\Http;
+@@ -36,17 +38,29 @@ trait HttpError {
+ 
+ 	/**
+ 	 * @param \Exception $exception
++	 * @param IRequest $request
++	 * @param ILogger $logger
+ 	 *
+ 	 * @return JSONResponse
+ 	 */
+-	public function jsonError(Exception $exception) {
+-		$message = $exception->getMessage();
++	public function jsonError(Exception $exception,
++							  IRequest $request,
++							  ILogger $logger) {
+ 		$code = $this->getHttpStatusCode($exception);
+ 
++		// If the exception is not of type ForbiddenServiceException only show a
++		// generic error message to avoid leaking information.
++		if(!($exception instanceof ForbiddenServiceException)) {
++			$logger->logException($exception, ['app' => 'gallery']);
++			$message = sprintf('An error occurred. Request ID: %s', $request->getId());
++		} else {
++			$message = $exception->getMessage() . ' (' . $code . ')';
++		}
++
+ 		return new JSONResponse(
+ 			[
+-				'message' => $message . ' (' . $code . ')',
+-				'success' => false
++				'message' => $message,
++				'success' => false,
+ 			],
+ 			$code
+ 		);
+diff --git a/tests/unit/controller/ConfigControllerTest.php b/tests/unit/controller/ConfigControllerTest.php
+index 95ecbbd95..2302ad838 100644
+--- a/tests/unit/controller/ConfigControllerTest.php
++++ b/tests/unit/controller/ConfigControllerTest.php
+@@ -170,10 +170,12 @@ public function testGetConfigWithBrokenSystem() {
+ 		$this->configService->expects($this->any())
+ 							->method('getFeaturesList')
+ 							->willThrowException(new ServiceException($exceptionMessage));
+-		// Default status code when something breaks
+-		$status = Http::STATUS_INTERNAL_SERVER_ERROR;
++		$this->request
++			->expects($this->once())
++			->method('getId')
++			->willReturn('1234');
+ 		$errorMessage = [
+-			'message' => $exceptionMessage  . ' (' . $status . ')',
++			'message' => 'An error occurred. Request ID: 1234',
+ 			'success' => false
+ 		];
+ 		/** @type JSONResponse $response */
+diff --git a/tests/unit/controller/FilesControllerTest.php b/tests/unit/controller/FilesControllerTest.php
+index 9076427a3..73ebbeedd 100644
+--- a/tests/unit/controller/FilesControllerTest.php
++++ b/tests/unit/controller/FilesControllerTest.php
+@@ -213,8 +213,12 @@ public function testGetFilesWithBrokenSetup() {
+ 								  ->willThrowException(new ServiceException($exceptionMessage));
+ 		// Default status code when something breaks
+ 		$status = Http::STATUS_INTERNAL_SERVER_ERROR;
++		$this->request
++			->expects($this->once())
++			->method('getId')
++			->willReturn('1234');
+ 		$errorMessage = [
+-			'message' => $exceptionMessage . ' (' . $status . ')',
++			'message' => 'An error occurred. Request ID: 1234',
+ 			'success' => false
+ 		];
+ 		/** @type JSONResponse $response */
+diff --git a/tests/unit/controller/HttpErrorTest.php b/tests/unit/controller/HttpErrorTest.php
+index 17ecd32fd..47746c9eb 100644
+--- a/tests/unit/controller/HttpErrorTest.php
++++ b/tests/unit/controller/HttpErrorTest.php
+@@ -20,6 +20,8 @@
+ use OCA\Gallery\Service\NotFoundServiceException;
+ use OCA\Gallery\Service\ForbiddenServiceException;
+ use OCA\Gallery\Service\InternalServerErrorServiceException;
++use OCP\ILogger;
++use OCP\IRequest;
+ 
+ /**
+  * Class HttpErrorTest
+@@ -35,11 +37,11 @@ class HttpErrorTest extends \Test\TestCase {
+ 	 * @return array
+ 	 */
+ 	public function providesExceptionData() {
+-		$notFoundEnvMessage = 'Not found in env';
++		$notFoundEnvMessage = 'An error occurred. Request ID: 1234';
+ 		$notFoundEnvException = new NotFoundEnvException($notFoundEnvMessage);
+ 		$notFoundEnvStatus = Http::STATUS_NOT_FOUND;
+ 
+-		$notFoundServiceMessage = 'Not found in service';
++		$notFoundServiceMessage = 'An error occurred. Request ID: 1234';
+ 		$notFoundServiceException = new NotFoundServiceException($notFoundServiceMessage);
+ 		$notFoundServiceStatus = Http::STATUS_NOT_FOUND;
+ 
+@@ -47,11 +49,11 @@ public function providesExceptionData() {
+ 		$forbiddenServiceException = new ForbiddenServiceException($forbiddenServiceMessage);
+ 		$forbiddenServiceStatus = Http::STATUS_FORBIDDEN;
+ 
+-		$errorServiceMessage = 'Broken service';
++		$errorServiceMessage = 'An error occurred. Request ID: 1234';
+ 		$errorServiceException = new InternalServerErrorServiceException($errorServiceMessage);
+ 		$errorServiceStatus = Http::STATUS_INTERNAL_SERVER_ERROR;
+ 
+-		$coreServiceMessage = 'Broken core';
++		$coreServiceMessage = 'An error occurred. Request ID: 1234';
+ 		$coreServiceException = new \Exception($coreServiceMessage);
+ 		$coreServiceStatus = Http::STATUS_INTERNAL_SERVER_ERROR;
+ 
+@@ -72,12 +74,32 @@ public function providesExceptionData() {
+ 	 * @param String $status
+ 	 */
+ 	public function testJsonError($exception, $message, $status) {
+-		$httpError = $this->getMockForTrait('\OCA\Gallery\Controller\HttpError');
++		$request = $this->createMock(IRequest::class);
++		$logger = $this->createMock(ILogger::class);
++
++		if($exception instanceof ForbiddenServiceException) {
++			$amount = 0;
++			$message = $message . ' (' . $status . ')';
++		} else {
++			$amount = 1;
++		}
++
++		$logger
++			->expects($this->exactly($amount))
++			->method('logException')
++			->with($exception, ['app' => 'gallery']);
++		$request
++			->expects($this->exactly($amount))
++			->method('getId')
++			->willReturn('1234');
++
++		/** @var HttpError $httpError */
++		$httpError = $this->getMockForTrait(HttpError::class);
+ 		/** @type JSONResponse $response */
+-		$response = $httpError->jsonError($exception);
++		$response = $httpError->jsonError($exception, $request, $logger);
+ 
+-		$this->assertEquals(
+-			['message' => $message . ' (' . $status . ')', 'success' => false], $response->getData()
++		$this->assertSame(
++			['message' => $message, 'success' => false], $response->getData()
+ 		);
+ 		$this->assertEquals($status, $response->getStatus());
+ 	}

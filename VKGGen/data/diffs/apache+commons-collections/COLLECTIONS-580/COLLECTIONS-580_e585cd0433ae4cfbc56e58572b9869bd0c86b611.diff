@@ -1,0 +1,373 @@
+diff --git a/src/changes/changes.xml b/src/changes/changes.xml
+index 61ee47151..19a75b19e 100644
+--- a/src/changes/changes.xml
++++ b/src/changes/changes.xml
+@@ -22,6 +22,13 @@
+   <body>
+ 
+   <release version="4.1" date="TBD" description="">
++    <action issue="COLLECTIONS-580" dev="tn" type="update">
++      Serialization support for unsafe classes in the functor package
++      has been removed as this can be exploited for remote code execution
++      attacks. Classes considered to be unsafe are: CloneTransformer,
++      ForClosure, InstantiateFactory, InstantiateTransformer, InvokerTransformer,
++      PrototypeCloneFactory, PrototypeSerializationFactory, WhileClosure.
++    </action>
+     <action issue="COLLECTIONS-576" dev="tn" type="fix" due-to="Stephan Roch">
+       Subclasses of MultiKey did not re-calculate their hashcode after de-serialization.
+     </action>
+diff --git a/src/main/java/org/apache/commons/collections4/functors/CloneTransformer.java b/src/main/java/org/apache/commons/collections4/functors/CloneTransformer.java
+index d99d492ba..4361845a7 100644
+--- a/src/main/java/org/apache/commons/collections4/functors/CloneTransformer.java
++++ b/src/main/java/org/apache/commons/collections4/functors/CloneTransformer.java
+@@ -16,22 +16,22 @@
+  */
+ package org.apache.commons.collections4.functors;
+ 
+-import java.io.Serializable;
+-
+ import org.apache.commons.collections4.Transformer;
+ 
+ /**
+  * Transformer implementation that returns a clone of the input object.
+  * <p>
+  * Clone is performed using <code>PrototypeFactory.prototypeFactory(input).create()</code>.
++ * <p>
++ * <b>WARNING:</b> from v4.1 onwards this class will <b>not</b> be serializable anymore
++ * in order to prevent potential remote code execution exploits. Please refer to
++ * <a href="https://issues.apache.org/jira/browse/COLLECTIONS-580">COLLECTIONS-580</a>
++ * for more details.
+  *
+  * @since 3.0
+  * @version $Id$
+  */
+-public class CloneTransformer<T> implements Transformer<T, T>, Serializable {
+-
+-    /** Serial version UID */
+-    private static final long serialVersionUID = -8188742709499652567L;
++public class CloneTransformer<T> implements Transformer<T, T> {
+ 
+     /** Singleton predicate instance */
+     @SuppressWarnings("rawtypes") // the singleton instance works for all types
+@@ -46,7 +46,7 @@
+      */
+     @SuppressWarnings("unchecked") // the singleton instance works for all types
+     public static <T> Transformer<T, T> cloneTransformer() {
+-        return (Transformer<T, T>) INSTANCE;
++        return INSTANCE;
+     }
+ 
+     /**
+@@ -62,6 +62,7 @@ private CloneTransformer() {
+      * @param input  the input object to transform
+      * @return the transformed result
+      */
++    @Override
+     public T transform(final T input) {
+         if (input == null) {
+             return null;
+@@ -69,8 +70,4 @@ public T transform(final T input) {
+         return PrototypeFactory.prototypeFactory(input).create();
+     }
+ 
+-    private Object readResolve() {
+-        return INSTANCE;
+-    }
+-
+ }
+diff --git a/src/main/java/org/apache/commons/collections4/functors/ForClosure.java b/src/main/java/org/apache/commons/collections4/functors/ForClosure.java
+index da2ecf0e3..e2e945949 100644
+--- a/src/main/java/org/apache/commons/collections4/functors/ForClosure.java
++++ b/src/main/java/org/apache/commons/collections4/functors/ForClosure.java
+@@ -16,20 +16,20 @@
+  */
+ package org.apache.commons.collections4.functors;
+ 
+-import java.io.Serializable;
+-
+ import org.apache.commons.collections4.Closure;
+ 
+ /**
+  * Closure implementation that calls another closure n times, like a for loop.
++ * <p>
++ * <b>WARNING:</b> from v4.1 onwards this class will <b>not</b> be serializable anymore
++ * in order to prevent potential remote code execution exploits. Please refer to
++ * <a href="https://issues.apache.org/jira/browse/COLLECTIONS-580">COLLECTIONS-580</a>
++ * for more details.
+  *
+  * @since 3.0
+  * @version $Id$
+  */
+-public class ForClosure<E> implements Closure<E>, Serializable {
+-
+-    /** Serial version UID */
+-    private static final long serialVersionUID = -1190120533393621674L;
++public class ForClosure<E> implements Closure<E> {
+ 
+     /** The number of times to loop */
+     private final int iCount;
+@@ -76,6 +76,7 @@ public ForClosure(final int count, final Closure<? super E> closure) {
+      *
+      * @param input  the input object
+      */
++    @Override
+     public void execute(final E input) {
+         for (int i = 0; i < iCount; i++) {
+             iClosure.execute(input);
+diff --git a/src/main/java/org/apache/commons/collections4/functors/InstantiateFactory.java b/src/main/java/org/apache/commons/collections4/functors/InstantiateFactory.java
+index 1179b5e71..457643c89 100644
+--- a/src/main/java/org/apache/commons/collections4/functors/InstantiateFactory.java
++++ b/src/main/java/org/apache/commons/collections4/functors/InstantiateFactory.java
+@@ -16,7 +16,6 @@
+  */
+ package org.apache.commons.collections4.functors;
+ 
+-import java.io.Serializable;
+ import java.lang.reflect.Constructor;
+ import java.lang.reflect.InvocationTargetException;
+ 
+@@ -25,14 +24,16 @@
+ 
+ /**
+  * Factory implementation that creates a new object instance by reflection.
++ * <p>
++ * <b>WARNING:</b> from v4.1 onwards this class will <b>not</b> be serializable anymore
++ * in order to prevent potential remote code execution exploits. Please refer to
++ * <a href="https://issues.apache.org/jira/browse/COLLECTIONS-580">COLLECTIONS-580</a>
++ * for more details.
+  *
+  * @since 3.0
+  * @version $Id$
+  */
+-public class InstantiateFactory<T> implements Factory<T>, Serializable {
+-
+-    /** The serial version */
+-    private static final long serialVersionUID = -7732226881069447957L;
++public class InstantiateFactory<T> implements Factory<T> {
+ 
+     /** The class to create */
+     private final Class<T> iClassToInstantiate;
+@@ -118,6 +119,7 @@ private void findConstructor() {
+      *
+      * @return the new object
+      */
++    @Override
+     public T create() {
+         // needed for post-serialization
+         if (iConstructor == null) {
+diff --git a/src/main/java/org/apache/commons/collections4/functors/InstantiateTransformer.java b/src/main/java/org/apache/commons/collections4/functors/InstantiateTransformer.java
+index e5a000ea0..757f2a9ac 100644
+--- a/src/main/java/org/apache/commons/collections4/functors/InstantiateTransformer.java
++++ b/src/main/java/org/apache/commons/collections4/functors/InstantiateTransformer.java
+@@ -16,7 +16,6 @@
+  */
+ package org.apache.commons.collections4.functors;
+ 
+-import java.io.Serializable;
+ import java.lang.reflect.Constructor;
+ import java.lang.reflect.InvocationTargetException;
+ 
+@@ -25,14 +24,16 @@
+ 
+ /**
+  * Transformer implementation that creates a new object instance by reflection.
++ * <p>
++ * <b>WARNING:</b> from v4.1 onwards this class will <b>not</b> be serializable anymore
++ * in order to prevent potential remote code execution exploits. Please refer to
++ * <a href="https://issues.apache.org/jira/browse/COLLECTIONS-580">COLLECTIONS-580</a>
++ * for more details.
+  *
+  * @since 3.0
+  * @version $Id$
+  */
+-public class InstantiateTransformer<T> implements Transformer<Class<? extends T>, T>, Serializable {
+-
+-    /** The serial version */
+-    private static final long serialVersionUID = 3786388740793356347L;
++public class InstantiateTransformer<T> implements Transformer<Class<? extends T>, T> {
+ 
+     /** Singleton instance that uses the no arg constructor */
+     @SuppressWarnings("rawtypes")
+@@ -51,7 +52,7 @@
+      */
+     @SuppressWarnings("unchecked")
+     public static <T> Transformer<Class<? extends T>, T> instantiateTransformer() {
+-        return (Transformer<Class<? extends T>, T>) NO_ARG_INSTANCE;
++        return NO_ARG_INSTANCE;
+     }
+ 
+     /**
+@@ -107,6 +108,7 @@ public InstantiateTransformer(final Class<?>[] paramTypes, final Object[] args)
+      * @param input  the input object to transform
+      * @return the transformed result
+      */
++    @Override
+     public T transform(final Class<? extends T> input) {
+         try {
+             if (input == null) {
+diff --git a/src/main/java/org/apache/commons/collections4/functors/InvokerTransformer.java b/src/main/java/org/apache/commons/collections4/functors/InvokerTransformer.java
+index 09d79ef2d..45d90b2ff 100644
+--- a/src/main/java/org/apache/commons/collections4/functors/InvokerTransformer.java
++++ b/src/main/java/org/apache/commons/collections4/functors/InvokerTransformer.java
+@@ -16,7 +16,6 @@
+  */
+ package org.apache.commons.collections4.functors;
+ 
+-import java.io.Serializable;
+ import java.lang.reflect.InvocationTargetException;
+ import java.lang.reflect.Method;
+ 
+@@ -25,14 +24,16 @@
+ 
+ /**
+  * Transformer implementation that creates a new object instance by reflection.
++ * <p>
++ * <b>WARNING:</b> from v4.1 onwards this class will <b>not</b> be serializable anymore
++ * in order to prevent potential remote code execution exploits. Please refer to
++ * <a href="https://issues.apache.org/jira/browse/COLLECTIONS-580">COLLECTIONS-580</a>
++ * for more details.
+  *
+  * @since 3.0
+  * @version $Id$
+  */
+-public class InvokerTransformer<I, O> implements Transformer<I, O>, Serializable {
+-
+-    /** The serial version */
+-    private static final long serialVersionUID = -8653385846894047688L;
++public class InvokerTransformer<I, O> implements Transformer<I, O> {
+ 
+     /** The method name to call */
+     private final String iMethodName;
+@@ -121,6 +122,7 @@ public InvokerTransformer(final String methodName, final Class<?>[] paramTypes,
+      * @param input  the input object to transform
+      * @return the transformed result, null if null input
+      */
++    @Override
+     @SuppressWarnings("unchecked")
+     public O transform(final Object input) {
+         if (input == null) {
+diff --git a/src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java b/src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java
+index 9d808c4ef..13186cd31 100644
+--- a/src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java
++++ b/src/main/java/org/apache/commons/collections4/functors/PrototypeFactory.java
+@@ -30,6 +30,12 @@
+ 
+ /**
+  * Factory implementation that creates a new instance each time based on a prototype.
++ * <p>
++ * <b>WARNING:</b> from v4.1 onwards {@link Factory} instances returned by
++ * {@link #prototypeFactory(Object)} will <b>not</b> be serializable anymore in order
++ * to prevent potential remote code execution exploits. Please refer to
++ * <a href="https://issues.apache.org/jira/browse/COLLECTIONS-580">COLLECTIONS-580</a>
++ * for more details.
+  *
+  * @since 3.0
+  * @version $Id$
+@@ -91,10 +97,7 @@ private PrototypeFactory() {
+     /**
+      * PrototypeCloneFactory creates objects by copying a prototype using the clone method.
+      */
+-    static class PrototypeCloneFactory<T> implements Factory<T>, Serializable {
+-
+-        /** The serial version */
+-        private static final long serialVersionUID = 5604271422565175555L;
++    static class PrototypeCloneFactory<T> implements Factory<T> {
+ 
+         /** The object to clone each time */
+         private final T iPrototype;
+@@ -126,6 +129,7 @@ private void findCloneMethod() {
+          *
+          * @return the new object
+          */
++        @Override
+         @SuppressWarnings("unchecked")
+         public T create() {
+             // needed for post-serialization
+@@ -148,10 +152,7 @@ public T create() {
+     /**
+      * PrototypeSerializationFactory creates objects by cloning a prototype using serialization.
+      */
+-    static class PrototypeSerializationFactory<T extends Serializable> implements Factory<T>, Serializable {
+-
+-        /** The serial version */
+-        private static final long serialVersionUID = -8704966966139178833L;
++    static class PrototypeSerializationFactory<T extends Serializable> implements Factory<T> {
+ 
+         /** The object to clone via serialization each time */
+         private final T iPrototype;
+@@ -169,6 +170,7 @@ private PrototypeSerializationFactory(final T prototype) {
+          *
+          * @return the new object
+          */
++        @Override
+         @SuppressWarnings("unchecked")
+         public T create() {
+             final ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
+diff --git a/src/main/java/org/apache/commons/collections4/functors/WhileClosure.java b/src/main/java/org/apache/commons/collections4/functors/WhileClosure.java
+index 525bc9a90..8f1834907 100644
+--- a/src/main/java/org/apache/commons/collections4/functors/WhileClosure.java
++++ b/src/main/java/org/apache/commons/collections4/functors/WhileClosure.java
+@@ -16,22 +16,22 @@
+  */
+ package org.apache.commons.collections4.functors;
+ 
+-import java.io.Serializable;
+-
+ import org.apache.commons.collections4.Closure;
+ import org.apache.commons.collections4.Predicate;
+ 
+ /**
+  * Closure implementation that executes a closure repeatedly until a condition is met,
+  * like a do-while or while loop.
++ * <p>
++ * <b>WARNING:</b> from v4.1 onwards this class will <b>not</b> be serializable anymore
++ * in order to prevent potential remote code execution exploits. Please refer to
++ * <a href="https://issues.apache.org/jira/browse/COLLECTIONS-580">COLLECTIONS-580</a>
++ * for more details.
+  *
+  * @since 3.0
+  * @version $Id$
+  */
+-public class WhileClosure<E> implements Closure<E>, Serializable {
+-
+-    /** Serial version UID */
+-    private static final long serialVersionUID = -3110538116913760108L;
++public class WhileClosure<E> implements Closure<E> {
+ 
+     /** The test condition */
+     private final Predicate<? super E> iPredicate;
+@@ -81,6 +81,7 @@ public WhileClosure(final Predicate<? super E> predicate, final Closure<? super
+      *
+      * @param input  the input object
+      */
++    @Override
+     public void execute(final E input) {
+         if (iDoLoop) {
+             iClosure.execute(input);
+diff --git a/src/main/java/org/apache/commons/collections4/functors/package-info.java b/src/main/java/org/apache/commons/collections4/functors/package-info.java
+index 198fc541c..c30ba19b7 100644
+--- a/src/main/java/org/apache/commons/collections4/functors/package-info.java
++++ b/src/main/java/org/apache/commons/collections4/functors/package-info.java
+@@ -21,6 +21,22 @@
+  * {@link org.apache.commons.collections4.Transformer Transformer} and
+  * {@link org.apache.commons.collections4.Factory Factory} interfaces.
+  * These provide simple callbacks for processing with collections.
++ * <p>
++ * <b>WARNING:</b> from v4.1 onwards several unsafe classes in this package
++ * will not be serializable anymore in order to prevent potential remote
++ * code execution exploits.
++ * <p>
++ * Classes considered to be unsafe are:
++ * <ul>
++ * <li>CloneTransformer</li>
++ * <li>ForClosure</li>
++ * <li>InstantiateFactory</li>
++ * <li>InstantiateTransformer</li>
++ * <li>InvokerTransformer</li>
++ * <li>PrototypeFactory$PrototypeCloneFactory</li>
++ * <li>PrototypeFactory$PrototypeSerializationFactory</li>
++ * <li>WhileClosure</li>
++ * </ul>
+  *
+  * @version $Id$
+  */

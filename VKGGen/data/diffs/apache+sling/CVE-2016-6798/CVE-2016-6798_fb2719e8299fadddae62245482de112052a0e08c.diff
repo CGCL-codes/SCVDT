@@ -1,0 +1,50 @@
+diff --git a/bundles/extensions/xss/src/main/java/org/apache/sling/xss/impl/XSSAPIImpl.java b/bundles/extensions/xss/src/main/java/org/apache/sling/xss/impl/XSSAPIImpl.java
+index e0fc15fea1..b38fde61b3 100644
+--- a/bundles/extensions/xss/src/main/java/org/apache/sling/xss/impl/XSSAPIImpl.java
++++ b/bundles/extensions/xss/src/main/java/org/apache/sling/xss/impl/XSSAPIImpl.java
+@@ -21,6 +21,7 @@
+ import java.util.regex.Pattern;
+ 
+ import javax.annotation.Nonnull;
++import javax.xml.parsers.ParserConfigurationException;
+ import javax.xml.parsers.SAXParser;
+ import javax.xml.parsers.SAXParserFactory;
+ 
+@@ -43,6 +44,8 @@
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ import org.xml.sax.InputSource;
++import org.xml.sax.SAXNotRecognizedException;
++import org.xml.sax.SAXNotSupportedException;
+ import org.xml.sax.XMLReader;
+ 
+ @Component
+@@ -65,6 +68,13 @@ protected void activate() {
+         factory = SAXParserFactory.newInstance();
+         factory.setValidating(false);
+         factory.setNamespaceAware(true);
++        try {
++            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
++            factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
++            factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
++        } catch (Exception e) {
++            LOGGER.error("SAX parser configuration error: " + e.getMessage(), e);
++        }
+     }
+ 
+     @Deactivate
+diff --git a/bundles/extensions/xss/src/test/java/org/apache/sling/xss/impl/XSSAPIImplTest.java b/bundles/extensions/xss/src/test/java/org/apache/sling/xss/impl/XSSAPIImplTest.java
+index e6f3c87bd2..263514ec53 100644
+--- a/bundles/extensions/xss/src/test/java/org/apache/sling/xss/impl/XSSAPIImplTest.java
++++ b/bundles/extensions/xss/src/test/java/org/apache/sling/xss/impl/XSSAPIImplTest.java
+@@ -673,6 +673,10 @@ public void testGetValidXML() {
+                 {
+                         "<t><w>xyz</t></w>",
+                         RUBBISH_XML
++                },
++                {
++                        "<?xml version=\"1.0\"?><!DOCTYPE test SYSTEM \"http://nonExistentHost:1234/\"><test/>",
++                        "<?xml version=\"1.0\"?><!DOCTYPE test SYSTEM \"http://nonExistentHost:1234/\"><test/>"
+                 }
+         };
+         for (String[] aTestData : testData) {

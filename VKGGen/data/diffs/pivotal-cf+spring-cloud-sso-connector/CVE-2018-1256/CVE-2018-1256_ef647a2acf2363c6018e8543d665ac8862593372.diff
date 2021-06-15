@@ -1,0 +1,62 @@
+diff --git a/src/main/java/io/pivotal/spring/cloud/IssuerCheckConfiguration.java b/src/main/java/io/pivotal/spring/cloud/IssuerCheckConfiguration.java
+index caccbac..985dbfe 100644
+--- a/src/main/java/io/pivotal/spring/cloud/IssuerCheckConfiguration.java
++++ b/src/main/java/io/pivotal/spring/cloud/IssuerCheckConfiguration.java
+@@ -13,7 +13,7 @@
+ import java.net.MalformedURLException;
+ 
+ @Configuration
+-@ConditionalOnProperty({"sso.connector.cloud.available"})
++@ConditionalOnProperty({"ssoServiceUrl", "security.oauth2.resource.jwk.key-set-uri"})
+ public class IssuerCheckConfiguration {
+     @Value("${ssoServiceUrl}")
+     private String ssoServiceUrl;
+diff --git a/src/main/java/io/pivotal/spring/cloud/SsoServiceCredentialsListener.java b/src/main/java/io/pivotal/spring/cloud/SsoServiceCredentialsListener.java
+index c101bed..a4bebcc 100644
+--- a/src/main/java/io/pivotal/spring/cloud/SsoServiceCredentialsListener.java
++++ b/src/main/java/io/pivotal/spring/cloud/SsoServiceCredentialsListener.java
+@@ -35,7 +35,6 @@ public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
+                 map.put("security.oauth2.resource.userInfoUri", ssoServiceInfo.getAuthDomain() + "/userinfo");
+                 map.put("security.oauth2.resource.tokenInfoUri", ssoServiceInfo.getAuthDomain() + "/check_token");
+                 map.put("security.oauth2.resource.jwk.key-set-uri", ssoServiceInfo.getAuthDomain() + "/token_keys");
+-                map.put("sso.connector.cloud.available", "success");
+                 MapPropertySource mapPropertySource = new MapPropertySource("vcapPivotalSso", map);
+ 
+                 event.getEnvironment().getPropertySources().addFirst(mapPropertySource);
+diff --git a/src/test/java/io/pivotal/spring/cloud/IssuerCheckConfigurationLocalTest.java b/src/test/java/io/pivotal/spring/cloud/IssuerCheckConfigurationLocalTest.java
+index b30724b..45907a8 100644
+--- a/src/test/java/io/pivotal/spring/cloud/IssuerCheckConfigurationLocalTest.java
++++ b/src/test/java/io/pivotal/spring/cloud/IssuerCheckConfigurationLocalTest.java
+@@ -27,7 +27,5 @@ public void testJwkTokenStoreNotFoundInContext() {
+         thrown.expectMessage("No qualifying bean of type 'org.springframework.security.oauth2.provider.token.TokenStore' available");
+ 
+         applicationContext.getBean( TokenStore.class );
+-
+     }
+-
+ }
+diff --git a/src/test/java/io/pivotal/spring/cloud/IssuerCheckConfigurationTest.java b/src/test/java/io/pivotal/spring/cloud/IssuerCheckConfigurationTest.java
+index 95b4626..d34b5d0 100644
+--- a/src/test/java/io/pivotal/spring/cloud/IssuerCheckConfigurationTest.java
++++ b/src/test/java/io/pivotal/spring/cloud/IssuerCheckConfigurationTest.java
+@@ -19,8 +19,7 @@
+ @EnableAutoConfiguration
+ @TestPropertySource(properties = {
+     "ssoServiceUrl=https://cf-identity-eng-test1.login.run.pivotal.io",
+-    "security.oauth2.resource.jwk.key-set-uri=https://cf-identity-eng-test1.login.run.pivotal.io/token_keys",
+-    "sso.connector.cloud.available=success"
++    "security.oauth2.resource.jwk.key-set-uri=https://cf-identity-eng-test1.login.run.pivotal.io/token_keys"
+ })
+ public class IssuerCheckConfigurationTest {
+     @ClassRule
+diff --git a/src/test/java/io/pivotal/spring/cloud/SsoServiceCredentialsListenerTest.java b/src/test/java/io/pivotal/spring/cloud/SsoServiceCredentialsListenerTest.java
+index 6050520..dd4f78b 100644
+--- a/src/test/java/io/pivotal/spring/cloud/SsoServiceCredentialsListenerTest.java
++++ b/src/test/java/io/pivotal/spring/cloud/SsoServiceCredentialsListenerTest.java
+@@ -48,6 +48,5 @@ public void addClientCredentials() {
+         assertEquals("test-auth-domain/userinfo", environment.getProperty("security.oauth2.resource.userInfoUri"));
+         assertEquals("test-auth-domain/check_token", environment.getProperty("security.oauth2.resource.tokenInfoUri"));
+         assertEquals("test-auth-domain", environment.getProperty("ssoServiceUrl"));
+-        assertEquals("success", environment.getProperty("sso.connector.cloud.available"));
+     }
+ }

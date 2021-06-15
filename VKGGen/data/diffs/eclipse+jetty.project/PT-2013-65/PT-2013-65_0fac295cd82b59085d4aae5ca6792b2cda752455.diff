@@ -1,0 +1,138 @@
+diff --git a/jetty-server/src/main/java/org/eclipse/jetty/server/handler/AllowSymLinkAliasChecker.java b/jetty-server/src/main/java/org/eclipse/jetty/server/handler/AllowSymLinkAliasChecker.java
+index 5cdf1e152aa..eec4a8d3a9a 100644
+--- a/jetty-server/src/main/java/org/eclipse/jetty/server/handler/AllowSymLinkAliasChecker.java
++++ b/jetty-server/src/main/java/org/eclipse/jetty/server/handler/AllowSymLinkAliasChecker.java
+@@ -54,7 +54,7 @@ public boolean check(String path, Resource resource)
+             {
+                 // we can use the real path method to check the symlinks resolve to the alias
+                 URI real = file.toPath().toRealPath().toUri();
+-                if (real.equals(resource.getAlias().toURI()))
++                if (real.equals(resource.getAlias()))
+                 {
+                     LOG.debug("Allow symlink {} --> {}",resource,real);
+                     return true;
+@@ -77,7 +77,7 @@ public boolean check(String path, Resource resource)
+                         d=link.toFile().getAbsoluteFile().getCanonicalFile();
+                     }
+                 }
+-                if (resource.getAlias().toURI().equals(d.toURI()))
++                if (resource.getAlias().equals(d.toURI()))
+                 {
+                     LOG.debug("Allow symlink {} --> {}",resource,d);
+                     return true;
+diff --git a/jetty-server/src/main/java/org/eclipse/jetty/server/handler/ContextHandler.java b/jetty-server/src/main/java/org/eclipse/jetty/server/handler/ContextHandler.java
+index 67d36ef0ed7..6b430011b3c 100644
+--- a/jetty-server/src/main/java/org/eclipse/jetty/server/handler/ContextHandler.java
++++ b/jetty-server/src/main/java/org/eclipse/jetty/server/handler/ContextHandler.java
+@@ -22,6 +22,7 @@
+ import java.io.IOException;
+ import java.io.InputStream;
+ import java.net.MalformedURLException;
++import java.net.URI;
+ import java.net.URL;
+ import java.net.URLClassLoader;
+ import java.security.AccessController;
+@@ -1652,6 +1653,15 @@ public Resource newResource(URL url) throws IOException
+     {
+         return Resource.newResource(url);
+     }
++    
++    /* ------------------------------------------------------------ */
++    /**
++     * Convert URL to Resource wrapper for {@link Resource#newResource(URL)} enables extensions to provide alternate resource implementations.
++     */
++    public Resource newResource(URI uri) throws IOException
++    {
++        return Resource.newResource(uri);
++    }
+ 
+     /* ------------------------------------------------------------ */
+     /**
+diff --git a/jetty-server/src/test/java/org/eclipse/jetty/server/handler/ContextHandlerGetResourceTest.java b/jetty-server/src/test/java/org/eclipse/jetty/server/handler/ContextHandlerGetResourceTest.java
+index 2a7ac387100..6295599b4ad 100644
+--- a/jetty-server/src/test/java/org/eclipse/jetty/server/handler/ContextHandlerGetResourceTest.java
++++ b/jetty-server/src/test/java/org/eclipse/jetty/server/handler/ContextHandlerGetResourceTest.java
+@@ -316,7 +316,7 @@ public void testAliasedFileAllowed() throws Exception
+ 
+             Resource resource=context.getResource(path);
+             assertNotNull(resource);
+-            assertEquals(context.getResource("/subdir/TextFile.Long.txt").getURL(),resource.getAlias());
++            assertEquals(context.getResource("/subdir/TextFile.Long.txt").getURI(),resource.getAlias());
+             
+             URL url=context.getServletContext().getResource(path);
+             assertNotNull(url);
+diff --git a/jetty-util/src/main/java/org/eclipse/jetty/util/resource/FileResource.java b/jetty-util/src/main/java/org/eclipse/jetty/util/resource/FileResource.java
+index a3440a2286e..9b0d5d175cc 100644
+--- a/jetty-util/src/main/java/org/eclipse/jetty/util/resource/FileResource.java
++++ b/jetty-util/src/main/java/org/eclipse/jetty/util/resource/FileResource.java
+@@ -56,7 +56,7 @@
+     /* ------------------------------------------------------------ */
+     private final File _file;
+     private final String _uri;
+-    private final URL _alias;
++    private final URI _alias;
+     
+     /* -------------------------------------------------------- */
+     public FileResource(URL url)
+@@ -135,7 +135,7 @@ else if (file.exists() && u.endsWith("/"))
+     }
+ 
+     /* -------------------------------------------------------- */
+-    private static URL checkAlias(File file)
++    private static URI checkAlias(File file)
+     {
+         try
+         {
+@@ -145,7 +145,7 @@ private static URL checkAlias(File file)
+             if (!abs.equals(can))
+             {
+                 LOG.debug("ALIAS abs={} can={}",abs,can);
+-                return new File(can).toURI().toURL();
++                return new File(can).toURI();
+             }
+         }
+         catch(IOException e)
+@@ -154,7 +154,7 @@ private static URL checkAlias(File file)
+             LOG.debug(e);
+             try
+             {
+-                return new URL("http://eclipse.org/bad/canonical/alias");
++                return new URI("http://eclipse.org/bad/canonical/alias");
+             }
+             catch(Exception e2)
+             {
+@@ -205,7 +205,7 @@ public Resource addPath(String path)
+     
+     /* ------------------------------------------------------------ */
+     @Override
+-    public URL getAlias()
++    public URI getAlias()
+     {
+         return _alias;
+     }
+@@ -401,6 +401,12 @@ public URL getURL()
+             throw new IllegalStateException(e);
+         }
+     }
++    
++    @Override
++    public URI getURI()
++    {
++        return _file.toURI();
++    }
+ 
+     @Override
+     public String toString()
+diff --git a/jetty-util/src/main/java/org/eclipse/jetty/util/resource/Resource.java b/jetty-util/src/main/java/org/eclipse/jetty/util/resource/Resource.java
+index d32230e8122..7b9b9bbaae6 100644
+--- a/jetty-util/src/main/java/org/eclipse/jetty/util/resource/Resource.java
++++ b/jetty-util/src/main/java/org/eclipse/jetty/util/resource/Resource.java
+@@ -471,7 +471,7 @@ public void setAssociate(Object o)
+     /**
+      * @return The canonical Alias of this resource or null if none.
+      */
+-    public URL getAlias()
++    public URI getAlias()
+     {
+         return null;
+     }

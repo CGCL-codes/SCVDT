@@ -1,0 +1,39 @@
+diff --git a/httpclient/src/main/java/org/apache/http/client/utils/URIBuilder.java b/httpclient/src/main/java/org/apache/http/client/utils/URIBuilder.java
+index 1cc54ebce..baf7122f3 100644
+--- a/httpclient/src/main/java/org/apache/http/client/utils/URIBuilder.java
++++ b/httpclient/src/main/java/org/apache/http/client/utils/URIBuilder.java
+@@ -493,7 +493,7 @@ public String toString() {
+     private static String normalizePath(final String path) {
+         String s = path;
+         if (s == null) {
+-            return null;
++            return "/";
+         }
+         int n = 0;
+         for (; n < s.length(); n++) {
+@@ -504,6 +504,9 @@ private static String normalizePath(final String path) {
+         if (n > 1) {
+             s = s.substring(n - 1);
+         }
++        if (!s.startsWith("/")) {
++            s = "/" + s;
++        }
+         return s;
+     }
+ 
+diff --git a/httpclient/src/test/java/org/apache/http/client/utils/TestURIBuilder.java b/httpclient/src/test/java/org/apache/http/client/utils/TestURIBuilder.java
+index 6ed9d7af9..6afc59422 100644
+--- a/httpclient/src/test/java/org/apache/http/client/utils/TestURIBuilder.java
++++ b/httpclient/src/test/java/org/apache/http/client/utils/TestURIBuilder.java
+@@ -292,4 +292,11 @@ public void assertBuild(final Charset charset, final URI uri) throws Exception {
+         return parameters;
+     }
+ 
++    @Test
++    public void testMalformedPath() throws Exception {
++        final String path = "@notexample.com/mypath";
++        final URI uri = new URIBuilder(path).setHost("example.com").build();
++        Assert.assertEquals("example.com", uri.getHost());
++    }
++
+ }

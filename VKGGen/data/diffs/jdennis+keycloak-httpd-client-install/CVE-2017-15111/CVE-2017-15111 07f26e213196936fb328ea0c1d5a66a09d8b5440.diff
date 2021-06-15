@@ -1,0 +1,13 @@
+diff --git a/keycloak_httpd_client/keycloak_cli.py b/keycloak_httpd_client/keycloak_cli.py
+index 3bd88f1..bcbf2be 100755
+--- a/keycloak_httpd_client/keycloak_cli.py
++++ b/keycloak_httpd_client/keycloak_cli.py
+@@ -863,7 +863,7 @@ def main():
+                              'error message')
+ 
+     parser.add_argument('--log-file',
+-                        default='/tmp/{prog_name}.log'.format(
++                        default='{prog_name}.log'.format(
+                             prog_name=prog_name),
+                         help='log file pathname')
+ 

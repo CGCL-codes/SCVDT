@@ -1,0 +1,88 @@
+diff --git a/rt/rs/extensions/providers/src/main/java/org/apache/cxf/jaxrs/provider/atom/AbstractAtomProvider.java b/rt/rs/extensions/providers/src/main/java/org/apache/cxf/jaxrs/provider/atom/AbstractAtomProvider.java
+index 179ee66c168..acc1285635c 100644
+--- a/rt/rs/extensions/providers/src/main/java/org/apache/cxf/jaxrs/provider/atom/AbstractAtomProvider.java
++++ b/rt/rs/extensions/providers/src/main/java/org/apache/cxf/jaxrs/provider/atom/AbstractAtomProvider.java
+@@ -30,6 +30,7 @@
+ import javax.ws.rs.core.MultivaluedMap;
+ import javax.ws.rs.ext.MessageBodyReader;
+ import javax.ws.rs.ext.MessageBodyWriter;
++import javax.xml.stream.XMLStreamReader;
+ 
+ import org.apache.abdera.Abdera;
+ import org.apache.abdera.model.Document;
+@@ -39,6 +40,7 @@
+ import org.apache.abdera.writer.Writer;
+ import org.apache.cxf.common.logging.LogUtils;
+ import org.apache.cxf.jaxrs.utils.ExceptionUtils;
++import org.apache.cxf.staxutils.StaxUtils;
+ 
+ public abstract class AbstractAtomProvider<T extends Element> 
+     implements MessageBodyWriter<T>, MessageBodyReader<T> {
+@@ -89,10 +91,10 @@ public T readFrom(Class<T> clazz, Type t, Annotation[] a, MediaType mt,
+             ParserOptions options = parser.getDefaultParserOptions();
+             if (options != null) {
+                 options.setAutodetectCharset(autodetectCharset);
+-                options.setResolveEntities(false);
+             }
+         }
+-        Document<T> doc = parser.parse(is);
++        XMLStreamReader reader = StaxUtils.createXMLStreamReader(is);
++        Document<T> doc = parser.parse(reader);
+         return doc.getRoot();
+     }
+ 
+diff --git a/rt/rs/extensions/providers/src/test/java/org/apache/cxf/jaxrs/provider/atom/AtomPojoProviderTest.java b/rt/rs/extensions/providers/src/test/java/org/apache/cxf/jaxrs/provider/atom/AtomPojoProviderTest.java
+index 0296764b5d6..025748c0de8 100644
+--- a/rt/rs/extensions/providers/src/test/java/org/apache/cxf/jaxrs/provider/atom/AtomPojoProviderTest.java
++++ b/rt/rs/extensions/providers/src/test/java/org/apache/cxf/jaxrs/provider/atom/AtomPojoProviderTest.java
+@@ -145,6 +145,25 @@ private void doTestReadEntry(AtomPojoProvider provider) throws Exception {
+                                             new Annotation[]{}, mt, null, bis);
+         assertEquals("a", book.getName());
+     }
++    @Test
++    public void testReadEntryNoBuilders2() throws Exception {
++        final String entry = 
++            "<!DOCTYPE entry SYSTEM \"entry://entry\"><entry xmlns=\"http://www.w3.org/2005/Atom\">"
++            + "<title type=\"text\">a</title>"
++            + "<content type=\"application/xml\">"
++            + "<book xmlns=\"\">"
++            + "<name>a</name>"
++            + "</book>"
++            + "</content>"
++            + "</entry>";
++        AtomPojoProvider provider = new AtomPojoProvider();
++        ByteArrayInputStream bis = new ByteArrayInputStream(entry.getBytes());
++        MediaType mt = MediaType.valueOf("application/atom+xml;type=entry");
++        @SuppressWarnings({"unchecked", "rawtypes" })
++        Book book = (Book)provider.readFrom((Class)Book.class, Book.class, 
++                                            new Annotation[]{}, mt, null, bis);
++        assertEquals("a", book.getName());
++    }
+     
+     
+     @Test
+@@ -179,6 +198,24 @@ private void doTestReadFeed(AtomPojoProvider provider) throws Exception {
+         assertTrue("b".equals(list.get(0).getName()) || "b".equals(list.get(1).getName()));        
+     }
+      
++    @Test
++    public void testReadFeedWithoutBuilders2() throws Exception {
++        AtomPojoProvider provider = new AtomPojoProvider();
++        final String feed = 
++            "<!DOCTYPE feed SYSTEM \"feed://feed\"><feed xmlns=\"http://www.w3.org/2005/Atom\">"
++            + "<entry><content type=\"application/xml\"><book xmlns=\"\"><name>a</name></book></content></entry>"
++            + "<entry><content type=\"application/xml\"><book xmlns=\"\"><name>b</name></book></content></entry>"
++            + "</feed>";
++        MediaType mt = MediaType.valueOf("application/atom+xml;type=feed");
++        ByteArrayInputStream bis = new ByteArrayInputStream(feed.getBytes());
++        @SuppressWarnings({"unchecked", "rawtypes" })
++        Books books2 = (Books)provider.readFrom((Class)Books.class, Books.class, 
++                                            new Annotation[]{}, mt, null, bis);
++        List<Book> list = books2.getBooks();
++        assertEquals(2, list.size());
++        assertTrue("a".equals(list.get(0).getName()) || "a".equals(list.get(1).getName()));
++        assertTrue("b".equals(list.get(0).getName()) || "b".equals(list.get(1).getName()));
++    }
+     @Test
+     public void testReadEntryNoContent() throws Exception {
+         /** A sample entry without content. */

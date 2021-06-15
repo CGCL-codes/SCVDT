@@ -1,0 +1,664 @@
+diff --git a/spring-amqp/src/main/java/org/springframework/amqp/support/converter/SerializerMessageConverter.java b/spring-amqp/src/main/java/org/springframework/amqp/support/converter/SerializerMessageConverter.java
+index 4e19a55f4..81a3ffa48 100644
+--- a/spring-amqp/src/main/java/org/springframework/amqp/support/converter/SerializerMessageConverter.java
++++ b/spring-amqp/src/main/java/org/springframework/amqp/support/converter/SerializerMessageConverter.java
+@@ -1,14 +1,17 @@
+ /*
+- * Copyright 2002-2014 the original author or authors.
++ * Copyright 2002-2016 the original author or authors.
+  *
+- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+- * the License. You may obtain a copy of the License at
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
+  *
+- * http://www.apache.org/licenses/LICENSE-2.0
++ *      http://www.apache.org/licenses/LICENSE-2.0
+  *
+- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+- * specific language governing permissions and limitations under the License.
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
+  */
+ 
+ package org.springframework.amqp.support.converter;
+@@ -16,24 +19,36 @@
+ import java.io.ByteArrayInputStream;
+ import java.io.ByteArrayOutputStream;
+ import java.io.IOException;
++import java.io.ObjectInputStream;
++import java.io.ObjectStreamClass;
+ import java.io.UnsupportedEncodingException;
+ 
+ import org.springframework.amqp.core.Message;
+ import org.springframework.amqp.core.MessageProperties;
++import org.springframework.beans.DirectFieldAccessor;
++import org.springframework.core.ConfigurableObjectInputStream;
++import org.springframework.core.NestedIOException;
+ import org.springframework.core.serializer.DefaultDeserializer;
+ import org.springframework.core.serializer.DefaultSerializer;
+ import org.springframework.core.serializer.Deserializer;
+ import org.springframework.core.serializer.Serializer;
+ 
+ /**
+- * Implementation of {@link MessageConverter} that can work with Strings or native objects of any kind via the
+- * {@link Serializer} and {@link Deserializer} abstractions in Spring. The {@link #toMessage(Object, MessageProperties)}
+- * method simply checks the type of the provided instance while the {@link #fromMessage(Message)} method relies upon the
++ * Implementation of {@link MessageConverter} that can work with Strings or native objects
++ * of any kind via the {@link Serializer} and {@link Deserializer} abstractions in Spring.
++ * The {@link #toMessage(Object, MessageProperties)} method simply checks the type of the
++ * provided instance while the {@link #fromMessage(Message)} method relies upon the
+  * {@link MessageProperties#getContentType() content-type} of the provided Message.
++ * <p>
++ * If a {@link DefaultDeserializer} is configured (default),
++ * the {@link #setWhiteListPatterns(java.util.List) white list patterns} will be applied
++ * (if configured); for all other deserializers, the deserializer is responsible for
++ * checking classes, if necessary.
+  *
+  * @author Dave Syer
++ * @author Gary Russell
+  */
+-public class SerializerMessageConverter extends AbstractMessageConverter {
++public class SerializerMessageConverter extends WhiteListDeserializingMessageConverter {
+ 
+ 	public static final String DEFAULT_CHARSET = "UTF-8";
+ 
+@@ -45,6 +60,10 @@
+ 
+ 	private volatile boolean ignoreContentType = false;
+ 
++	private volatile ClassLoader defaultDeserializerClassLoader;
++
++	private volatile boolean usingDefaultDeserializer = true;
++
+ 	/**
+ 	 * Flag to signal that the content type should be ignored and the deserializer used irrespective if it is a text
+ 	 * message. Defaults to false, in which case the default encoding is used to convert a text message to a String.
+@@ -81,6 +100,19 @@ public void setSerializer(Serializer<Object> serializer) {
+ 	 */
+ 	public void setDeserializer(Deserializer<Object> deserializer) {
+ 		this.deserializer = deserializer;
++		if (this.deserializer.getClass().equals(DefaultDeserializer.class)) {
++			try {
++				this.defaultDeserializerClassLoader = (ClassLoader) new DirectFieldAccessor(deserializer)
++						.getPropertyValue("classLoader");
++			}
++			catch (Exception e) {
++				// no-op
++			}
++			this.usingDefaultDeserializer = true;
++		}
++		else {
++			this.usingDefaultDeserializer = false;
++		}
+ 	}
+ 
+ 	/**
+@@ -92,21 +124,30 @@ public Object fromMessage(Message message) throws MessageConversionException {
+ 		MessageProperties properties = message.getMessageProperties();
+ 		if (properties != null) {
+ 			String contentType = properties.getContentType();
+-			if (contentType != null && contentType.startsWith("text") && !ignoreContentType) {
++			if (contentType != null && contentType.startsWith("text") && !this.ignoreContentType) {
+ 				String encoding = properties.getContentEncoding();
+ 				if (encoding == null) {
+ 					encoding = this.defaultCharset;
+ 				}
+ 				try {
+ 					content = new String(message.getBody(), encoding);
+-				} catch (UnsupportedEncodingException e) {
++				}
++				catch (UnsupportedEncodingException e) {
+ 					throw new MessageConversionException("failed to convert text-based Message content", e);
+ 				}
+-			} else if (contentType != null && contentType.equals(MessageProperties.CONTENT_TYPE_SERIALIZED_OBJECT)
+-					|| ignoreContentType) {
++			}
++			else if (contentType != null && contentType.equals(MessageProperties.CONTENT_TYPE_SERIALIZED_OBJECT)
++					|| this.ignoreContentType) {
+ 				try {
+-					content = deserializer.deserialize(new ByteArrayInputStream(message.getBody()));
+-				} catch (IOException e) {
++					ByteArrayInputStream inputStream = new ByteArrayInputStream(message.getBody());
++					if (this.usingDefaultDeserializer) {
++						content = deserialize(inputStream, this.deserializer);
++					}
++					else {
++						content = this.deserializer.deserialize(inputStream);
++					}
++				}
++				catch (IOException e) {
+ 					throw new MessageConversionException("Could not convert message body", e);
+ 				}
+ 			}
+@@ -117,11 +158,34 @@ public Object fromMessage(Message message) throws MessageConversionException {
+ 		return content;
+ 	}
+ 
++	private Object deserialize(ByteArrayInputStream inputStream, Deserializer<Object> deserializer)
++			throws IOException {
++		try {
++			ObjectInputStream objectInputStream = new ConfigurableObjectInputStream(inputStream,
++					this.defaultDeserializerClassLoader) {
++
++				@Override
++				protected Class<?> resolveClass(ObjectStreamClass classDesc)
++						throws IOException, ClassNotFoundException {
++					Class<?> clazz = super.resolveClass(classDesc);
++					checkWhiteList(clazz);
++					return clazz;
++				}
++
++			};
++			return objectInputStream.readObject();
++		}
++		catch (ClassNotFoundException ex) {
++			throw new NestedIOException("Failed to deserialize object type", ex);
++		}
++	}
++
+ 	/**
+ 	 * Creates an AMQP Message from the provided Object.
+ 	 */
+ 	@Override
+-	protected Message createMessage(Object object, MessageProperties messageProperties) throws MessageConversionException {
++	protected Message createMessage(Object object, MessageProperties messageProperties)
++			throws MessageConversionException {
+ 		byte[] bytes = null;
+ 		if (object instanceof String) {
+ 			try {
+@@ -131,14 +195,17 @@ protected Message createMessage(Object object, MessageProperties messageProperti
+ 			}
+ 			messageProperties.setContentType(MessageProperties.CONTENT_TYPE_TEXT_PLAIN);
+ 			messageProperties.setContentEncoding(this.defaultCharset);
+-		} else if (object instanceof byte[]) {
++		}
++		else if (object instanceof byte[]) {
+ 			bytes = (byte[]) object;
+ 			messageProperties.setContentType(MessageProperties.CONTENT_TYPE_BYTES);
+-		} else {
++		}
++		else {
+ 			ByteArrayOutputStream output = new ByteArrayOutputStream();
+ 			try {
+-				serializer.serialize(object, output);
+-			} catch (IOException e) {
++				this.serializer.serialize(object, output);
++			}
++			catch (IOException e) {
+ 				throw new MessageConversionException("Cannot convert object to bytes", e);
+ 			}
+ 			bytes = output.toByteArray();
+diff --git a/spring-amqp/src/main/java/org/springframework/amqp/support/converter/SimpleMessageConverter.java b/spring-amqp/src/main/java/org/springframework/amqp/support/converter/SimpleMessageConverter.java
+index 1eb89a34a..2b9a25f81 100644
+--- a/spring-amqp/src/main/java/org/springframework/amqp/support/converter/SimpleMessageConverter.java
++++ b/spring-amqp/src/main/java/org/springframework/amqp/support/converter/SimpleMessageConverter.java
+@@ -20,6 +20,7 @@
+ import java.io.IOException;
+ import java.io.InputStream;
+ import java.io.ObjectInputStream;
++import java.io.ObjectStreamClass;
+ import java.io.Serializable;
+ import java.io.UnsupportedEncodingException;
+ 
+@@ -31,15 +32,17 @@
+ import org.springframework.util.ClassUtils;
+ 
+ /**
+- * Implementation of {@link MessageConverter} that can work with Strings, Serializable instances,
+- * or byte arrays. The {@link #toMessage(Object, MessageProperties)} method simply checks the
+- * type of the provided instance while the {@link #fromMessage(Message)} method relies upon the
+- * {@link MessageProperties#getContentType() content-type} of the provided Message.
++ * Implementation of {@link MessageConverter} that can work with Strings, Serializable
++ * instances, or byte arrays. The {@link #toMessage(Object, MessageProperties)} method
++ * simply checks the type of the provided instance while the {@link #fromMessage(Message)}
++ * method relies upon the {@link MessageProperties#getContentType() content-type} of the
++ * provided Message.
+  *
+  * @author Mark Fisher
+  * @author Oleg Zhurakousky
++ * @author Gary Russell
+  */
+-public class SimpleMessageConverter extends AbstractMessageConverter implements BeanClassLoaderAware {
++public class SimpleMessageConverter extends WhiteListDeserializingMessageConverter implements BeanClassLoaderAware {
+ 
+ 	public static final String DEFAULT_CHARSET = "UTF-8";
+ 
+@@ -105,10 +108,12 @@ else if (contentType != null &&
+ 					contentType.equals(MessageProperties.CONTENT_TYPE_SERIALIZED_OBJECT)) {
+ 				try {
+ 					content = SerializationUtils.deserialize(createObjectInputStream(new ByteArrayInputStream(message.getBody()), this.codebaseUrl));
+-				} catch (IOException e) {
++				}
++				catch (IOException e) {
+ 					throw new MessageConversionException(
+ 							"failed to convert serialized Message content", e);
+-				} catch (IllegalArgumentException e) {
++				}
++				catch (IllegalArgumentException e) {
+ 					throw new MessageConversionException(
+ 							"failed to convert serialized Message content", e);
+ 				}
+@@ -144,7 +149,8 @@ else if (object instanceof String) {
+ 		else if (object instanceof Serializable) {
+ 			try {
+ 				bytes = SerializationUtils.serialize(object);
+-			} catch (IllegalArgumentException e) {
++			}
++			catch (IllegalArgumentException e) {
+ 				throw new MessageConversionException(
+ 						"failed to convert to serialized Message content", e);
+ 			}
+@@ -166,7 +172,16 @@ else if (object instanceof Serializable) {
+ 	 * @see org.springframework.remoting.rmi.CodebaseAwareObjectInputStream
+ 	 */
+ 	protected ObjectInputStream createObjectInputStream(InputStream is, String codebaseUrl) throws IOException {
+-		return new CodebaseAwareObjectInputStream(is, this.beanClassLoader, codebaseUrl);
++		return new CodebaseAwareObjectInputStream(is, this.beanClassLoader, codebaseUrl) {
++
++			@Override
++			protected Class<?> resolveClass(ObjectStreamClass classDesc) throws IOException, ClassNotFoundException {
++				Class<?> clazz = super.resolveClass(classDesc);
++				checkWhiteList(clazz);
++				return clazz;
++			}
++
++		};
+ 	}
+ 
+ }
+diff --git a/spring-amqp/src/main/java/org/springframework/amqp/support/converter/WhiteListDeserializingMessageConverter.java b/spring-amqp/src/main/java/org/springframework/amqp/support/converter/WhiteListDeserializingMessageConverter.java
+new file mode 100644
+index 000000000..245b63d2e
+--- /dev/null
++++ b/spring-amqp/src/main/java/org/springframework/amqp/support/converter/WhiteListDeserializingMessageConverter.java
+@@ -0,0 +1,67 @@
++/*
++ * Copyright 2016 the original author or authors.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.springframework.amqp.support.converter;
++
++import java.io.IOException;
++import java.util.LinkedHashSet;
++import java.util.List;
++import java.util.Set;
++
++import org.springframework.util.PatternMatchUtils;
++
++/**
++ * MessageConverters that potentially use Java deserialization.
++ *
++ * @author Gary Russell
++ * @since 1.5.5
++ *
++ */
++public abstract class WhiteListDeserializingMessageConverter extends AbstractMessageConverter {
++
++	private final Set<String> whiteListPatterns = new LinkedHashSet<String>();
++
++	/**
++	 * Set simple patterns for allowable packages/classes for deserialization.
++	 * The patterns will be applied in order until a match is found.
++	 * A class can be fully qualified or a wildcard '*' is allowed at the
++	 * beginning or end of the class name.
++	 * Examples: {@code com.foo.*}, {@code *.MyClass}.
++	 * @param whiteListPatterns the patterns.
++	 */
++	public void setWhiteListPatterns(List<String> whiteListPatterns) {
++		this.whiteListPatterns.clear();
++		this.whiteListPatterns.addAll(whiteListPatterns);
++	}
++
++	protected void checkWhiteList(Class<?> clazz) throws IOException {
++		if (this.whiteListPatterns.isEmpty()) {
++			return;
++		}
++		if (clazz.isArray() || clazz.isPrimitive() || clazz.equals(String.class)
++				|| Number.class.isAssignableFrom(clazz)) {
++			return;
++		}
++		String className = clazz.getName();
++		for (String pattern : this.whiteListPatterns) {
++			if (PatternMatchUtils.simpleMatch(pattern, className)) {
++				return;
++			}
++		}
++		throw new SecurityException("Attempt to deserialize unauthorized " + clazz);
++	}
++
++}
+diff --git a/spring-amqp/src/test/java/org/springframework/amqp/support/converter/SerializerMessageConverterTests.java b/spring-amqp/src/test/java/org/springframework/amqp/support/converter/SerializerMessageConverterTests.java
+index e8e0f5482..e02b3a305 100644
+--- a/spring-amqp/src/test/java/org/springframework/amqp/support/converter/SerializerMessageConverterTests.java
++++ b/spring-amqp/src/test/java/org/springframework/amqp/support/converter/SerializerMessageConverterTests.java
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2002-2010 the original author or authors.
++ * Copyright 2002-2016 the original author or authors.
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+@@ -17,22 +17,32 @@
+ package org.springframework.amqp.support.converter;
+ 
+ import static org.junit.Assert.assertEquals;
++import static org.junit.Assert.assertFalse;
++import static org.junit.Assert.assertSame;
++import static org.junit.Assert.assertTrue;
++import static org.mockito.Mockito.mock;
++import static org.mockito.Mockito.verify;
+ 
+ import java.io.ByteArrayInputStream;
+ import java.io.ByteArrayOutputStream;
++import java.io.InputStream;
+ import java.io.ObjectInputStream;
+ import java.io.ObjectOutputStream;
+-import java.io.Serializable;
+ 
+ import org.junit.Test;
++import org.mockito.Mockito;
++
+ import org.springframework.amqp.core.Message;
+ import org.springframework.amqp.core.MessageProperties;
+-import org.springframework.util.Assert;
++import org.springframework.amqp.utils.test.TestUtils;
++import org.springframework.core.serializer.DefaultDeserializer;
++import org.springframework.core.serializer.Deserializer;
+ 
+ /**
+  * @author Mark Fisher
++ * @author Gary Russell
+  */
+-public class SerializerMessageConverterTests {
++public class SerializerMessageConverterTests extends WhiteListDeserializingMessageConverterTests {
+ 
+ 	@Test
+ 	public void bytesAsDefaultMessageBodyType() throws Exception {
+@@ -140,24 +150,22 @@ public void serializedObjectToMessage() throws Exception {
+ 		assertEquals(testBean, deserializedObject);
+ 	}
+ 
+-
+-	@SuppressWarnings("serial")
+-	private static class TestBean implements Serializable {
+-
+-		private final String text;
+-
+-		TestBean(String text) {
+-			Assert.notNull(text, "text must not be null");
+-			this.text = text;
+-		}
+-
+-		public boolean equals(Object other) {
+-			return (other instanceof TestBean && this.text.equals(((TestBean) other).text));
+-		}
+-
+-		public int hashCode() {
+-			return this.text.hashCode();
+-		}
++	@SuppressWarnings("unchecked")
++	@Test
++	public void testDefaultDeserializerClassLoader() throws Exception {
++		SerializerMessageConverter converter = new SerializerMessageConverter();
++		ClassLoader loader = mock(ClassLoader.class);
++		Deserializer<Object> deserializer = new DefaultDeserializer(loader);
++		converter.setDeserializer(deserializer);
++		assertSame(loader, TestUtils.getPropertyValue(converter, "defaultDeserializerClassLoader"));
++		assertTrue(TestUtils.getPropertyValue(converter, "usingDefaultDeserializer", Boolean.class));
++		Deserializer<Object> mock = mock(Deserializer.class);
++		converter.setDeserializer(mock);
++		assertFalse(TestUtils.getPropertyValue(converter, "usingDefaultDeserializer", Boolean.class));
++		TestBean testBean = new TestBean("foo");
++		Message message = converter.toMessage(testBean, new MessageProperties());
++		converter.fromMessage(message);
++		verify(mock).deserialize(Mockito.any(InputStream.class));
+ 	}
+ 
+ }
+diff --git a/spring-amqp/src/test/java/org/springframework/amqp/support/converter/SimpleMessageConverterTests.java b/spring-amqp/src/test/java/org/springframework/amqp/support/converter/SimpleMessageConverterTests.java
+index 598e71c35..675ffd601 100644
+--- a/spring-amqp/src/test/java/org/springframework/amqp/support/converter/SimpleMessageConverterTests.java
++++ b/spring-amqp/src/test/java/org/springframework/amqp/support/converter/SimpleMessageConverterTests.java
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2002-2010 the original author or authors.
++ * Copyright 2002-2016 the original author or authors.
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+@@ -24,17 +24,17 @@
+ import java.io.ByteArrayOutputStream;
+ import java.io.ObjectInputStream;
+ import java.io.ObjectOutputStream;
+-import java.io.Serializable;
+ 
+ import org.junit.Test;
++
+ import org.springframework.amqp.core.Message;
+ import org.springframework.amqp.core.MessageProperties;
+-import org.springframework.util.Assert;
+ 
+ /**
+  * @author Mark Fisher
++ * @author Gary Russell
+  */
+-public class SimpleMessageConverterTests {
++public class SimpleMessageConverterTests extends WhiteListDeserializingMessageConverterTests {
+ 
+ 	@Test
+ 	public void bytesAsDefaultMessageBodyType() throws Exception {
+@@ -139,24 +139,4 @@ public void serializedObjectToMessage() throws Exception {
+ 		assertEquals(testBean, deserializedObject);
+ 	}
+ 
+-
+-	@SuppressWarnings("serial")
+-	private static class TestBean implements Serializable {
+-
+-		private final String text;
+-
+-		TestBean(String text) {
+-			Assert.notNull(text, "text must not be null");
+-			this.text = text;
+-		}
+-
+-		public boolean equals(Object other) {
+-			return (other instanceof TestBean && this.text.equals(((TestBean) other).text));
+-		}
+-
+-		public int hashCode() {
+-			return this.text.hashCode();
+-		}
+-	}
+-
+ }
+diff --git a/spring-amqp/src/test/java/org/springframework/amqp/support/converter/WhiteListDeserializingMessageConverterTests.java b/spring-amqp/src/test/java/org/springframework/amqp/support/converter/WhiteListDeserializingMessageConverterTests.java
+new file mode 100644
+index 000000000..a958ae79e
+--- /dev/null
++++ b/spring-amqp/src/test/java/org/springframework/amqp/support/converter/WhiteListDeserializingMessageConverterTests.java
+@@ -0,0 +1,90 @@
++/*
++ * Copyright 2016 the original author or authors.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.springframework.amqp.support.converter;
++
++import static org.junit.Assert.assertEquals;
++import static org.junit.Assert.fail;
++
++import java.io.Serializable;
++import java.util.Collections;
++
++import org.junit.Test;
++
++import org.springframework.amqp.core.Message;
++import org.springframework.amqp.core.MessageProperties;
++import org.springframework.util.Assert;
++
++/**
++ * @author Gary Russell
++ * @since 1.5.5
++ *
++ */
++public class WhiteListDeserializingMessageConverterTests {
++
++	@Test
++	public void testWhiteList() throws Exception {
++		SerializerMessageConverter converter = new SerializerMessageConverter();
++		TestBean testBean = new TestBean("foo");
++		Message message = converter.toMessage(testBean, new MessageProperties());
++		Object fromMessage = converter.fromMessage(message);
++		assertEquals(testBean, fromMessage);
++
++		converter.setWhiteListPatterns(Collections.singletonList("*"));
++		fromMessage = converter.fromMessage(message);
++		assertEquals(testBean, fromMessage);
++
++		converter.setWhiteListPatterns(Collections.singletonList("org.springframework.amqp.*"));
++		fromMessage = converter.fromMessage(message);
++		assertEquals(testBean, fromMessage);
++		converter.setWhiteListPatterns(Collections.singletonList("*$TestBean"));
++		fromMessage = converter.fromMessage(message);
++		assertEquals(testBean, fromMessage);
++
++		try {
++			converter.setWhiteListPatterns(Collections.singletonList("foo.*"));
++			fromMessage = converter.fromMessage(message);
++			assertEquals(testBean, fromMessage);
++			fail("Expected SecurityException");
++		}
++		catch (SecurityException e) {
++
++		}
++	}
++
++	@SuppressWarnings("serial")
++	protected static class TestBean implements Serializable {
++
++		private final String text;
++
++		protected TestBean(String text) {
++			Assert.notNull(text, "text must not be null");
++			this.text = text;
++		}
++
++		@Override
++		public boolean equals(Object other) {
++			return (other instanceof TestBean && this.text.equals(((TestBean) other).text));
++		}
++
++		@Override
++		public int hashCode() {
++			return this.text.hashCode();
++		}
++	}
++
++
++}
+diff --git a/src/reference/asciidoc/amqp.adoc b/src/reference/asciidoc/amqp.adoc
+index 945c942d0..cb1ec2605 100644
+--- a/src/reference/asciidoc/amqp.adoc
++++ b/src/reference/asciidoc/amqp.adoc
+@@ -1721,12 +1721,22 @@ In the next two sections, we'll explore some alternatives for passing rich domai
+ 
+ For all other content-types, the `SimpleMessageConverter` will return the Message body content directly as a byte array.
+ 
++See <<java-deserialization>> for important information.
++
+ ====== Converting To a Message
+ 
+ When converting to a Message from an arbitrary Java Object, the `SimpleMessageConverter` likewise deals with byte arrays, Strings, and Serializable instances.
+ It will convert each of these to bytes (in the case of byte arrays, there is nothing to convert), and it will set the content-type property accordingly.
+ If the Object to be converted does not match one of those types, the Message body will be null.
+ 
++[[serializer-message-converter]]
++===== SerializerMessageConverter
++
++This converter is similar to the `SimpleMessageConverter` except it can be configured with other Spring Framework
++`Serializer` and `Deserializer` implementations for `application/x-java-serialized-object` conversions.
++
++See <<java-deserialization>> for important information.
++
+ ===== JsonMessageConverter and Jackson2JsonMessageConverter
+ 
+ As mentioned in the previous section, relying on Java serialization is generally not recommended.
+@@ -1824,6 +1834,29 @@ By default, it will delegate to a `SimpleMessageConverter` if there is no `conte
+ </bean>
+ ----
+ 
++[[java-deserialization]]
++===== Java Deserialization
++
++[IMPORTANT]
++====
++There is a possible vulnerability when deserializing java objects from untrusted sources.
++
++If you accept messages from untrusted sources with a `content-type` `application/x-java-serialized-object`, you should
++consider configuring which packages/classes are allowed to be deserialized.
++This applies to both the `SimpleMessageConverter` and `SerializerMessageConverter` when it is configured to use a
++`DefaultDeserializer` - either implicitly, or via configuration.
++
++By default, the white list is empty, meaning all classes will be deserialized.
++
++You can set a list of patterns, such as `foo.*`, `foo.bar.Baz` or `*.MySafeClass`.
++
++The patterns will be checked in order until a match is found.
++If there is no match, a `SecurityException` is thrown.
++
++Set the patterns using the `whiteListPatterns` property on these converters.
++
++====
++
+ [[message-properties-converters]]
+ ===== Message Properties Converters
+ 
+diff --git a/src/reference/asciidoc/whats-new.adoc b/src/reference/asciidoc/whats-new.adoc
+index a19ea6fcd..bad940e12 100644
+--- a/src/reference/asciidoc/whats-new.adoc
++++ b/src/reference/asciidoc/whats-new.adoc
+@@ -174,6 +174,14 @@ See <<queue-affinity>>.
+ Starting with _version 1.5.3_, you can now control how `AnonymousQueue` names are generated.
+ See <<anonymous-queue>> for more information.
+ 
++===== Java Deserialization
++
++A "white list" of allowable classes can now be configured when using Java deserialization.
++It is important to consider creating a white list if you accept messages with serialized java objects from
++untrusted sources.
++See <<java-deserialization>> for more information.
++
++
+ ==== Changes in 1.4 Since 1.3
+ 
+ ===== @RabbitListener Annotation

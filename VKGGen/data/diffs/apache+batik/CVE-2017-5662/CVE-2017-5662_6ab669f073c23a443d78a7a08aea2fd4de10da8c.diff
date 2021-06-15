@@ -1,0 +1,20 @@
+diff --git a/batik-dom/src/main/java/org/apache/batik/dom/util/SAXDocumentFactory.java b/batik-dom/src/main/java/org/apache/batik/dom/util/SAXDocumentFactory.java
+index f70b31ad8a..a2977715ea 100644
+--- a/batik-dom/src/main/java/org/apache/batik/dom/util/SAXDocumentFactory.java
++++ b/batik-dom/src/main/java/org/apache/batik/dom/util/SAXDocumentFactory.java
+@@ -402,6 +402,7 @@ protected Document createDocument(String ns, String root, String uri,
+         try {
+             saxFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+             saxFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
++			saxFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+         } catch (SAXNotRecognizedException e) {
+             e.printStackTrace();
+         } catch (SAXNotSupportedException e) {
+@@ -446,6 +447,7 @@ protected Document createDocument(InputSource is)
+                               isValidating);
+             parser.setFeature("http://xml.org/sax/features/external-general-entities", false);
+             parser.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
++			parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+             parser.setProperty("http://xml.org/sax/properties/lexical-handler",
+                                this);
+             parser.parse(is);

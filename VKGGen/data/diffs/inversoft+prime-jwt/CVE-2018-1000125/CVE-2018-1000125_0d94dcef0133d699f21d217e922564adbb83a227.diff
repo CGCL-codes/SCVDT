@@ -1,0 +1,123 @@
+diff --git a/src/main/java/org/primeframework/jwt/JWTDecoder.java b/src/main/java/org/primeframework/jwt/JWTDecoder.java
+index b37d27a..8740428 100644
+--- a/src/main/java/org/primeframework/jwt/JWTDecoder.java
++++ b/src/main/java/org/primeframework/jwt/JWTDecoder.java
+@@ -19,6 +19,7 @@
+ import org.primeframework.jwt.domain.Algorithm;
+ import org.primeframework.jwt.domain.Header;
+ import org.primeframework.jwt.domain.InvalidJWTException;
++import org.primeframework.jwt.domain.InvalidJWTSignatureException;
+ import org.primeframework.jwt.domain.JWT;
+ import org.primeframework.jwt.domain.JWTExpiredException;
+ import org.primeframework.jwt.domain.JWTUnavailableForProcessingException;
+@@ -65,9 +66,13 @@ public JWT decode(String encodedJWT, Verifier... verifiers) {
+     String[] parts = getParts(encodedJWT);
+     Header header = Mapper.deserialize(base64Decode(parts[0].getBytes(StandardCharsets.UTF_8)), Header.class);
+ 
+-    // Be particular about decoding an unsecured JWT. If the JWT is signed or any verifiers were provided don't do it.
+-    if (header.algorithm == Algorithm.none && parts.length == 2 && verifiers.length == 0) {
+-      return Mapper.deserialize(base64Decode(parts[1].getBytes(StandardCharsets.UTF_8)), JWT.class);
++    // If parts.length == 2 we have no signature, if no verifiers were provided, decode if header says 'none', else throw an exception
++    if (parts.length == 2 && verifiers.length == 0) {
++      if (header.algorithm == Algorithm.none) {
++        return Mapper.deserialize(base64Decode(parts[1].getBytes(StandardCharsets.UTF_8)), JWT.class);
++      } else {
++        throw new InvalidJWTSignatureException();
++      }
+     }
+ 
+     // If verifiers were provided, ensure it is able to verify this JWT.
+@@ -115,9 +120,13 @@ public JWT decode(String encodedJWT, Map<String, Verifier> verifiers, Function<H
+ 
+     String[] parts = getParts(encodedJWT);
+     Header header = Mapper.deserialize(base64Decode(parts[0].getBytes(StandardCharsets.UTF_8)), Header.class);
+-    // Be particular about decoding an unsecured JWT. If the JWT is signed or any verifiers were provided don't do it.
+-    if (header.algorithm == Algorithm.none && parts.length == 2 && verifiers.isEmpty()) {
+-      return Mapper.deserialize(base64Decode(parts[1].getBytes(StandardCharsets.UTF_8)), JWT.class);
++    // If parts.length == 2 we have no signature, if no verifiers were provided, decode if header says 'none', else throw an exception
++    if (parts.length == 2 && verifiers.isEmpty()) {
++      if (header.algorithm == Algorithm.none) {
++        return Mapper.deserialize(base64Decode(parts[1].getBytes(StandardCharsets.UTF_8)), JWT.class);
++      } else {
++        throw new InvalidJWTSignatureException();
++      }
+     }
+ 
+     // If verifiers were provided, ensure it is able to verify this JWT.
+@@ -150,6 +159,11 @@ private JWT decode(String encodedJWT, Header header, String[] parts, Verifier ve
+       throw new MissingVerifierException("No Verifier has been provided for verify a signature signed using [" + header.algorithm.getName() + "]");
+     }
+ 
++    // A verifier was provided but no signature exists, this is treated as an invalid signature.
++    if (parts.length == 2 && verifier != null) {
++      throw new InvalidJWTSignatureException();
++    }
++
+     if (parts.length == 3) {
+       // Verify the signature before de-serializing the payload.
+       byte[] signature = base64Decode(parts[2].getBytes(StandardCharsets.UTF_8));
+diff --git a/src/test/java/org/primeframework/jwt/JWTTest.java b/src/test/java/org/primeframework/jwt/JWTTest.java
+index a37ac9c..9443fb5 100644
+--- a/src/test/java/org/primeframework/jwt/JWTTest.java
++++ b/src/test/java/org/primeframework/jwt/JWTTest.java
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright (c) 2016-2017, Inversoft Inc., All Rights Reserved
++ * Copyright (c) 2016-2018, Inversoft Inc., All Rights Reserved
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+@@ -17,6 +17,7 @@
+ package org.primeframework.jwt;
+ 
+ import org.primeframework.jwt.domain.InvalidJWTException;
++import org.primeframework.jwt.domain.InvalidJWTSignatureException;
+ import org.primeframework.jwt.domain.InvalidKeyLengthException;
+ import org.primeframework.jwt.domain.JWT;
+ import org.primeframework.jwt.domain.JWTExpiredException;
+@@ -194,14 +195,6 @@ public void test_RS256() throws Exception {
+     assertEquals(JWT.getEncoder().encode(jwt, signer), "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkifQ.kRXJkOHC98D0LCT2oPg5fTmQJDFXkMRQJopbt7QM6prmQDHwjJL_xO-_EXRXnbvf5NLORto45By3XNn2ZzWmY3pAOxj46MlQ5elhROx2S-EnHZNLfQhoG8ZXPZ54q-Obz_6K7ZSlkAQ8jmeZUO3Ryi8jRlHQ2PT4LbBtLpaf982SGJfeTyUMw1LbvowZUTZSF-E6JARaokmmx8M2GeLuKcFhU-YsBTXUarKp0IJCy3jpMQ2zW_HGjyVWH8WwSIbSdpBn7ztoQEJYO-R5H3qVaAz2BsTuGLRxoyIu1iy2-QcDp5uTufmX1roXM8ciQMpcfwKGiyNpKVIZm-lF8aROXRL4kk4rqp6KUzJuOPljPXRU--xKSua-DeR0BEerKzI9hbwIMWiblCslAciNminoSc9G7pUyVwV5Z5IT8CGJkVgoyVGELeBmYCDy7LHwXrr0poc0hPbE3mJXhzolga4BB84nCg2Hb9tCNiHU8F-rKgZWCONaSSIdhQ49x8OiPafFh2DJBEBe5Xbm6xdCfh3KVG0qe4XL18R5s98aIP9UIC4i62UEgPy6W7Fr7QgUxpXrjRCERBV3MiNu4L8NNJb3oZleq5lQi72EfdS-Bt8ZUOVInIcAvSmu-3i8jB_2sF38XUXdl8gkW8k_b9dJkzDcivCFehvSqGmm3vBm5X4bNmk");
+   }
+ 
+-  @Test
+-  public void test_badEncoding() throws Exception {
+-    Verifier verifier = RSAVerifier.newVerifier(new String(Files.readAllBytes(Paths.get("src/test/resources/rsa_public_key_2048.pem"))));
+-    // add a space to the header, invalid Base64 character point 20 (space)
+-    expectException(InvalidJWTException.class, ()
+-        -> JWT.getDecoder().decode("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9 .foo.bar", verifier));
+-  }
+-
+   @Test
+   public void test_RS384() throws Exception {
+     JWT jwt = new JWT().setSubject("123456789");
+@@ -229,6 +222,30 @@ public void test_RSA_1024Key() throws Exception {
+         -> RSAVerifier.newVerifier(new String(Files.readAllBytes(Paths.get("src/test/resources/rsa_public_key_1024.pem")))));
+   }
+ 
++  @Test
++  public void test_SingedWithoutSignature() throws Exception {
++    JWT inputJwt = new JWT()
++        .setSubject("123456789")
++        .setIssuedAt(ZonedDateTime.now(ZoneOffset.UTC))
++        .setExpiration(ZonedDateTime.now(ZoneOffset.UTC).plusHours(2));
++
++    String encodedJWT = JWT.getEncoder().encode(inputJwt, HMACSigner.newSHA256Signer("secret"));
++    String encodedJWTNoSignature = encodedJWT.substring(0, encodedJWT.lastIndexOf('.') + 1);
++
++    expectException(InvalidJWTSignatureException.class, () -> JWT.getDecoder().decode(encodedJWTNoSignature, HMACVerifier.newVerifier("secret")));
++
++    // Also cannot be decoded even if the caller calls decode w/out a signature because the header still indicates a signature algorithm.
++    expectException(InvalidJWTSignatureException.class, () -> JWT.getDecoder().decode(encodedJWTNoSignature));
++  }
++
++  @Test
++  public void test_badEncoding() throws Exception {
++    Verifier verifier = RSAVerifier.newVerifier(new String(Files.readAllBytes(Paths.get("src/test/resources/rsa_public_key_2048.pem"))));
++    // add a space to the header, invalid Base64 character point 20 (space)
++    expectException(InvalidJWTException.class, ()
++        -> JWT.getDecoder().decode("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9 .foo.bar", verifier));
++  }
++
+   @Test
+   public void test_complexPayload() throws Exception {
+     JWT expectedJWT = new JWT()

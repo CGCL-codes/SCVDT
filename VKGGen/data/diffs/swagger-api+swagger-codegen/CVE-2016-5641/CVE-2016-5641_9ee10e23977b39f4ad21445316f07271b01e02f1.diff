@@ -1,0 +1,3046 @@
+diff --git a/bin/security/csharp-petstore.sh b/bin/security/csharp-petstore.sh
+new file mode 100755
+index 00000000000..375e33fac40
+--- /dev/null
++++ b/bin/security/csharp-petstore.sh
+@@ -0,0 +1,31 @@
++#!/bin/sh
++
++SCRIPT="$0"
++
++while [ -h "$SCRIPT" ] ; do
++  ls=`ls -ld "$SCRIPT"`
++  link=`expr "$ls" : '.*-> \(.*\)$'`
++  if expr "$link" : '/.*' > /dev/null; then
++    SCRIPT="$link"
++  else
++    SCRIPT=`dirname "$SCRIPT"`/"$link"
++  fi
++done
++
++if [ ! -d "${APP_DIR}" ]; then
++  APP_DIR=`dirname "$SCRIPT"`/..
++  APP_DIR=`cd "${APP_DIR}"; pwd`
++fi
++
++executable="./modules/swagger-codegen-cli/target/swagger-codegen-cli.jar"
++
++if [ ! -f "$executable" ]
++then
++  mvn clean package
++fi
++
++# if you've executed sbt assembly previously it will use that instead.
++export JAVA_OPTS="${JAVA_OPTS} -XX:MaxPermSize=256M -Xmx1024M -DloggerPath=conf/log4j.properties"
++ags="$@ generate -i modules/swagger-codegen/src/test/resources/2_0/petstore-security-test.yaml -l csharp -o samples/client/petstore-security-test/csharp/SwaggerClient"
++
++java $JAVA_OPTS -jar $executable $ags
+diff --git a/modules/swagger-codegen/src/main/java/io/swagger/codegen/languages/AbstractCSharpCodegen.java b/modules/swagger-codegen/src/main/java/io/swagger/codegen/languages/AbstractCSharpCodegen.java
+index a0f8cf56487..62995980dbf 100644
+--- a/modules/swagger-codegen/src/main/java/io/swagger/codegen/languages/AbstractCSharpCodegen.java
++++ b/modules/swagger-codegen/src/main/java/io/swagger/codegen/languages/AbstractCSharpCodegen.java
+@@ -656,4 +656,16 @@ public String toEnumName(CodegenProperty property) {
+     public String testPackageName() {
+         return this.packageName + ".Test";
+     }
++
++    @Override
++    public String escapeQuotationMark(String input) {
++        // remove " to avoid code injection
++        return input.replace("\"", "");
++    }
++
++    @Override
++    public String escapeUnsafeCharacters(String input) {
++        return input.replace("*/", "");
++    }
++
+ }
+diff --git a/modules/swagger-codegen/src/main/resources/aspnet5/controller.mustache b/modules/swagger-codegen/src/main/resources/aspnet5/controller.mustache
+index 7f12e6515b7..592ef42362b 100644
+--- a/modules/swagger-codegen/src/main/resources/aspnet5/controller.mustache
++++ b/modules/swagger-codegen/src/main/resources/aspnet5/controller.mustache
+@@ -16,7 +16,7 @@ namespace {{packageName}}.Controllers
+     /// <summary>
+     /// {{description}}
+     /// </summary>{{#description}}{{#basePath}}
+-    [Route("{{basePath}}")]
++    [Route("{{{basePath}}}")]
+     {{/basePath}}[Description("{{description}}")]{{/description}}
+     public class {{classname}}Controller : Controller
+     { {{#operation}}
+diff --git a/modules/swagger-codegen/src/main/resources/csharp/ApiClient.mustache b/modules/swagger-codegen/src/main/resources/csharp/ApiClient.mustache
+index 6ab34216b9f..33b631280c2 100644
+--- a/modules/swagger-codegen/src/main/resources/csharp/ApiClient.mustache
++++ b/modules/swagger-codegen/src/main/resources/csharp/ApiClient.mustache
+@@ -41,17 +41,17 @@ namespace {{packageName}}.Client
+ 
+         /// <summary>
+         /// Initializes a new instance of the <see cref="ApiClient" /> class
+-        /// with default configuration and base path ({{basePath}}).
++        /// with default configuration and base path ({{{basePath}}}).
+         /// </summary>
+         public ApiClient()
+         {
+             Configuration = Configuration.Default;
+-            RestClient = new RestClient("{{basePath}}");
++            RestClient = new RestClient("{{{basePath}}}");
+         }
+ 
+         /// <summary>
+         /// Initializes a new instance of the <see cref="ApiClient" /> class
+-        /// with default base path ({{basePath}}).
++        /// with default base path ({{{basePath}}}).
+         /// </summary>
+         /// <param name="config">An instance of Configuration.</param>
+         public ApiClient(Configuration config = null)
+@@ -61,7 +61,7 @@ namespace {{packageName}}.Client
+             else
+                 Configuration = config;
+ 
+-            RestClient = new RestClient("{{basePath}}");
++            RestClient = new RestClient("{{{basePath}}}");
+         }
+ 
+         /// <summary>
+@@ -69,7 +69,7 @@ namespace {{packageName}}.Client
+         /// with default configuration.
+         /// </summary>
+         /// <param name="basePath">The base path.</param>
+-        public ApiClient(String basePath = "{{basePath}}")
++        public ApiClient(String basePath = "{{{basePath}}}")
+         {
+            if (String.IsNullOrEmpty(basePath))
+                 throw new ArgumentException("basePath cannot be empty");
+diff --git a/modules/swagger-codegen/src/main/resources/csharp/Configuration.mustache b/modules/swagger-codegen/src/main/resources/csharp/Configuration.mustache
+index 48b2886f6c9..5ce03342baa 100644
+--- a/modules/swagger-codegen/src/main/resources/csharp/Configuration.mustache
++++ b/modules/swagger-codegen/src/main/resources/csharp/Configuration.mustache
+@@ -281,7 +281,7 @@ namespace {{packageName}}.Client
+         /// </summary>
+         public static String ToDebugReport()
+         {
+-            String report = "C# SDK ({{packageName}}) Debug Report:\n";
++            String report = "C# SDK ({{{packageName}}}) Debug Report:\n";
+             {{^supportsUWP}}
+             report += "    OS: " + Environment.OSVersion + "\n";
+             report += "    .NET Framework Version: " + Assembly
+@@ -289,8 +289,8 @@ namespace {{packageName}}.Client
+                      .GetReferencedAssemblies()
+                      .Where(x => x.Name == "System.Core").First().Version.ToString()  + "\n";
+             {{/supportsUWP}}
+-            report += "    Version of the API: {{version}}\n";
+-            report += "    SDK Package Version: {{packageVersion}}\n";
++            report += "    Version of the API: {{{version}}}\n";
++            report += "    SDK Package Version: {{{packageVersion}}}\n";
+ 
+             return report;
+         }
+diff --git a/modules/swagger-codegen/src/main/resources/csharp/README.mustache b/modules/swagger-codegen/src/main/resources/csharp/README.mustache
+index fa0d40873f1..77b69c273a4 100644
+--- a/modules/swagger-codegen/src/main/resources/csharp/README.mustache
++++ b/modules/swagger-codegen/src/main/resources/csharp/README.mustache
+@@ -107,7 +107,7 @@ namespace Example
+ 
+ ## Documentation for API Endpoints
+ 
+-All URIs are relative to *{{basePath}}*
++All URIs are relative to *{{{basePath}}}*
+ 
+ Class | Method | HTTP request | Description
+ ------------ | ------------- | ------------- | -------------
+diff --git a/modules/swagger-codegen/src/main/resources/csharp/api_doc.mustache b/modules/swagger-codegen/src/main/resources/csharp/api_doc.mustache
+index c0a31d09377..c069d7f3dcf 100644
+--- a/modules/swagger-codegen/src/main/resources/csharp/api_doc.mustache
++++ b/modules/swagger-codegen/src/main/resources/csharp/api_doc.mustache
+@@ -1,7 +1,7 @@
+ # {{packageName}}.Api.{{classname}}{{#description}}
+ {{description}}{{/description}}
+ 
+-All URIs are relative to *{{basePath}}*
++All URIs are relative to *{{{basePath}}}*
+ 
+ Method | HTTP request | Description
+ ------------- | ------------- | -------------
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/.gitignore b/samples/client/petstore-security-test/csharp/SwaggerClient/.gitignore
+new file mode 100644
+index 00000000000..56fef626922
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/.gitignore
+@@ -0,0 +1,185 @@
++# Ref: https://gist.github.com/kmorcinek/2710267
++# Download this file using PowerShell v3 under Windows with the following comand
++# Invoke-WebRequest https://gist.githubusercontent.com/kmorcinek/2710267/raw/ -OutFile .gitignore
++
++# User-specific files
++*.suo
++*.user
++*.sln.docstates
++
++# Build results
++
++[Dd]ebug/
++[Rr]elease/
++x64/
++build/
++[Bb]in/
++[Oo]bj/
++
++# NuGet Packages
++*.nupkg
++# The packages folder can be ignored because of Package Restore
++**/packages/*
++# except build/, which is used as an MSBuild target.
++!**/packages/build/
++# Uncomment if necessary however generally it will be regenerated when needed
++#!**/packages/repositories.config
++
++# MSTest test Results
++[Tt]est[Rr]esult*/
++[Bb]uild[Ll]og.*
++
++*_i.c
++*_p.c
++*.ilk
++*.meta
++*.obj
++*.pch
++*.pdb
++*.pgc
++*.pgd
++*.rsp
++*.sbr
++*.tlb
++*.tli
++*.tlh
++*.tmp
++*.tmp_proj
++*.log
++*.vspscc
++*.vssscc
++.builds
++*.pidb
++*.log
++*.scc
++
++# OS generated files #
++.DS_Store*
++ehthumbs.db
++Icon?
++Thumbs.db
++
++# Visual C++ cache files
++ipch/
++*.aps
++*.ncb
++*.opensdf
++*.sdf
++*.cachefile
++
++# Visual Studio profiler
++*.psess
++*.vsp
++*.vspx
++
++# Guidance Automation Toolkit
++*.gpState
++
++# ReSharper is a .NET coding add-in
++_ReSharper*/
++*.[Rr]e[Ss]harper
++
++# TeamCity is a build add-in
++_TeamCity*
++
++# DotCover is a Code Coverage Tool
++*.dotCover
++
++# NCrunch
++*.ncrunch*
++.*crunch*.local.xml
++
++# Installshield output folder
++[Ee]xpress/
++
++# DocProject is a documentation generator add-in
++DocProject/buildhelp/
++DocProject/Help/*.HxT
++DocProject/Help/*.HxC
++DocProject/Help/*.hhc
++DocProject/Help/*.hhk
++DocProject/Help/*.hhp
++DocProject/Help/Html2
++DocProject/Help/html
++
++# Click-Once directory
++publish/
++
++# Publish Web Output
++*.Publish.xml
++
++# Windows Azure Build Output
++csx
++*.build.csdef
++
++# Windows Store app package directory
++AppPackages/
++
++# Others
++sql/
++*.Cache
++ClientBin/
++[Ss]tyle[Cc]op.*
++~$*
++*~
++*.dbmdl
++*.[Pp]ublish.xml
++*.pfx
++*.publishsettings
++modulesbin/
++tempbin/
++
++# EPiServer Site file (VPP)
++AppData/
++
++# RIA/Silverlight projects
++Generated_Code/
++
++# Backup & report files from converting an old project file to a newer
++# Visual Studio version. Backup files are not needed, because we have git ;-)
++_UpgradeReport_Files/
++Backup*/
++UpgradeLog*.XML
++UpgradeLog*.htm
++
++# vim
++*.txt~
++*.swp
++*.swo
++
++ # svn
++ .svn
++
++ # SQL Server files
++ **/App_Data/*.mdf
++ **/App_Data/*.ldf
++ **/App_Data/*.sdf
++
++
++ #LightSwitch generated files
++ GeneratedArtifacts/
++ _Pvt_Extensions/
++ ModelManifest.xml
++
++ # =========================
++ # Windows detritus
++ # =========================
++
++ # Windows image file caches
++ Thumbs.db
++ ehthumbs.db
++
++ # Folder config file
++ Desktop.ini
++
++ # Recycle Bin used on file shares
++ $RECYCLE.BIN/
++
++ # Mac desktop service store files
++ .DS_Store
++
++ # SASS Compiler cache
++ .sass-cache
++
++ # Visual Studio 2014 CTP
++ **/*.sln.ide
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/.swagger-codegen-ignore b/samples/client/petstore-security-test/csharp/SwaggerClient/.swagger-codegen-ignore
+new file mode 100644
+index 00000000000..c5fa491b4c5
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/.swagger-codegen-ignore
+@@ -0,0 +1,23 @@
++# Swagger Codegen Ignore
++# Generated by swagger-codegen https://github.com/swagger-api/swagger-codegen
++
++# Use this file to prevent files from being overwritten by the generator.
++# The patterns follow closely to .gitignore or .dockerignore.
++
++# As an example, the C# client generator defines ApiClient.cs.
++# You can make changes and tell Swagger Codgen to ignore just this file by uncommenting the following line:
++#ApiClient.cs
++
++# You can match any string of characters against a directory, file or extension with a single asterisk (*):
++#foo/*/qux
++# The above matches foo/bar/qux and foo/baz/qux, but not foo/bar/baz/qux
++
++# You can recursively match patterns against a directory, file or extension with a double asterisk (**):
++#foo/**/qux
++# This matches foo/bar/qux, foo/baz/qux, and foo/bar/baz/qux
++
++# You can also negate patterns with an exclamation (!).
++# For example, you can ignore all files in a docs folder with the file extension .md:
++#docs/*.md
++# Then explicitly reverse the ignore rule for a single file:
++#!docs/README.md
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/.travis.yml b/samples/client/petstore-security-test/csharp/SwaggerClient/.travis.yml
+new file mode 100644
+index 00000000000..4096e0b50d4
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/.travis.yml
+@@ -0,0 +1,21 @@
++#
++# Generated by: https://github.com/swagger-api/swagger-codegen.git
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#      http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++#
++language: csharp
++mono:
++  - latest
++solution: IO.Swagger.sln
++script:
++  - /bin/sh ./mono_nunit_test.sh
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.sln b/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.sln
+new file mode 100644
+index 00000000000..3f6c7053bf8
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.sln
+@@ -0,0 +1,27 @@
++Microsoft Visual Studio Solution File, Format Version 12.00
++# Visual Studio 2012
++VisualStudioVersion = 12.0.0.0
++MinimumVisualStudioVersion = 10.0.0.1
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Swagger", "src\IO.Swagger\IO.Swagger.csproj", "{29125490-71E4-47ED-B0D7-34505F58103C}"
++EndProject
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Swagger.Test", "src\IO.Swagger.Test\IO.Swagger.Test.csproj", "{19F1DEBC-DE5E-4517-8062-F000CD499087}"
++EndProject
++Global
++GlobalSection(SolutionConfigurationPlatforms) = preSolution
++Debug|Any CPU = Debug|Any CPU
++Release|Any CPU = Release|Any CPU
++EndGlobalSection
++GlobalSection(ProjectConfigurationPlatforms) = postSolution
++{29125490-71E4-47ED-B0D7-34505F58103C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++{29125490-71E4-47ED-B0D7-34505F58103C}.Debug|Any CPU.Build.0 = Debug|Any CPU
++{29125490-71E4-47ED-B0D7-34505F58103C}.Release|Any CPU.ActiveCfg = Release|Any CPU
++{29125490-71E4-47ED-B0D7-34505F58103C}.Release|Any CPU.Build.0 = Release|Any CPU
++{19F1DEBC-DE5E-4517-8062-F000CD499087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++{19F1DEBC-DE5E-4517-8062-F000CD499087}.Debug|Any CPU.Build.0 = Debug|Any CPU
++{19F1DEBC-DE5E-4517-8062-F000CD499087}.Release|Any CPU.ActiveCfg = Release|Any CPU
++{19F1DEBC-DE5E-4517-8062-F000CD499087}.Release|Any CPU.Build.0 = Release|Any CPU
++EndGlobalSection
++GlobalSection(SolutionProperties) = preSolution
++HideSolutionNode = FALSE
++EndGlobalSection
++EndGlobal
+\ No newline at end of file
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.userprefs b/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.userprefs
+new file mode 100644
+index 00000000000..39b58c92731
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/IO.Swagger.userprefs
+@@ -0,0 +1,13 @@
++﻿<Properties>
++  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
++  <MonoDevelop.Ide.Workbench ActiveDocument="src/IO.Swagger/Client/Configuration.cs">
++    <Files>
++      <File FileName="src/IO.Swagger/Client/ApiClient.cs" Line="72" Column="77" />
++      <File FileName="src/IO.Swagger/Client/Configuration.cs" Line="311" Column="58" />
++    </Files>
++  </MonoDevelop.Ide.Workbench>
++  <MonoDevelop.Ide.DebuggingService.Breakpoints>
++    <BreakpointStore />
++  </MonoDevelop.Ide.DebuggingService.Breakpoints>
++  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
++</Properties>
+\ No newline at end of file
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/LICENSE b/samples/client/petstore-security-test/csharp/SwaggerClient/LICENSE
+new file mode 100644
+index 00000000000..8dada3edaf5
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/LICENSE
+@@ -0,0 +1,201 @@
++                                 Apache License
++                           Version 2.0, January 2004
++                        http://www.apache.org/licenses/
++
++   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
++
++   1. Definitions.
++
++      "License" shall mean the terms and conditions for use, reproduction,
++      and distribution as defined by Sections 1 through 9 of this document.
++
++      "Licensor" shall mean the copyright owner or entity authorized by
++      the copyright owner that is granting the License.
++
++      "Legal Entity" shall mean the union of the acting entity and all
++      other entities that control, are controlled by, or are under common
++      control with that entity. For the purposes of this definition,
++      "control" means (i) the power, direct or indirect, to cause the
++      direction or management of such entity, whether by contract or
++      otherwise, or (ii) ownership of fifty percent (50%) or more of the
++      outstanding shares, or (iii) beneficial ownership of such entity.
++
++      "You" (or "Your") shall mean an individual or Legal Entity
++      exercising permissions granted by this License.
++
++      "Source" form shall mean the preferred form for making modifications,
++      including but not limited to software source code, documentation
++      source, and configuration files.
++
++      "Object" form shall mean any form resulting from mechanical
++      transformation or translation of a Source form, including but
++      not limited to compiled object code, generated documentation,
++      and conversions to other media types.
++
++      "Work" shall mean the work of authorship, whether in Source or
++      Object form, made available under the License, as indicated by a
++      copyright notice that is included in or attached to the work
++      (an example is provided in the Appendix below).
++
++      "Derivative Works" shall mean any work, whether in Source or Object
++      form, that is based on (or derived from) the Work and for which the
++      editorial revisions, annotations, elaborations, or other modifications
++      represent, as a whole, an original work of authorship. For the purposes
++      of this License, Derivative Works shall not include works that remain
++      separable from, or merely link (or bind by name) to the interfaces of,
++      the Work and Derivative Works thereof.
++
++      "Contribution" shall mean any work of authorship, including
++      the original version of the Work and any modifications or additions
++      to that Work or Derivative Works thereof, that is intentionally
++      submitted to Licensor for inclusion in the Work by the copyright owner
++      or by an individual or Legal Entity authorized to submit on behalf of
++      the copyright owner. For the purposes of this definition, "submitted"
++      means any form of electronic, verbal, or written communication sent
++      to the Licensor or its representatives, including but not limited to
++      communication on electronic mailing lists, source code control systems,
++      and issue tracking systems that are managed by, or on behalf of, the
++      Licensor for the purpose of discussing and improving the Work, but
++      excluding communication that is conspicuously marked or otherwise
++      designated in writing by the copyright owner as "Not a Contribution."
++
++      "Contributor" shall mean Licensor and any individual or Legal Entity
++      on behalf of whom a Contribution has been received by Licensor and
++      subsequently incorporated within the Work.
++
++   2. Grant of Copyright License. Subject to the terms and conditions of
++      this License, each Contributor hereby grants to You a perpetual,
++      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
++      copyright license to reproduce, prepare Derivative Works of,
++      publicly display, publicly perform, sublicense, and distribute the
++      Work and such Derivative Works in Source or Object form.
++
++   3. Grant of Patent License. Subject to the terms and conditions of
++      this License, each Contributor hereby grants to You a perpetual,
++      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
++      (except as stated in this section) patent license to make, have made,
++      use, offer to sell, sell, import, and otherwise transfer the Work,
++      where such license applies only to those patent claims licensable
++      by such Contributor that are necessarily infringed by their
++      Contribution(s) alone or by combination of their Contribution(s)
++      with the Work to which such Contribution(s) was submitted. If You
++      institute patent litigation against any entity (including a
++      cross-claim or counterclaim in a lawsuit) alleging that the Work
++      or a Contribution incorporated within the Work constitutes direct
++      or contributory patent infringement, then any patent licenses
++      granted to You under this License for that Work shall terminate
++      as of the date such litigation is filed.
++
++   4. Redistribution. You may reproduce and distribute copies of the
++      Work or Derivative Works thereof in any medium, with or without
++      modifications, and in Source or Object form, provided that You
++      meet the following conditions:
++
++      (a) You must give any other recipients of the Work or
++          Derivative Works a copy of this License; and
++
++      (b) You must cause any modified files to carry prominent notices
++          stating that You changed the files; and
++
++      (c) You must retain, in the Source form of any Derivative Works
++          that You distribute, all copyright, patent, trademark, and
++          attribution notices from the Source form of the Work,
++          excluding those notices that do not pertain to any part of
++          the Derivative Works; and
++
++      (d) If the Work includes a "NOTICE" text file as part of its
++          distribution, then any Derivative Works that You distribute must
++          include a readable copy of the attribution notices contained
++          within such NOTICE file, excluding those notices that do not
++          pertain to any part of the Derivative Works, in at least one
++          of the following places: within a NOTICE text file distributed
++          as part of the Derivative Works; within the Source form or
++          documentation, if provided along with the Derivative Works; or,
++          within a display generated by the Derivative Works, if and
++          wherever such third-party notices normally appear. The contents
++          of the NOTICE file are for informational purposes only and
++          do not modify the License. You may add Your own attribution
++          notices within Derivative Works that You distribute, alongside
++          or as an addendum to the NOTICE text from the Work, provided
++          that such additional attribution notices cannot be construed
++          as modifying the License.
++
++      You may add Your own copyright statement to Your modifications and
++      may provide additional or different license terms and conditions
++      for use, reproduction, or distribution of Your modifications, or
++      for any such Derivative Works as a whole, provided Your use,
++      reproduction, and distribution of the Work otherwise complies with
++      the conditions stated in this License.
++
++   5. Submission of Contributions. Unless You explicitly state otherwise,
++      any Contribution intentionally submitted for inclusion in the Work
++      by You to the Licensor shall be under the terms and conditions of
++      this License, without any additional terms or conditions.
++      Notwithstanding the above, nothing herein shall supersede or modify
++      the terms of any separate license agreement you may have executed
++      with Licensor regarding such Contributions.
++
++   6. Trademarks. This License does not grant permission to use the trade
++      names, trademarks, service marks, or product names of the Licensor,
++      except as required for reasonable and customary use in describing the
++      origin of the Work and reproducing the content of the NOTICE file.
++
++   7. Disclaimer of Warranty. Unless required by applicable law or
++      agreed to in writing, Licensor provides the Work (and each
++      Contributor provides its Contributions) on an "AS IS" BASIS,
++      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
++      implied, including, without limitation, any warranties or conditions
++      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
++      PARTICULAR PURPOSE. You are solely responsible for determining the
++      appropriateness of using or redistributing the Work and assume any
++      risks associated with Your exercise of permissions under this License.
++
++   8. Limitation of Liability. In no event and under no legal theory,
++      whether in tort (including negligence), contract, or otherwise,
++      unless required by applicable law (such as deliberate and grossly
++      negligent acts) or agreed to in writing, shall any Contributor be
++      liable to You for damages, including any direct, indirect, special,
++      incidental, or consequential damages of any character arising as a
++      result of this License or out of the use or inability to use the
++      Work (including but not limited to damages for loss of goodwill,
++      work stoppage, computer failure or malfunction, or any and all
++      other commercial damages or losses), even if such Contributor
++      has been advised of the possibility of such damages.
++
++   9. Accepting Warranty or Additional Liability. While redistributing
++      the Work or Derivative Works thereof, You may choose to offer,
++      and charge a fee for, acceptance of support, warranty, indemnity,
++      or other liability obligations and/or rights consistent with this
++      License. However, in accepting such obligations, You may act only
++      on Your own behalf and on Your sole responsibility, not on behalf
++      of any other Contributor, and only if You agree to indemnify,
++      defend, and hold each Contributor harmless for any liability
++      incurred by, or claims asserted against, such Contributor by reason
++      of your accepting any such warranty or additional liability.
++
++   END OF TERMS AND CONDITIONS
++
++   APPENDIX: How to apply the Apache License to your work.
++
++      To apply the Apache License to your work, attach the following
++      boilerplate notice, with the fields enclosed by brackets "{}"
++      replaced with your own identifying information. (Don't include
++      the brackets!)  The text should be enclosed in the appropriate
++      comment syntax for the file format. We also recommend that a
++      file or class name and description of purpose be included on the
++      same "printed page" as the copyright notice for easier
++      identification within third-party archives.
++
++   Copyright {yyyy} {name of copyright owner}
++
++   Licensed under the Apache License, Version 2.0 (the "License");
++   you may not use this file except in compliance with the License.
++   You may obtain a copy of the License at
++
++       http://www.apache.org/licenses/LICENSE-2.0
++
++   Unless required by applicable law or agreed to in writing, software
++   distributed under the License is distributed on an "AS IS" BASIS,
++   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++   See the License for the specific language governing permissions and
++   limitations under the License.
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/README.md b/samples/client/petstore-security-test/csharp/SwaggerClient/README.md
+new file mode 100644
+index 00000000000..dc258722110
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/README.md
+@@ -0,0 +1,104 @@
++# IO.Swagger - the C# library for the Swagger Petstore  &#39; \&quot; &#x3D;end
++
++This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++
++This C# SDK is automatically generated by the [Swagger Codegen](https://github.com/swagger-api/swagger-codegen) project:
++
++- API version: 1.0.0  &#39; \&quot; &#x3D;end
++- SDK version: 1.0.0
++- Build date: 2016-06-29T22:47:27.264+08:00
++- Build package: class io.swagger.codegen.languages.CSharpClientCodegen
++
++## Frameworks supported
++- .NET 4.0 or later
++- Windows Phone 7.1 (Mango)
++
++## Dependencies
++- [RestSharp] (https://www.nuget.org/packages/RestSharp) - 105.1.0 or later
++- [Json.NET] (https://www.nuget.org/packages/Newtonsoft.Json/) - 7.0.0 or later
++
++The DLLs included in the package may not be the latest version. We recommned using [NuGet] (https://docs.nuget.org/consume/installing-nuget) to obtain the latest version of the packages:
++```
++Install-Package RestSharp
++Install-Package Newtonsoft.Json
++```
++
++NOTE: RestSharp versions greater than 105.1.0 have a bug which causes file uploads to fail. See [RestSharp#742](https://github.com/restsharp/RestSharp/issues/742)
++
++## Installation
++Run the following command to generate the DLL
++- [Mac/Linux] `/bin/sh build.sh`
++- [Windows] `build.bat`
++
++Then include the DLL (under the `bin` folder) in the C# project, and use the namespaces:
++```csharp
++using IO.Swagger.Api;
++using IO.Swagger.Client;
++using Model;
++```
++
++## Getting Started
++
++```csharp
++using System;
++using System.Diagnostics;
++using IO.Swagger.Api;
++using IO.Swagger.Client;
++using Model;
++
++namespace Example
++{
++    public class Example
++    {
++        public void main()
++        {
++            
++            var apiInstance = new FakeApi();
++            var testCodeInjectEnd = testCodeInjectEnd_example;  // string | To test code injection  ' \" =end (optional) 
++
++            try
++            {
++                // To test code injection  ' \" =end
++                apiInstance.TestCodeInjectEnd(testCodeInjectEnd);
++            }
++            catch (Exception e)
++            {
++                Debug.Print("Exception when calling FakeApi.TestCodeInjectEnd: " + e.Message );
++            }
++        }
++    }
++}
++```
++
++## Documentation for API Endpoints
++
++All URIs are relative to *https://petstore.swagger.io  ' \" =end/v2  ' \" =end*
++
++Class | Method | HTTP request | Description
++------------ | ------------- | ------------- | -------------
++*FakeApi* | [**TestCodeInjectEnd**](docs/FakeApi.md#testcodeinjectend) | **PUT** /fake | To test code injection  ' \" =end
++
++
++## Documentation for Models
++
++ - [Model.ModelReturn](docs/ModelReturn.md)
++
++
++## Documentation for Authorization
++
++
++### api_key
++
++- **Type**: API key
++- **API key parameter name**: api_key  */ &#39; &quot; &#x3D;end
++- **Location**: HTTP header
++
++### petstore_auth
++
++- **Type**: OAuth
++- **Flow**: implicit
++- **Authorization URL**: http://petstore.swagger.io/api/oauth/dialog
++- **Scopes**: 
++  - write:pets: modify pets in your account  */ &#39; &quot; &#x3D;end
++  - read:pets: read your pets  */ &#39; &quot; &#x3D;end
++
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/build.bat b/samples/client/petstore-security-test/csharp/SwaggerClient/build.bat
+new file mode 100644
+index 00000000000..ae94b120d7b
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/build.bat
+@@ -0,0 +1,28 @@
++:: Generated by: https://github.com/swagger-api/swagger-codegen.git
++::
++:: Licensed under the Apache License, Version 2.0 (the "License");
++:: you may not use this file except in compliance with the License.
++:: You may obtain a copy of the License at
++::
++::      http://www.apache.org/licenses/LICENSE-2.0
++::
++:: Unless required by applicable law or agreed to in writing, software
++:: distributed under the License is distributed on an "AS IS" BASIS,
++:: WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++:: See the License for the specific language governing permissions and
++:: limitations under the License.
++
++@echo off
++
++SET CSCPATH=%SYSTEMROOT%\Microsoft.NET\Framework\v4.0.30319
++
++
++if not exist ".\nuget.exe" powershell -Command "(new-object System.Net.WebClient).DownloadFile('https://nuget.org/nuget.exe', '.\nuget.exe')"
++.\nuget.exe install src\IO.Swagger\packages.config -o packages
++
++if not exist ".\bin" mkdir bin
++
++copy packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll bin\Newtonsoft.Json.dll
++copy packages\RestSharp.105.1.0\lib\net45\RestSharp.dll bin\RestSharp.dll
++
++%CSCPATH%\csc /reference:bin\Newtonsoft.Json.dll;bin\RestSharp.dll /target:library /out:bin\IO.Swagger.dll /recurse:src\IO.Swagger\*.cs /doc:bin\IO.Swagger.xml
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/build.sh b/samples/client/petstore-security-test/csharp/SwaggerClient/build.sh
+new file mode 100644
+index 00000000000..25228f3cc36
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/build.sh
+@@ -0,0 +1,48 @@
++#!/usr/bin/env bash
++#
++# Generated by: https://github.com/swagger-api/swagger-codegen.git
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#      http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++
++frameworkVersion=net45
++netfx=${frameworkVersion#net}
++
++echo "[INFO] Target framework: ${frameworkVersion}"
++
++echo "[INFO] Download nuget and packages"
++wget -nc https://nuget.org/nuget.exe;
++mozroots --import --sync
++mono nuget.exe install src/IO.Swagger/packages.config -o packages;
++
++echo "[INFO] Copy DLLs to the 'bin' folder"
++mkdir -p bin;
++cp packages/Newtonsoft.Json.8.0.3/lib/net45/Newtonsoft.Json.dll bin/Newtonsoft.Json.dll;
++cp packages/RestSharp.105.1.0/lib/net45/RestSharp.dll bin/RestSharp.dll;
++
++echo "[INFO] Run 'mcs' to build bin/IO.Swagger.dll"
++mcs -sdk:${netfx} -r:bin/Newtonsoft.Json.dll,\
++bin/RestSharp.dll,\
++System.Runtime.Serialization.dll \
++-target:library \
++-out:bin/IO.Swagger.dll \
++-recurse:'src/IO.Swagger/*.cs' \
++-doc:bin/IO.Swagger.xml \
++-platform:anycpu
++
++if [ $? -ne 0 ]
++then
++  echo "[ERROR] Compilation failed with exit code $?"
++  exit 1
++else
++  echo "[INFO] bin/IO.Swagger.dll was created successfully"
++fi
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/docs/FakeApi.md b/samples/client/petstore-security-test/csharp/SwaggerClient/docs/FakeApi.md
+new file mode 100644
+index 00000000000..962ba5fc6e0
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/docs/FakeApi.md
+@@ -0,0 +1,67 @@
++# IO.Swagger.Api.FakeApi
++
++All URIs are relative to *https://petstore.swagger.io  ' \" =end/v2  ' \" =end*
++
++Method | HTTP request | Description
++------------- | ------------- | -------------
++[**TestCodeInjectEnd**](FakeApi.md#testcodeinjectend) | **PUT** /fake | To test code injection  &#39; \&quot; &#x3D;end
++
++
++# **TestCodeInjectEnd**
++> void TestCodeInjectEnd (string testCodeInjectEnd = null)
++
++To test code injection  ' \" =end
++
++### Example
++```csharp
++using System;
++using System.Diagnostics;
++using IO.Swagger.Api;
++using IO.Swagger.Client;
++using IO.Swagger.Model;
++
++namespace Example
++{
++    public class TestCodeInjectEndExample
++    {
++        public void main()
++        {
++            
++            var apiInstance = new FakeApi();
++            var testCodeInjectEnd = testCodeInjectEnd_example;  // string | To test code injection  ' \" =end (optional) 
++
++            try
++            {
++                // To test code injection  ' \" =end
++                apiInstance.TestCodeInjectEnd(testCodeInjectEnd);
++            }
++            catch (Exception e)
++            {
++                Debug.Print("Exception when calling FakeApi.TestCodeInjectEnd: " + e.Message );
++            }
++        }
++    }
++}
++```
++
++### Parameters
++
++Name | Type | Description  | Notes
++------------- | ------------- | ------------- | -------------
++ **testCodeInjectEnd** | **string**| To test code injection  &#39; \&quot; &#x3D;end | [optional] 
++
++### Return type
++
++void (empty response body)
++
++### Authorization
++
++No authorization required
++
++### HTTP request headers
++
++ - **Content-Type**: application/json, */ '  =end
++ - **Accept**: application/json, */ '  =end
++
++[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
++
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/docs/ModelReturn.md b/samples/client/petstore-security-test/csharp/SwaggerClient/docs/ModelReturn.md
+new file mode 100644
+index 00000000000..57af1de2bdc
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/docs/ModelReturn.md
+@@ -0,0 +1,9 @@
++# IO.Swagger.Model.ModelReturn
++## Properties
++
++Name | Type | Description | Notes
++------------ | ------------- | ------------- | -------------
++**_Return** | **int?** | property description   &#39; \&quot; &#x3D;end | [optional] 
++
++[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
++
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/git_push.sh b/samples/client/petstore-security-test/csharp/SwaggerClient/git_push.sh
+new file mode 100644
+index 00000000000..792320114fb
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/git_push.sh
+@@ -0,0 +1,52 @@
++#!/bin/sh
++# ref: https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/
++#
++# Usage example: /bin/sh ./git_push.sh wing328 swagger-petstore-perl "minor update"
++
++git_user_id=$1
++git_repo_id=$2
++release_note=$3
++
++if [ "$git_user_id" = "" ]; then
++    git_user_id="GIT_USER_ID"
++    echo "[INFO] No command line input provided. Set \$git_user_id to $git_user_id"
++fi
++
++if [ "$git_repo_id" = "" ]; then
++    git_repo_id="GIT_REPO_ID"
++    echo "[INFO] No command line input provided. Set \$git_repo_id to $git_repo_id"
++fi
++
++if [ "$release_note" = "" ]; then
++    release_note="Minor update"
++    echo "[INFO] No command line input provided. Set \$release_note to $release_note"
++fi
++
++# Initialize the local directory as a Git repository
++git init
++
++# Adds the files in the local repository and stages them for commit.
++git add .
++
++# Commits the tracked changes and prepares them to be pushed to a remote repository.
++git commit -m "$release_note"
++
++# Sets the new remote
++git_remote=`git remote`
++if [ "$git_remote" = "" ]; then # git remote not defined
++
++    if [ "$GIT_TOKEN" = "" ]; then
++        echo "[INFO] \$GIT_TOKEN (environment variable) is not set. Using the git crediential in your environment."
++        git remote add origin https://github.com/${git_user_id}/${git_repo_id}.git
++    else
++        git remote add origin https://${git_user_id}:${GIT_TOKEN}@github.com/${git_user_id}/${git_repo_id}.git
++    fi
++
++fi
++
++git pull origin master
++
++# Pushes (Forces) the changes in the local repository up to the remote repository
++echo "Git pushing to https://github.com/${git_user_id}/${git_repo_id}.git"
++git push origin master 2>&1 | grep -v 'To https'
++
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/mono_nunit_test.sh b/samples/client/petstore-security-test/csharp/SwaggerClient/mono_nunit_test.sh
+new file mode 100644
+index 00000000000..e7032942787
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/mono_nunit_test.sh
+@@ -0,0 +1,33 @@
++#!/usr/bin/env bash
++#
++# Generated by: https://github.com/swagger-api/swagger-codegen.git
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#      http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++
++wget -nc https://nuget.org/nuget.exe
++mozroots --import --sync
++
++echo "[INFO] remove bin/Debug/SwaggerClientTest.dll"
++rm src/IO.Swagger.Test/bin/Debug/IO.Swagger.Test.dll 2> /dev/null
++
++echo "[INFO] install NUnit runners via NuGet"
++wget -nc https://nuget.org/nuget.exe
++mozroots --import --sync
++mono nuget.exe install src/IO.Swagger.Test/packages.config -o packages
++
++echo "[INFO] Install NUnit runners via NuGet"
++mono nuget.exe install NUnit.Runners -Version 3.2.1 -OutputDirectory packages 
++
++echo "[INFO] Build the solution and run the unit test"
++xbuild IO.Swagger.sln && \
++    mono ./packages/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe src/IO.Swagger.Test/bin/Debug/IO.Swagger.Test.dll
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/Api/FakeApiTests.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/Api/FakeApiTests.cs
+new file mode 100644
+index 00000000000..3bcf1cce223
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/Api/FakeApiTests.cs
+@@ -0,0 +1,92 @@
++/* 
++ * Swagger Petstore  ' \" =end
++ *
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ *
++ * OpenAPI spec version: 1.0.0  ' \" =end
++ * Contact: apiteam@swagger.io  ' \" =end
++ * Generated by: https://github.com/swagger-api/swagger-codegen.git
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++using System;
++using System.IO;
++using System.Collections.Generic;
++using System.Collections.ObjectModel;
++using System.Linq;
++using System.Reflection;
++using RestSharp;
++using NUnit.Framework;
++
++using IO.Swagger.Client;
++using IO.Swagger.Api;
++
++namespace IO.Swagger.Test
++{
++    /// <summary>
++    ///  Class for testing FakeApi
++    /// </summary>
++    /// <remarks>
++    /// This file is automatically generated by Swagger Codegen.
++    /// Please update the test case below to test the API endpoint.
++    /// </remarks>
++    [TestFixture]
++    public class FakeApiTests
++    {
++        private FakeApi instance;
++
++        /// <summary>
++        /// Setup before each unit test
++        /// </summary>
++        [SetUp]
++        public void Init()
++        {
++            instance = new FakeApi();
++        }
++
++        /// <summary>
++        /// Clean up after each unit test
++        /// </summary>
++        [TearDown]
++        public void Cleanup()
++        {
++
++        }
++
++        /// <summary>
++        /// Test an instance of FakeApi
++        /// </summary>
++        [Test]
++        public void InstanceTest()
++        {
++            // test 'IsInstanceOfType' FakeApi
++            Assert.IsInstanceOfType(typeof(FakeApi), instance, "instance is a FakeApi");
++        }
++
++        
++        /// <summary>
++        /// Test TestCodeInjectEnd
++        /// </summary>
++        [Test]
++        public void TestCodeInjectEndTest()
++        {
++            // TODO uncomment below to test the method and replace null with proper value
++            //string testCodeInjectEnd = null;
++            //instance.TestCodeInjectEnd(testCodeInjectEnd);
++            
++        }
++        
++    }
++
++}
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/IO.Swagger.Test.csproj b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/IO.Swagger.Test.csproj
+new file mode 100644
+index 00000000000..35bf372e00a
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/IO.Swagger.Test.csproj
+@@ -0,0 +1,94 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++Swagger Petstore  ' \" =end
++
++This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++
++OpenAPI spec version: 1.0.0  ' \" =end
++Contact: apiteam@swagger.io  ' \" =end
++Generated by: https://github.com/swagger-api/swagger-codegen.git
++
++Licensed under the Apache License, Version 2.0 (the "License");
++you may not use this file except in compliance with the License.
++You may obtain a copy of the License at
++
++     http://www.apache.org/licenses/LICENSE-2.0
++
++Unless required by applicable law or agreed to in writing, software
++distributed under the License is distributed on an "AS IS" BASIS,
++WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++See the License for the specific language governing permissions and
++limitations under the License.
++-->
++<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <PropertyGroup>
++    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
++    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
++    <ProjectGuid>{19F1DEBC-DE5E-4517-8062-F000CD499087}</ProjectGuid>
++    <OutputType>Library</OutputType>
++    <AppDesignerFolder>Properties</AppDesignerFolder>
++    <RootNamespace>IO.Swagger.Test</RootNamespace>
++    <AssemblyName>IO.Swagger.Test</AssemblyName>
++    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
++    <FileAlignment>512</FileAlignment>
++  </PropertyGroup>
++  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
++    <DebugSymbols>true</DebugSymbols>
++    <DebugType>full</DebugType>
++    <Optimize>false</Optimize>
++    <OutputPath>bin\Debug\</OutputPath>
++    <DefineConstants>DEBUG;TRACE</DefineConstants>
++    <ErrorReport>prompt</ErrorReport>
++    <WarningLevel>4</WarningLevel>
++  </PropertyGroup>
++  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
++    <DebugType>pdbonly</DebugType>
++    <Optimize>true</Optimize>
++    <OutputPath>bin\Release\</OutputPath>
++    <DefineConstants>TRACE</DefineConstants>
++    <ErrorReport>prompt</ErrorReport>
++    <WarningLevel>4</WarningLevel>
++  </PropertyGroup>
++  <ItemGroup>
++    <Reference Include="System" />
++    <Reference Include="System.Core" />
++    <Reference Include="System.Xml.Linq" />
++    <Reference Include="System.Data.DataSetExtensions" />
++    <Reference Include="Microsoft.CSharp" />
++    <Reference Include="System.Data" />
++    <Reference Include="System.Runtime.Serialization" />
++    <Reference Include="System.Xml" />
++    <Reference Include="Newtonsoft.Json">
++        <HintPath Condition="Exists('$(SolutionDir)\packages')">$(SolutionDir)\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
++        <HintPath Condition="Exists('..\packages')">..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
++        <HintPath Condition="Exists('..\..\packages')">..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
++        <HintPath Condition="Exists('..\..\vendor')">..\..\vendor\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
++    </Reference>
++    <Reference Include="RestSharp">
++        <HintPath Condition="Exists('$(SolutionDir)\packages')">$(SolutionDir)\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
++        <HintPath Condition="Exists('..\packages')">..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
++        <HintPath Condition="Exists('..\..\packages')">..\..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
++        <HintPath Condition="Exists('..\..\vendor')">..\..\vendor\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
++    </Reference>
++    <Reference Include="nunit.framework">
++        <HintPath Condition="Exists('$(SolutionDir)\packages')">$(SolutionDir)\packages\NUnit.3.2.1\lib\nunit.framework.dll</HintPath>
++        <HintPath Condition="Exists('..\packages')">..\packages\NUnit.3.2.1\lib\nunit.framework.dll</HintPath>
++        <HintPath Condition="Exists('..\..\packages')">..\..\packages\NUnit.3.2.1\lib\nunit.framework.dll</HintPath>
++        <HintPath Condition="Exists('..\..\vendor')">..\..\vendor\NUnit.3.2.1\lib\nunit.framework.dll</HintPath>
++    </Reference>
++  </ItemGroup>
++  <ItemGroup>
++    <Compile Include="**\*.cs"/>
++  </ItemGroup>
++  <ItemGroup>
++      <None Include="packages.config" />
++  </ItemGroup>
++  <Import Project="$(MsBuildToolsPath)\Microsoft.CSharp.targets" />
++  <ItemGroup>
++      <ProjectReference Include="..\IO.Swagger\IO.Swagger.csproj">
++          <Project>{29125490-71E4-47ED-B0D7-34505F58103C}</Project>
++          <Name>IO.Swagger</Name>
++      </ProjectReference>
++  </ItemGroup>
++</Project>
++
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/Model/ModelReturnTests.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/Model/ModelReturnTests.cs
+new file mode 100644
+index 00000000000..5a2043e1344
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/Model/ModelReturnTests.cs
+@@ -0,0 +1,90 @@
++/* 
++ * Swagger Petstore  ' \" =end
++ *
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ *
++ * OpenAPI spec version: 1.0.0  ' \" =end
++ * Contact: apiteam@swagger.io  ' \" =end
++ * Generated by: https://github.com/swagger-api/swagger-codegen.git
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++
++using NUnit.Framework;
++
++using System;
++using System.Linq;
++using System.IO;
++using System.Collections.Generic;
++using IO.Swagger.Api;
++using IO.Swagger.Model;
++using IO.Swagger.Client;
++using System.Reflection;
++
++namespace IO.Swagger.Test
++{
++    /// <summary>
++    ///  Class for testing ModelReturn
++    /// </summary>
++    /// <remarks>
++    /// This file is automatically generated by Swagger Codegen.
++    /// Please update the test case below to test the model.
++    /// </remarks>
++    [TestFixture]
++    public class ModelReturnTests
++    {
++        // TODO uncomment below to declare an instance variable for ModelReturn
++        //private ModelReturn instance;
++
++        /// <summary>
++        /// Setup before each test
++        /// </summary>
++        [SetUp]
++        public void Init()
++        {
++            // TODO uncomment below to create an instance of ModelReturn
++            //instance = new ModelReturn();
++        }
++
++        /// <summary>
++        /// Clean up after each test
++        /// </summary>
++        [TearDown]
++        public void Cleanup()
++        {
++
++        }
++
++        /// <summary>
++        /// Test an instance of ModelReturn
++        /// </summary>
++        [Test]
++        public void ModelReturnInstanceTest()
++        {
++            // TODO uncomment below to test "IsInstanceOfType" ModelReturn
++            //Assert.IsInstanceOfType<ModelReturn> (instance, "variable 'instance' is a ModelReturn");
++        }
++
++        /// <summary>
++        /// Test the property '_Return'
++        /// </summary>
++        [Test]
++        public void _ReturnTest()
++        {
++            // TODO unit test for the property '_Return'
++        }
++
++    }
++
++}
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/packages.config b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/packages.config
+new file mode 100644
+index 00000000000..317248179b6
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger.Test/packages.config
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="utf-8"?>
++<packages>
++  <package id="NUnit" version="3.2.1" targetFramework="net45" />
++  <package id="RestSharp" version="105.1.0" targetFramework="net45" developmentDependency="true" />
++  <package id="Newtonsoft.Json" version="8.0.3" targetFramework="net45" developmentDependency="true" />
++</packages>
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Api/FakeApi.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Api/FakeApi.cs
+new file mode 100644
+index 00000000000..8d6d0d22c05
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Api/FakeApi.cs
+@@ -0,0 +1,334 @@
++/* 
++ * Swagger Petstore  ' \" =end
++ *
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ *
++ * OpenAPI spec version: 1.0.0  ' \" =end
++ * Contact: apiteam@swagger.io  ' \" =end
++ * Generated by: https://github.com/swagger-api/swagger-codegen.git
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++using System;
++using System.Collections.Generic;
++using System.Collections.ObjectModel;
++using System.Linq;
++using RestSharp;
++using IO.Swagger.Client;
++
++namespace IO.Swagger.Api
++{
++    /// <summary>
++    /// Represents a collection of functions to interact with the API endpoints
++    /// </summary>
++    public interface IFakeApi : IApiAccessor
++    {
++        #region Synchronous Operations
++        /// <summary>
++        /// To test code injection  &#39; \&quot; &#x3D;end
++        /// </summary>
++        /// <remarks>
++        /// 
++        /// </remarks>
++        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
++        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <returns></returns>
++        void TestCodeInjectEnd (string testCodeInjectEnd = null);
++
++        /// <summary>
++        /// To test code injection  &#39; \&quot; &#x3D;end
++        /// </summary>
++        /// <remarks>
++        /// 
++        /// </remarks>
++        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
++        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <returns>ApiResponse of Object(void)</returns>
++        ApiResponse<Object> TestCodeInjectEndWithHttpInfo (string testCodeInjectEnd = null);
++        #endregion Synchronous Operations
++        #region Asynchronous Operations
++        /// <summary>
++        /// To test code injection  &#39; \&quot; &#x3D;end
++        /// </summary>
++        /// <remarks>
++        /// 
++        /// </remarks>
++        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
++        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <returns>Task of void</returns>
++        System.Threading.Tasks.Task TestCodeInjectEndAsync (string testCodeInjectEnd = null);
++
++        /// <summary>
++        /// To test code injection  &#39; \&quot; &#x3D;end
++        /// </summary>
++        /// <remarks>
++        /// 
++        /// </remarks>
++        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
++        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <returns>Task of ApiResponse</returns>
++        System.Threading.Tasks.Task<ApiResponse<Object>> TestCodeInjectEndAsyncWithHttpInfo (string testCodeInjectEnd = null);
++        #endregion Asynchronous Operations
++    }
++
++    /// <summary>
++    /// Represents a collection of functions to interact with the API endpoints
++    /// </summary>
++    public partial class FakeApi : IFakeApi
++    {
++        private IO.Swagger.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
++
++        /// <summary>
++        /// Initializes a new instance of the <see cref="FakeApi"/> class.
++        /// </summary>
++        /// <returns></returns>
++        public FakeApi(String basePath)
++        {
++            this.Configuration = new Configuration(new ApiClient(basePath));
++
++            ExceptionFactory = IO.Swagger.Client.Configuration.DefaultExceptionFactory;
++
++            // ensure API client has configuration ready
++            if (Configuration.ApiClient.Configuration == null)
++            {
++                this.Configuration.ApiClient.Configuration = this.Configuration;
++            }
++        }
++
++        /// <summary>
++        /// Initializes a new instance of the <see cref="FakeApi"/> class
++        /// using Configuration object
++        /// </summary>
++        /// <param name="configuration">An instance of Configuration</param>
++        /// <returns></returns>
++        public FakeApi(Configuration configuration = null)
++        {
++            if (configuration == null) // use the default one in Configuration
++                this.Configuration = Configuration.Default;
++            else
++                this.Configuration = configuration;
++
++            ExceptionFactory = IO.Swagger.Client.Configuration.DefaultExceptionFactory;
++
++            // ensure API client has configuration ready
++            if (Configuration.ApiClient.Configuration == null)
++            {
++                this.Configuration.ApiClient.Configuration = this.Configuration;
++            }
++        }
++
++        /// <summary>
++        /// Gets the base path of the API client.
++        /// </summary>
++        /// <value>The base path</value>
++        public String GetBasePath()
++        {
++            return this.Configuration.ApiClient.RestClient.BaseUrl.ToString();
++        }
++
++        /// <summary>
++        /// Sets the base path of the API client.
++        /// </summary>
++        /// <value>The base path</value>
++        [Obsolete("SetBasePath is deprecated, please do 'Configuration.ApiClient = new ApiClient(\"http://new-path\")' instead.")]
++        public void SetBasePath(String basePath)
++        {
++            // do nothing
++        }
++
++        /// <summary>
++        /// Gets or sets the configuration object
++        /// </summary>
++        /// <value>An instance of the Configuration</value>
++        public Configuration Configuration {get; set;}
++
++        /// <summary>
++        /// Provides a factory method hook for the creation of exceptions.
++        /// </summary>
++        public IO.Swagger.Client.ExceptionFactory ExceptionFactory
++        {
++            get
++            {
++                if (_exceptionFactory != null && _exceptionFactory.GetInvocationList().Length > 1)
++                {
++                    throw new InvalidOperationException("Multicast delegate for ExceptionFactory is unsupported.");
++                }
++                return _exceptionFactory;
++            }
++            set { _exceptionFactory = value; }
++        }
++
++        /// <summary>
++        /// Gets the default header.
++        /// </summary>
++        /// <returns>Dictionary of HTTP header</returns>
++        [Obsolete("DefaultHeader is deprecated, please use Configuration.DefaultHeader instead.")]
++        public Dictionary<String, String> DefaultHeader()
++        {
++            return this.Configuration.DefaultHeader;
++        }
++
++        /// <summary>
++        /// Add default header.
++        /// </summary>
++        /// <param name="key">Header field name.</param>
++        /// <param name="value">Header field value.</param>
++        /// <returns></returns>
++        [Obsolete("AddDefaultHeader is deprecated, please use Configuration.AddDefaultHeader instead.")]
++        public void AddDefaultHeader(string key, string value)
++        {
++            this.Configuration.AddDefaultHeader(key, value);
++        }
++
++        /// <summary>
++        /// To test code injection  &#39; \&quot; &#x3D;end 
++        /// </summary>
++        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
++        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <returns></returns>
++        public void TestCodeInjectEnd (string testCodeInjectEnd = null)
++        {
++             TestCodeInjectEndWithHttpInfo(testCodeInjectEnd);
++        }
++
++        /// <summary>
++        /// To test code injection  &#39; \&quot; &#x3D;end 
++        /// </summary>
++        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
++        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <returns>ApiResponse of Object(void)</returns>
++        public ApiResponse<Object> TestCodeInjectEndWithHttpInfo (string testCodeInjectEnd = null)
++        {
++
++            var localVarPath = "/fake";
++            var localVarPathParams = new Dictionary<String, String>();
++            var localVarQueryParams = new Dictionary<String, String>();
++            var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
++            var localVarFormParams = new Dictionary<String, String>();
++            var localVarFileParams = new Dictionary<String, FileParameter>();
++            Object localVarPostBody = null;
++
++            // to determine the Content-Type header
++            String[] localVarHttpContentTypes = new String[] {
++                "application/json", 
++                "*/ '  =end"
++            };
++            String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
++
++            // to determine the Accept header
++            String[] localVarHttpHeaderAccepts = new String[] {
++                "application/json", 
++                "*/ '  =end"
++            };
++            String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
++            if (localVarHttpHeaderAccept != null)
++                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
++
++            // set "format" to json by default
++            // e.g. /pet/{petId}.{format} becomes /pet/{petId}.json
++            localVarPathParams.Add("format", "json");
++            if (testCodeInjectEnd != null) localVarFormParams.Add("test code inject */ &#39; &quot; &#x3D;end", Configuration.ApiClient.ParameterToString(testCodeInjectEnd)); // form parameter
++
++
++            // make the HTTP request
++            IRestResponse localVarResponse = (IRestResponse) Configuration.ApiClient.CallApi(localVarPath,
++                Method.PUT, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
++                localVarPathParams, localVarHttpContentType);
++
++            int localVarStatusCode = (int) localVarResponse.StatusCode;
++
++            if (ExceptionFactory != null)
++            {
++                Exception exception = ExceptionFactory("TestCodeInjectEnd", localVarResponse);
++                if (exception != null) throw exception;
++            }
++
++            
++            return new ApiResponse<Object>(localVarStatusCode,
++                localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
++                null);
++        }
++
++        /// <summary>
++        /// To test code injection  &#39; \&quot; &#x3D;end 
++        /// </summary>
++        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
++        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <returns>Task of void</returns>
++        public async System.Threading.Tasks.Task TestCodeInjectEndAsync (string testCodeInjectEnd = null)
++        {
++             await TestCodeInjectEndAsyncWithHttpInfo(testCodeInjectEnd);
++
++        }
++
++        /// <summary>
++        /// To test code injection  &#39; \&quot; &#x3D;end 
++        /// </summary>
++        /// <exception cref="IO.Swagger.Client.ApiException">Thrown when fails to make API call</exception>
++        /// <param name="testCodeInjectEnd">To test code injection  &#39; \&quot; &#x3D;end (optional)</param>
++        /// <returns>Task of ApiResponse</returns>
++        public async System.Threading.Tasks.Task<ApiResponse<Object>> TestCodeInjectEndAsyncWithHttpInfo (string testCodeInjectEnd = null)
++        {
++
++            var localVarPath = "/fake";
++            var localVarPathParams = new Dictionary<String, String>();
++            var localVarQueryParams = new Dictionary<String, String>();
++            var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
++            var localVarFormParams = new Dictionary<String, String>();
++            var localVarFileParams = new Dictionary<String, FileParameter>();
++            Object localVarPostBody = null;
++
++            // to determine the Content-Type header
++            String[] localVarHttpContentTypes = new String[] {
++                "application/json", 
++                "*/ '  =end"
++            };
++            String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
++
++            // to determine the Accept header
++            String[] localVarHttpHeaderAccepts = new String[] {
++                "application/json", 
++                "*/ '  =end"
++            };
++            String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
++            if (localVarHttpHeaderAccept != null)
++                localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
++
++            // set "format" to json by default
++            // e.g. /pet/{petId}.{format} becomes /pet/{petId}.json
++            localVarPathParams.Add("format", "json");
++            if (testCodeInjectEnd != null) localVarFormParams.Add("test code inject */ &#39; &quot; &#x3D;end", Configuration.ApiClient.ParameterToString(testCodeInjectEnd)); // form parameter
++
++
++            // make the HTTP request
++            IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
++                Method.PUT, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
++                localVarPathParams, localVarHttpContentType);
++
++            int localVarStatusCode = (int) localVarResponse.StatusCode;
++
++            if (ExceptionFactory != null)
++            {
++                Exception exception = ExceptionFactory("TestCodeInjectEnd", localVarResponse);
++                if (exception != null) throw exception;
++            }
++
++            
++            return new ApiResponse<Object>(localVarStatusCode,
++                localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
++                null);
++        }
++
++    }
++}
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiClient.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiClient.cs
+new file mode 100644
+index 00000000000..965816433fe
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiClient.cs
+@@ -0,0 +1,494 @@
++/* 
++ * Swagger Petstore  ' \" =end
++ *
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ *
++ * OpenAPI spec version: 1.0.0  ' \" =end
++ * Contact: apiteam@swagger.io  ' \" =end
++ * Generated by: https://github.com/swagger-api/swagger-codegen.git
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++using System;
++using System.Collections;
++using System.Collections.Generic;
++using System.Globalization;
++using System.Text.RegularExpressions;
++using System.IO;
++using System.Web;
++using System.Linq;
++using System.Net;
++using System.Text;
++using Newtonsoft.Json;
++using RestSharp;
++
++namespace IO.Swagger.Client
++{
++    /// <summary>
++    /// API client is mainly responsible for making the HTTP call to the API backend.
++    /// </summary>
++    public partial class ApiClient
++    {
++        private JsonSerializerSettings serializerSettings = new JsonSerializerSettings
++        {
++            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
++        };
++
++        /// <summary>
++        /// Allows for extending request processing for <see cref="ApiClient"/> generated code.
++        /// </summary>
++        /// <param name="request">The RestSharp request object</param>
++        partial void InterceptRequest(IRestRequest request);
++
++        /// <summary>
++        /// Allows for extending response processing for <see cref="ApiClient"/> generated code.
++        /// </summary>
++        /// <param name="request">The RestSharp request object</param>
++        /// <param name="response">The RestSharp response object</param>
++        partial void InterceptResponse(IRestRequest request, IRestResponse response);
++
++        /// <summary>
++        /// Initializes a new instance of the <see cref="ApiClient" /> class
++        /// with default configuration and base path (https://petstore.swagger.io  ' \" =end/v2  ' \" =end).
++        /// </summary>
++        public ApiClient()
++        {
++            Configuration = Configuration.Default;
++            RestClient = new RestClient("https://petstore.swagger.io  ' \" =end/v2  ' \" =end");
++        }
++
++        /// <summary>
++        /// Initializes a new instance of the <see cref="ApiClient" /> class
++        /// with default base path (https://petstore.swagger.io  ' \" =end/v2  ' \" =end).
++        /// </summary>
++        /// <param name="config">An instance of Configuration.</param>
++        public ApiClient(Configuration config = null)
++        {
++            if (config == null)
++                Configuration = Configuration.Default;
++            else
++                Configuration = config;
++
++            RestClient = new RestClient("https://petstore.swagger.io  ' \" =end/v2  ' \" =end");
++        }
++
++        /// <summary>
++        /// Initializes a new instance of the <see cref="ApiClient" /> class
++        /// with default configuration.
++        /// </summary>
++        /// <param name="basePath">The base path.</param>
++        public ApiClient(String basePath = "https://petstore.swagger.io  ' \" =end/v2  ' \" =end")
++        {
++           if (String.IsNullOrEmpty(basePath))
++                throw new ArgumentException("basePath cannot be empty");
++
++            RestClient = new RestClient(basePath);
++            Configuration = Configuration.Default;
++        }
++
++        /// <summary>
++        /// Gets or sets the default API client for making HTTP calls.
++        /// </summary>
++        /// <value>The default API client.</value>
++        [Obsolete("ApiClient.Default is deprecated, please use 'Configuration.Default.ApiClient' instead.")]
++        public static ApiClient Default;
++
++        /// <summary>
++        /// Gets or sets the Configuration.
++        /// </summary>
++        /// <value>An instance of the Configuration.</value>
++        public Configuration Configuration { get; set; }
++
++        /// <summary>
++        /// Gets or sets the RestClient.
++        /// </summary>
++        /// <value>An instance of the RestClient</value>
++        public RestClient RestClient { get; set; }
++
++        // Creates and sets up a RestRequest prior to a call.
++        private RestRequest PrepareRequest(
++            String path, RestSharp.Method method, Dictionary<String, String> queryParams, Object postBody,
++            Dictionary<String, String> headerParams, Dictionary<String, String> formParams,
++            Dictionary<String, FileParameter> fileParams, Dictionary<String, String> pathParams,
++            String contentType)
++        {
++            var request = new RestRequest(path, method);
++
++            // add path parameter, if any
++            foreach(var param in pathParams)
++                request.AddParameter(param.Key, param.Value, ParameterType.UrlSegment);
++
++            // add header parameter, if any
++            foreach(var param in headerParams)
++                request.AddHeader(param.Key, param.Value);
++
++            // add query parameter, if any
++            foreach(var param in queryParams)
++                request.AddQueryParameter(param.Key, param.Value);
++
++            // add form parameter, if any
++            foreach(var param in formParams)
++                request.AddParameter(param.Key, param.Value);
++
++            // add file parameter, if any
++            foreach(var param in fileParams)
++            {
++                request.AddFile(param.Value.Name, param.Value.Writer, param.Value.FileName, param.Value.ContentType);
++            }
++
++            if (postBody != null) // http body (model or byte[]) parameter
++            {
++                if (postBody.GetType() == typeof(String))
++                {
++                    request.AddParameter("application/json", postBody, ParameterType.RequestBody);
++                }
++                else if (postBody.GetType() == typeof(byte[]))
++                {
++                    request.AddParameter(contentType, postBody, ParameterType.RequestBody);
++                }
++            }
++
++            return request;
++        }
++
++        /// <summary>
++        /// Makes the HTTP request (Sync).
++        /// </summary>
++        /// <param name="path">URL path.</param>
++        /// <param name="method">HTTP method.</param>
++        /// <param name="queryParams">Query parameters.</param>
++        /// <param name="postBody">HTTP body (POST request).</param>
++        /// <param name="headerParams">Header parameters.</param>
++        /// <param name="formParams">Form parameters.</param>
++        /// <param name="fileParams">File parameters.</param>
++        /// <param name="pathParams">Path parameters.</param>
++        /// <param name="contentType">Content Type of the request</param>
++        /// <returns>Object</returns>
++        public Object CallApi(
++            String path, RestSharp.Method method, Dictionary<String, String> queryParams, Object postBody,
++            Dictionary<String, String> headerParams, Dictionary<String, String> formParams,
++            Dictionary<String, FileParameter> fileParams, Dictionary<String, String> pathParams,
++            String contentType)
++        {
++            var request = PrepareRequest(
++                path, method, queryParams, postBody, headerParams, formParams, fileParams,
++                pathParams, contentType);
++
++            // set timeout
++            RestClient.Timeout = Configuration.Timeout;
++            // set user agent
++            RestClient.UserAgent = Configuration.UserAgent;
++
++            InterceptRequest(request);
++            var response = RestClient.Execute(request);
++            InterceptResponse(request, response);
++
++            return (Object) response;
++        }
++        /// <summary>
++        /// Makes the asynchronous HTTP request.
++        /// </summary>
++        /// <param name="path">URL path.</param>
++        /// <param name="method">HTTP method.</param>
++        /// <param name="queryParams">Query parameters.</param>
++        /// <param name="postBody">HTTP body (POST request).</param>
++        /// <param name="headerParams">Header parameters.</param>
++        /// <param name="formParams">Form parameters.</param>
++        /// <param name="fileParams">File parameters.</param>
++        /// <param name="pathParams">Path parameters.</param>
++        /// <param name="contentType">Content type.</param>
++        /// <returns>The Task instance.</returns>
++        public async System.Threading.Tasks.Task<Object> CallApiAsync(
++            String path, RestSharp.Method method, Dictionary<String, String> queryParams, Object postBody,
++            Dictionary<String, String> headerParams, Dictionary<String, String> formParams,
++            Dictionary<String, FileParameter> fileParams, Dictionary<String, String> pathParams,
++            String contentType)
++        {
++            var request = PrepareRequest(
++                path, method, queryParams, postBody, headerParams, formParams, fileParams,
++                pathParams, contentType);
++            InterceptRequest(request);
++            var response = await RestClient.ExecuteTaskAsync(request);
++            InterceptResponse(request, response);
++            return (Object)response;
++        }
++
++        /// <summary>
++        /// Escape string (url-encoded).
++        /// </summary>
++        /// <param name="str">String to be escaped.</param>
++        /// <returns>Escaped string.</returns>
++        public string EscapeString(string str)
++        {
++            return UrlEncode(str);
++        }
++
++        /// <summary>
++        /// Create FileParameter based on Stream.
++        /// </summary>
++        /// <param name="name">Parameter name.</param>
++        /// <param name="stream">Input stream.</param>
++        /// <returns>FileParameter.</returns>
++        public FileParameter ParameterToFile(string name, Stream stream)
++        {
++            if (stream is FileStream)
++                return FileParameter.Create(name, ReadAsBytes(stream), Path.GetFileName(((FileStream)stream).Name));
++            else
++                return FileParameter.Create(name, ReadAsBytes(stream), "no_file_name_provided");
++        }
++
++        /// <summary>
++        /// If parameter is DateTime, output in a formatted string (default ISO 8601), customizable with Configuration.DateTime.
++        /// If parameter is a list, join the list with ",".
++        /// Otherwise just return the string.
++        /// </summary>
++        /// <param name="obj">The parameter (header, path, query, form).</param>
++        /// <returns>Formatted string.</returns>
++        public string ParameterToString(object obj)
++        {
++            if (obj is DateTime)
++                // Return a formatted date string - Can be customized with Configuration.DateTimeFormat
++                // Defaults to an ISO 8601, using the known as a Round-trip date/time pattern ("o")
++                // https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx#Anchor_8
++                // For example: 2009-06-15T13:45:30.0000000
++                return ((DateTime)obj).ToString (Configuration.DateTimeFormat);
++            else if (obj is DateTimeOffset)
++                // Return a formatted date string - Can be customized with Configuration.DateTimeFormat
++                // Defaults to an ISO 8601, using the known as a Round-trip date/time pattern ("o")
++                // https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx#Anchor_8
++                // For example: 2009-06-15T13:45:30.0000000
++                return ((DateTimeOffset)obj).ToString (Configuration.DateTimeFormat);
++            else if (obj is IList)
++            {
++                var flattenedString = new StringBuilder();
++                foreach (var param in (IList)obj)
++                {
++                    if (flattenedString.Length > 0)
++                        flattenedString.Append(",");
++                    flattenedString.Append(param);
++                }
++                return flattenedString.ToString();
++            }
++            else
++                return Convert.ToString (obj);
++        }
++
++        /// <summary>
++        /// Deserialize the JSON string into a proper object.
++        /// </summary>
++        /// <param name="response">The HTTP response.</param>
++        /// <param name="type">Object type.</param>
++        /// <returns>Object representation of the JSON string.</returns>
++        public object Deserialize(IRestResponse response, Type type)
++        {
++            IList<Parameter> headers = response.Headers;
++            if (type == typeof(byte[])) // return byte array
++            {
++                return response.RawBytes;
++            }
++
++            if (type == typeof(Stream))
++            {
++                if (headers != null)
++                {
++                    var filePath = String.IsNullOrEmpty(Configuration.TempFolderPath)
++                        ? Path.GetTempPath()
++                        : Configuration.TempFolderPath;
++                    var regex = new Regex(@"Content-Disposition=.*filename=['""]?([^'""\s]+)['""]?$");
++                    foreach (var header in headers)
++                    {
++                        var match = regex.Match(header.ToString());
++                        if (match.Success)
++                        {
++                            string fileName = filePath + SanitizeFilename(match.Groups[1].Value.Replace("\"", "").Replace("'", ""));
++                            File.WriteAllBytes(fileName, response.RawBytes);
++                            return new FileStream(fileName, FileMode.Open);
++                        }
++                    }
++                }
++                var stream = new MemoryStream(response.RawBytes);
++                return stream;
++            }
++
++            if (type.Name.StartsWith("System.Nullable`1[[System.DateTime")) // return a datetime object
++            {
++                return DateTime.Parse(response.Content,  null, System.Globalization.DateTimeStyles.RoundtripKind);
++            }
++
++            if (type == typeof(String) || type.Name.StartsWith("System.Nullable")) // return primitive type
++            {
++                return ConvertType(response.Content, type);
++            }
++
++            // at this point, it must be a model (json)
++            try
++            {
++                return JsonConvert.DeserializeObject(response.Content, type, serializerSettings);
++            }
++            catch (Exception e)
++            {
++                throw new ApiException(500, e.Message);
++            }
++        }
++
++        /// <summary>
++        /// Serialize an input (model) into JSON string
++        /// </summary>
++        /// <param name="obj">Object.</param>
++        /// <returns>JSON string.</returns>
++        public String Serialize(object obj)
++        {
++            try
++            {
++                return obj != null ? JsonConvert.SerializeObject(obj) : null;
++            }
++            catch (Exception e)
++            {
++                throw new ApiException(500, e.Message);
++            }
++        }
++
++        /// <summary>
++        /// Select the Content-Type header's value from the given content-type array:
++        /// if JSON exists in the given array, use it;
++        /// otherwise use the first one defined in 'consumes'
++        /// </summary>
++        /// <param name="contentTypes">The Content-Type array to select from.</param>
++        /// <returns>The Content-Type header to use.</returns>
++        public String SelectHeaderContentType(String[] contentTypes)
++        {
++            if (contentTypes.Length == 0)
++                return null;
++
++            if (contentTypes.Contains("application/json", StringComparer.OrdinalIgnoreCase))
++                return "application/json";
++
++            return contentTypes[0]; // use the first content type specified in 'consumes'
++        }
++
++        /// <summary>
++        /// Select the Accept header's value from the given accepts array:
++        /// if JSON exists in the given array, use it;
++        /// otherwise use all of them (joining into a string)
++        /// </summary>
++        /// <param name="accepts">The accepts array to select from.</param>
++        /// <returns>The Accept header to use.</returns>
++        public String SelectHeaderAccept(String[] accepts)
++        {
++            if (accepts.Length == 0)
++                return null;
++
++            if (accepts.Contains("application/json", StringComparer.OrdinalIgnoreCase))
++                return "application/json";
++
++            return String.Join(",", accepts);
++        }
++
++        /// <summary>
++        /// Encode string in base64 format.
++        /// </summary>
++        /// <param name="text">String to be encoded.</param>
++        /// <returns>Encoded string.</returns>
++        public static string Base64Encode(string text)
++        {
++            return System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(text));
++        }
++
++        /// <summary>
++        /// Dynamically cast the object into target type.
++        /// Ref: http://stackoverflow.com/questions/4925718/c-dynamic-runtime-cast
++        /// </summary>
++        /// <param name="source">Object to be casted</param>
++        /// <param name="dest">Target type</param>
++        /// <returns>Casted object</returns>
++        public static dynamic ConvertType(dynamic source, Type dest)
++        {
++            return Convert.ChangeType(source, dest);
++        }
++
++        /// <summary>
++        /// Convert stream to byte array
++        /// Credit/Ref: http://stackoverflow.com/a/221941/677735
++        /// </summary>
++        /// <param name="input">Input stream to be converted</param>
++        /// <returns>Byte array</returns>
++        public static byte[] ReadAsBytes(Stream input)
++        {
++            byte[] buffer = new byte[16*1024];
++            using (MemoryStream ms = new MemoryStream())
++            {
++                int read;
++                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
++                {
++                    ms.Write(buffer, 0, read);
++                }
++                return ms.ToArray();
++            }
++        }
++
++        /// <summary>
++        /// URL encode a string
++        /// Credit/Ref: https://github.com/restsharp/RestSharp/blob/master/RestSharp/Extensions/StringExtensions.cs#L50
++        /// </summary>
++        /// <param name="input">String to be URL encoded</param>
++        /// <returns>Byte array</returns>
++        public static string UrlEncode(string input)
++        {
++            const int maxLength = 32766;
++
++            if (input == null)
++            {
++                throw new ArgumentNullException("input");
++            }
++
++            if (input.Length <= maxLength)
++            {
++                return Uri.EscapeDataString(input);
++            }
++
++            StringBuilder sb = new StringBuilder(input.Length * 2);
++            int index = 0;
++
++            while (index < input.Length)
++            {
++                int length = Math.Min(input.Length - index, maxLength);
++                string subString = input.Substring(index, length);
++
++                sb.Append(Uri.EscapeDataString(subString));
++                index += subString.Length;
++            }
++
++            return sb.ToString();
++        }
++
++        /// <summary>
++        /// Sanitize filename by removing the path
++        /// </summary>
++        /// <param name="filename">Filename</param>
++        /// <returns>Filename</returns>
++        public static string SanitizeFilename(string filename)
++        {
++            Match match = Regex.Match(filename, @".*[/\\](.*)$");
++
++            if (match.Success)
++            {
++                return match.Groups[1].Value;
++            }
++            else
++            {
++                return filename;
++            }
++        }
++    }
++}
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiException.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiException.cs
+new file mode 100644
+index 00000000000..b19e853fcb5
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiException.cs
+@@ -0,0 +1,72 @@
++/* 
++ * Swagger Petstore  ' \" =end
++ *
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ *
++ * OpenAPI spec version: 1.0.0  ' \" =end
++ * Contact: apiteam@swagger.io  ' \" =end
++ * Generated by: https://github.com/swagger-api/swagger-codegen.git
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++using System;
++
++namespace IO.Swagger.Client
++{
++    /// <summary>
++    /// API Exception
++    /// </summary>
++    public class ApiException : Exception
++    {
++        /// <summary>
++        /// Gets or sets the error code (HTTP status code)
++        /// </summary>
++        /// <value>The error code (HTTP status code).</value>
++        public int ErrorCode { get; set; }
++
++        /// <summary>
++        /// Gets or sets the error content (body json object)
++        /// </summary>
++        /// <value>The error content (Http response body).</value>
++        public dynamic ErrorContent { get; private set; }
++
++        /// <summary>
++        /// Initializes a new instance of the <see cref="ApiException"/> class.
++        /// </summary>
++        public ApiException() {}
++
++        /// <summary>
++        /// Initializes a new instance of the <see cref="ApiException"/> class.
++        /// </summary>
++        /// <param name="errorCode">HTTP status code.</param>
++        /// <param name="message">Error message.</param>
++        public ApiException(int errorCode, string message) : base(message)
++        {
++            this.ErrorCode = errorCode;
++        }
++
++        /// <summary>
++        /// Initializes a new instance of the <see cref="ApiException"/> class.
++        /// </summary>
++        /// <param name="errorCode">HTTP status code.</param>
++        /// <param name="message">Error message.</param>
++        /// <param name="errorContent">Error content.</param>
++        public ApiException(int errorCode, string message, dynamic errorContent = null) : base(message)
++        {
++            this.ErrorCode = errorCode;
++            this.ErrorContent = errorContent;
++        }
++    }
++
++}
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiResponse.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiResponse.cs
+new file mode 100644
+index 00000000000..aae1f964a20
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ApiResponse.cs
+@@ -0,0 +1,66 @@
++/* 
++ * Swagger Petstore  ' \" =end
++ *
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ *
++ * OpenAPI spec version: 1.0.0  ' \" =end
++ * Contact: apiteam@swagger.io  ' \" =end
++ * Generated by: https://github.com/swagger-api/swagger-codegen.git
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++using System;
++using System.Collections.Generic;
++
++namespace IO.Swagger.Client
++{
++    /// <summary>
++    /// API Response
++    /// </summary>
++    public class ApiResponse<T>
++    {
++        /// <summary>
++        /// Gets or sets the status code (HTTP status code)
++        /// </summary>
++        /// <value>The status code.</value>
++        public int StatusCode { get; private set; }
++
++        /// <summary>
++        /// Gets or sets the HTTP headers
++        /// </summary>
++        /// <value>HTTP headers</value>
++        public IDictionary<string, string> Headers { get; private set; }
++
++        /// <summary>
++        /// Gets or sets the data (parsed HTTP body)
++        /// </summary>
++        /// <value>The data.</value>
++        public T Data { get; private set; }
++
++        /// <summary>
++        /// Initializes a new instance of the <see cref="ApiResponse&lt;T&gt;" /> class.
++        /// </summary>
++        /// <param name="statusCode">HTTP status code.</param>
++        /// <param name="headers">HTTP headers.</param>
++        /// <param name="data">Data (parsed HTTP body)</param>
++        public ApiResponse(int statusCode, IDictionary<string, string> headers, T data)
++        {
++            this.StatusCode= statusCode;
++            this.Headers = headers;
++            this.Data = data;
++        }
++
++    }
++
++}
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/Configuration.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/Configuration.cs
+new file mode 100644
+index 00000000000..53144da2bd1
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/Configuration.cs
+@@ -0,0 +1,317 @@
++/* 
++ * Swagger Petstore  ' \" =end
++ *
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ *
++ * OpenAPI spec version: 1.0.0  ' \" =end
++ * Contact: apiteam@swagger.io  ' \" =end
++ * Generated by: https://github.com/swagger-api/swagger-codegen.git
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++using System;
++using System.Reflection;
++using System.Collections.Generic;
++using System.IO;
++using System.Linq;
++using System.Text;
++
++namespace IO.Swagger.Client
++{
++    /// <summary>
++    /// Represents a set of configuration settings
++    /// </summary>
++    public class Configuration
++    {
++        /// <summary>
++        /// Initializes a new instance of the Configuration class with different settings
++        /// </summary>
++        /// <param name="apiClient">Api client</param>
++        /// <param name="defaultHeader">Dictionary of default HTTP header</param>
++        /// <param name="username">Username</param>
++        /// <param name="password">Password</param>
++        /// <param name="accessToken">accessToken</param>
++        /// <param name="apiKey">Dictionary of API key</param>
++        /// <param name="apiKeyPrefix">Dictionary of API key prefix</param>
++        /// <param name="tempFolderPath">Temp folder path</param>
++        /// <param name="dateTimeFormat">DateTime format string</param>
++        /// <param name="timeout">HTTP connection timeout (in milliseconds)</param>
++        /// <param name="userAgent">HTTP user agent</param>
++        public Configuration(ApiClient apiClient = null,
++                             Dictionary<String, String> defaultHeader = null,
++                             string username = null,
++                             string password = null,
++                             string accessToken = null,
++                             Dictionary<String, String> apiKey = null,
++                             Dictionary<String, String> apiKeyPrefix = null,
++                             string tempFolderPath = null,
++                             string dateTimeFormat = null,
++                             int timeout = 100000,
++                             string userAgent = "Swagger-Codegen/1.0.0/csharp"
++                            )
++        {
++            setApiClientUsingDefault(apiClient);
++
++            Username = username;
++            Password = password;
++            AccessToken = accessToken;
++            UserAgent = userAgent;
++
++            if (defaultHeader != null)
++                DefaultHeader = defaultHeader;
++            if (apiKey != null)
++                ApiKey = apiKey;
++            if (apiKeyPrefix != null)
++                ApiKeyPrefix = apiKeyPrefix;
++
++            TempFolderPath = tempFolderPath;
++            DateTimeFormat = dateTimeFormat;
++            Timeout = timeout;
++        }
++
++        /// <summary>
++        /// Initializes a new instance of the Configuration class.
++        /// </summary>
++        /// <param name="apiClient">Api client.</param>
++        public Configuration(ApiClient apiClient)
++        {
++            setApiClientUsingDefault(apiClient);
++        }
++
++        /// <summary>
++        /// Version of the package.
++        /// </summary>
++        /// <value>Version of the package.</value>
++        public const string Version = "1.0.0";
++
++        /// <summary>
++        /// Gets or sets the default Configuration.
++        /// </summary>
++        /// <value>Configuration.</value>
++        public static Configuration Default = new Configuration();
++
++        /// <summary>
++        /// Default creation of exceptions for a given method name and response object
++        /// </summary>
++        public static readonly ExceptionFactory DefaultExceptionFactory = (methodName, response) =>
++        {
++            int status = (int) response.StatusCode;
++            if (status >= 400) return new ApiException(status, String.Format("Error calling {0}: {1}", methodName, response.Content), response.Content);
++            if (status == 0) return new ApiException(status, String.Format("Error calling {0}: {1}", methodName, response.ErrorMessage), response.ErrorMessage);
++            return null;
++        };
++
++        /// <summary>
++        /// Gets or sets the HTTP timeout (milliseconds) of ApiClient. Default to 100000 milliseconds.
++        /// </summary>
++        /// <value>Timeout.</value>
++        public int Timeout
++        {
++            get { return ApiClient.RestClient.Timeout; }
++
++            set
++            {
++                if (ApiClient != null)
++                    ApiClient.RestClient.Timeout = value;
++            }
++        }
++
++        /// <summary>
++        /// Gets or sets the default API client for making HTTP calls.
++        /// </summary>
++        /// <value>The API client.</value>
++        public ApiClient ApiClient;
++
++        /// <summary>
++        /// Set the ApiClient using Default or ApiClient instance.
++        /// </summary>
++        /// <param name="apiClient">An instance of ApiClient.</param>
++        /// <returns></returns>
++        public void setApiClientUsingDefault (ApiClient apiClient = null)
++        {
++            if (apiClient == null)
++            {
++                if (Default != null && Default.ApiClient == null)
++                    Default.ApiClient = new ApiClient();
++
++                ApiClient = Default != null ? Default.ApiClient : new ApiClient();
++            }
++            else
++            {
++                if (Default != null && Default.ApiClient == null)
++                    Default.ApiClient = apiClient;
++
++                ApiClient = apiClient;
++            }
++        }
++
++        private Dictionary<String, String> _defaultHeaderMap = new Dictionary<String, String>();
++
++        /// <summary>
++        /// Gets or sets the default header.
++        /// </summary>
++        public Dictionary<String, String> DefaultHeader
++        {
++            get { return _defaultHeaderMap; }
++
++            set
++            {
++                _defaultHeaderMap = value;
++            }
++        }
++
++        /// <summary>
++        /// Add default header.
++        /// </summary>
++        /// <param name="key">Header field name.</param>
++        /// <param name="value">Header field value.</param>
++        /// <returns></returns>
++        public void AddDefaultHeader(string key, string value)
++        {
++            _defaultHeaderMap.Add(key, value);
++        }
++
++        /// <summary>
++        /// Gets or sets the HTTP user agent.
++        /// </summary>
++        /// <value>Http user agent.</value>
++        public String UserAgent { get; set; }
++
++        /// <summary>
++        /// Gets or sets the username (HTTP basic authentication).
++        /// </summary>
++        /// <value>The username.</value>
++        public String Username { get; set; }
++
++        /// <summary>
++        /// Gets or sets the password (HTTP basic authentication).
++        /// </summary>
++        /// <value>The password.</value>
++        public String Password { get; set; }
++
++        /// <summary>
++        /// Gets or sets the access token for OAuth2 authentication.
++        /// </summary>
++        /// <value>The access token.</value>
++        public String AccessToken { get; set; }
++
++        /// <summary>
++        /// Gets or sets the API key based on the authentication name.
++        /// </summary>
++        /// <value>The API key.</value>
++        public Dictionary<String, String> ApiKey = new Dictionary<String, String>();
++
++        /// <summary>
++        /// Gets or sets the prefix (e.g. Token) of the API key based on the authentication name.
++        /// </summary>
++        /// <value>The prefix of the API key.</value>
++        public Dictionary<String, String> ApiKeyPrefix = new Dictionary<String, String>();
++
++        /// <summary>
++        /// Get the API key with prefix.
++        /// </summary>
++        /// <param name="apiKeyIdentifier">API key identifier (authentication scheme).</param>
++        /// <returns>API key with prefix.</returns>
++        public string GetApiKeyWithPrefix (string apiKeyIdentifier)
++        {
++            var apiKeyValue = "";
++            ApiKey.TryGetValue (apiKeyIdentifier, out apiKeyValue);
++            var apiKeyPrefix = "";
++            if (ApiKeyPrefix.TryGetValue (apiKeyIdentifier, out apiKeyPrefix))
++                return apiKeyPrefix + " " + apiKeyValue;
++            else
++                return apiKeyValue;
++        }
++
++        private string _tempFolderPath = Path.GetTempPath();
++
++        /// <summary>
++        /// Gets or sets the temporary folder path to store the files downloaded from the server.
++        /// </summary>
++        /// <value>Folder path.</value>
++        public String TempFolderPath
++        {
++            get { return _tempFolderPath; }
++
++            set
++            {
++                if (String.IsNullOrEmpty(value))
++                {
++                    _tempFolderPath = value;
++                    return;
++                }
++
++                // create the directory if it does not exist
++                if (!Directory.Exists(value))
++                    Directory.CreateDirectory(value);
++
++                // check if the path contains directory separator at the end
++                if (value[value.Length - 1] == Path.DirectorySeparatorChar)
++                    _tempFolderPath = value;
++                else
++                    _tempFolderPath = value  + Path.DirectorySeparatorChar;
++            }
++        }
++
++        private const string ISO8601_DATETIME_FORMAT = "o";
++
++        private string _dateTimeFormat = ISO8601_DATETIME_FORMAT;
++
++        /// <summary>
++        /// Gets or sets the the date time format used when serializing in the ApiClient
++        /// By default, it's set to ISO 8601 - "o", for others see:
++        /// https://msdn.microsoft.com/en-us/library/az4se3k1(v=vs.110).aspx
++        /// and https://msdn.microsoft.com/en-us/library/8kb3ddd4(v=vs.110).aspx
++        /// No validation is done to ensure that the string you're providing is valid
++        /// </summary>
++        /// <value>The DateTimeFormat string</value>
++        public String DateTimeFormat
++        {
++            get
++            {
++                return _dateTimeFormat;
++            }
++            set
++            {
++                if (string.IsNullOrEmpty(value))
++                {
++                    // Never allow a blank or null string, go back to the default
++                    _dateTimeFormat = ISO8601_DATETIME_FORMAT;
++                    return;
++                }
++
++                // Caution, no validation when you choose date time format other than ISO 8601
++                // Take a look at the above links
++                _dateTimeFormat = value;
++            }
++        }
++
++        /// <summary>
++        /// Returns a string with essential information for debugging.
++        /// </summary>
++        public static String ToDebugReport()
++        {
++            String report = "C# SDK (IO.Swagger) Debug Report:\n";
++            report += "    OS: " + Environment.OSVersion + "\n";
++            report += "    .NET Framework Version: " + Assembly
++                     .GetExecutingAssembly()
++                     .GetReferencedAssemblies()
++                     .Where(x => x.Name == "System.Core").First().Version.ToString()  + "\n";
++            report += "    Version of the API: 1.0.0  ' \" =end\n";
++            report += "    SDK Package Version: 1.0.0\n";
++
++            return report;
++        }
++    }
++}
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ExceptionFactory.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ExceptionFactory.cs
+new file mode 100644
+index 00000000000..3b848056221
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/ExceptionFactory.cs
+@@ -0,0 +1,36 @@
++/* 
++ * Swagger Petstore  ' \" =end
++ *
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ *
++ * OpenAPI spec version: 1.0.0  ' \" =end
++ * Contact: apiteam@swagger.io  ' \" =end
++ * Generated by: https://github.com/swagger-api/swagger-codegen.git
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++
++using System;
++using RestSharp;
++
++namespace IO.Swagger.Client
++{
++    /// <summary>
++    /// A delegate to ExceptionFactory method
++    /// </summary>
++    /// <param name="methodName">Method name</param>
++    /// <param name="response">Response</param>
++    /// <returns>Exceptions</returns>    
++    public delegate Exception ExceptionFactory(string methodName, IRestResponse response);
++}
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/IApiAccessor.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/IApiAccessor.cs
+new file mode 100644
+index 00000000000..cacade5d15e
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Client/IApiAccessor.cs
+@@ -0,0 +1,54 @@
++/* 
++ * Swagger Petstore  ' \" =end
++ *
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ *
++ * OpenAPI spec version: 1.0.0  ' \" =end
++ * Contact: apiteam@swagger.io  ' \" =end
++ * Generated by: https://github.com/swagger-api/swagger-codegen.git
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++
++using System;
++using System.Collections.Generic;
++using System.Collections.ObjectModel;
++using System.Linq;
++using RestSharp;
++
++namespace IO.Swagger.Client
++{
++    /// <summary>
++    /// Represents configuration aspects required to interact with the API endpoints.
++    /// </summary>
++    public interface IApiAccessor
++    {
++        /// <summary>
++        /// Gets or sets the configuration object
++        /// </summary>
++        /// <value>An instance of the Configuration</value>
++        Configuration Configuration {get; set;}
++
++        /// <summary>
++        /// Gets the base path of the API client.
++        /// </summary>
++        /// <value>The base path</value>
++        String GetBasePath();
++        
++        /// <summary>
++        /// Provides a factory method hook for the creation of exceptions.
++        /// </summary>
++        ExceptionFactory ExceptionFactory { get; set; }
++    }
++}
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/IO.Swagger.csproj b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/IO.Swagger.csproj
+new file mode 100644
+index 00000000000..4bc928f6ded
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/IO.Swagger.csproj
+@@ -0,0 +1,82 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!--
++Swagger Petstore  ' \" =end
++
++This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++
++OpenAPI spec version: 1.0.0  &#39; \&quot; &#x3D;end
++Contact: apiteam@swagger.io  ' \" =end
++Generated by: https://github.com/swagger-api/swagger-codegen.git
++
++Licensed under the Apache License, Version 2.0 (the "License");
++you may not use this file except in compliance with the License.
++You may obtain a copy of the License at
++
++     http://www.apache.org/licenses/LICENSE-2.0
++
++Unless required by applicable law or agreed to in writing, software
++distributed under the License is distributed on an "AS IS" BASIS,
++WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++See the License for the specific language governing permissions and
++limitations under the License.
++-->
++<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <PropertyGroup>
++    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
++    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
++    <ProjectGuid>{29125490-71E4-47ED-B0D7-34505F58103C}</ProjectGuid>
++    <OutputType>Library</OutputType>
++    <AppDesignerFolder>Properties</AppDesignerFolder>
++    <RootNamespace>Swagger Library</RootNamespace>
++    <AssemblyName>Swagger Library</AssemblyName>
++    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
++    <FileAlignment>512</FileAlignment>
++  </PropertyGroup>
++  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
++    <DebugSymbols>true</DebugSymbols>
++    <DebugType>full</DebugType>
++    <Optimize>false</Optimize>
++    <OutputPath>bin\Debug\</OutputPath>
++    <DefineConstants>DEBUG;TRACE</DefineConstants>
++    <ErrorReport>prompt</ErrorReport>
++    <WarningLevel>4</WarningLevel>
++  </PropertyGroup>
++  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
++    <DebugType>pdbonly</DebugType>
++    <Optimize>true</Optimize>
++    <OutputPath>bin\Release\</OutputPath>
++    <DefineConstants>TRACE</DefineConstants>
++    <ErrorReport>prompt</ErrorReport>
++    <WarningLevel>4</WarningLevel>
++  </PropertyGroup>
++  <ItemGroup>
++    <Reference Include="System" />
++    <Reference Include="System.Core" />
++    <Reference Include="System.Xml.Linq" />
++    <Reference Include="System.Data.DataSetExtensions" />
++    <Reference Include="Microsoft.CSharp" />
++    <Reference Include="System.Data" />
++    <Reference Include="System.Runtime.Serialization" />
++    <Reference Include="System.Xml" />
++    <Reference Include="Newtonsoft.Json">
++      <HintPath Condition="Exists('$(SolutionDir)\packages')">$(SolutionDir)\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
++      <HintPath Condition="Exists('..\packages')">..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
++      <HintPath Condition="Exists('..\..\packages')">..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
++      <HintPath Condition="Exists('..\..\vendor')">..\..\vendor\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
++    </Reference>
++    <Reference Include="RestSharp">
++        <HintPath Condition="Exists('$(SolutionDir)\packages')">$(SolutionDir)\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
++        <HintPath Condition="Exists('..\packages')">..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
++        <HintPath Condition="Exists('..\..\packages')">..\..\packages\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
++      <HintPath Condition="Exists('..\..\vendor')">..\..\vendor\RestSharp.105.1.0\lib\net45\RestSharp.dll</HintPath>
++    </Reference>
++  </ItemGroup>
++  <ItemGroup>
++    <Compile Include="**\*.cs"/>
++  </ItemGroup>
++  <ItemGroup>
++      <None Include="packages.config" />
++  </ItemGroup>
++  <Import Project="$(MsBuildToolsPath)\Microsoft.CSharp.targets" />
++</Project>
++
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Model/ModelReturn.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Model/ModelReturn.cs
+new file mode 100644
+index 00000000000..007a7939816
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Model/ModelReturn.cs
+@@ -0,0 +1,127 @@
++/* 
++ * Swagger Petstore  ' \" =end
++ *
++ * This spec is mainly for testing Petstore server and contains fake endpoints, models. Please do not use this for any other purpose. Special characters: \" \\   ' \" =end
++ *
++ * OpenAPI spec version: 1.0.0  ' \" =end
++ * Contact: apiteam@swagger.io  ' \" =end
++ * Generated by: https://github.com/swagger-api/swagger-codegen.git
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++using System;
++using System.Linq;
++using System.IO;
++using System.Text;
++using System.Collections;
++using System.Collections.Generic;
++using System.Collections.ObjectModel;
++using System.Runtime.Serialization;
++using Newtonsoft.Json;
++using Newtonsoft.Json.Converters;
++
++namespace IO.Swagger.Model
++{
++    /// <summary>
++    /// Model for testing reserved words   &#39; \&quot; &#x3D;end
++    /// </summary>
++    [DataContract]
++    public partial class ModelReturn :  IEquatable<ModelReturn>
++    {
++        /// <summary>
++        /// Initializes a new instance of the <see cref="ModelReturn" /> class.
++        /// </summary>
++        /// <param name="_Return">property description   &#39; \&quot; &#x3D;end.</param>
++        public ModelReturn(int? _Return = null)
++        {
++            this._Return = _Return;
++        }
++        
++        /// <summary>
++        /// property description   &#39; \&quot; &#x3D;end
++        /// </summary>
++        /// <value>property description   &#39; \&quot; &#x3D;end</value>
++        [DataMember(Name="return", EmitDefaultValue=false)]
++        public int? _Return { get; set; }
++        /// <summary>
++        /// Returns the string presentation of the object
++        /// </summary>
++        /// <returns>String presentation of the object</returns>
++        public override string ToString()
++        {
++            var sb = new StringBuilder();
++            sb.Append("class ModelReturn {\n");
++            sb.Append("  _Return: ").Append(_Return).Append("\n");
++            sb.Append("}\n");
++            return sb.ToString();
++        }
++  
++        /// <summary>
++        /// Returns the JSON string presentation of the object
++        /// </summary>
++        /// <returns>JSON string presentation of the object</returns>
++        public string ToJson()
++        {
++            return JsonConvert.SerializeObject(this, Formatting.Indented);
++        }
++
++        /// <summary>
++        /// Returns true if objects are equal
++        /// </summary>
++        /// <param name="obj">Object to be compared</param>
++        /// <returns>Boolean</returns>
++        public override bool Equals(object obj)
++        {
++            // credit: http://stackoverflow.com/a/10454552/677735
++            return this.Equals(obj as ModelReturn);
++        }
++
++        /// <summary>
++        /// Returns true if ModelReturn instances are equal
++        /// </summary>
++        /// <param name="other">Instance of ModelReturn to be compared</param>
++        /// <returns>Boolean</returns>
++        public bool Equals(ModelReturn other)
++        {
++            // credit: http://stackoverflow.com/a/10454552/677735
++            if (other == null)
++                return false;
++
++            return 
++                (
++                    this._Return == other._Return ||
++                    this._Return != null &&
++                    this._Return.Equals(other._Return)
++                );
++        }
++
++        /// <summary>
++        /// Gets the hash code
++        /// </summary>
++        /// <returns>Hash code</returns>
++        public override int GetHashCode()
++        {
++            // credit: http://stackoverflow.com/a/263416/677735
++            unchecked // Overflow is fine, just wrap
++            {
++                int hash = 41;
++                // Suitable nullity checks etc, of course :)
++                if (this._Return != null)
++                    hash = hash * 59 + this._Return.GetHashCode();
++                return hash;
++            }
++        }
++    }
++
++}
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Properties/AssemblyInfo.cs b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Properties/AssemblyInfo.cs
+new file mode 100644
+index 00000000000..f3b9f7d1d14
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/Properties/AssemblyInfo.cs
+@@ -0,0 +1,32 @@
++using System.Reflection;
++using System.Runtime.InteropServices;
++
++// General Information about an assembly is controlled through the following
++// set of attributes. Change these attribute values to modify the information
++// associated with an assembly.
++[assembly: AssemblyTitle("Swagger Library")]
++[assembly: AssemblyDescription("A library generated from a Swagger doc")]
++[assembly: AssemblyConfiguration("")]
++[assembly: AssemblyCompany("Swagger")]
++[assembly: AssemblyProduct("SwaggerLibrary")]
++[assembly: AssemblyCopyright("No Copyright")]
++[assembly: AssemblyTrademark("")]
++[assembly: AssemblyCulture("")]
++
++// Setting ComVisible to false makes the types in this assembly not visible
++// to COM components.  If you need to access a type in this assembly from
++// COM, set the ComVisible attribute to true on that type.
++[assembly: ComVisible(false)]
++
++// Version information for an assembly consists of the following four values:
++//
++//      Major Version
++//      Minor Version
++//      Build Number
++//      Revision
++//
++// You can specify all the values or you can default the Build and Revision Numbers
++// by using the '*' as shown below:
++// [assembly: AssemblyVersion("1.0.*")]
++[assembly: AssemblyVersion("1.0.0")]
++[assembly: AssemblyFileVersion("1.0.0")]
+diff --git a/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/packages.config b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/packages.config
+new file mode 100644
+index 00000000000..80f617d6d9f
+--- /dev/null
++++ b/samples/client/petstore-security-test/csharp/SwaggerClient/src/IO.Swagger/packages.config
+@@ -0,0 +1,5 @@
++<?xml version="1.0" encoding="utf-8"?>
++<packages>
++  <package id="RestSharp" version="105.1.0" targetFramework="net45" developmentDependency="true" />
++  <package id="Newtonsoft.Json" version="8.0.3" targetFramework="net45" developmentDependency="true" />
++</packages>

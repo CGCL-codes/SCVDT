@@ -1,0 +1,71 @@
+diff --git a/enterprise/security/src/main/java/org/neo4j/server/security/enterprise/auth/LdapRealm.java b/enterprise/security/src/main/java/org/neo4j/server/security/enterprise/auth/LdapRealm.java
+index 248d43e0af0e..708b9e6bc35b 100644
+--- a/enterprise/security/src/main/java/org/neo4j/server/security/enterprise/auth/LdapRealm.java
++++ b/enterprise/security/src/main/java/org/neo4j/server/security/enterprise/auth/LdapRealm.java
+@@ -232,6 +232,9 @@ private LdapContext getLdapContextUsingStartTls( LdapContextFactory ldapContextF
+             ctx.addToEnvironment( Context.SECURITY_PRINCIPAL, principal );
+             ctx.addToEnvironment( Context.SECURITY_CREDENTIALS, credentials );
+ 
++            // do a lookup of the user to trigger authentication
++            ctx.lookup( principal.toString() );
++
+             return ctx;
+         }
+         catch ( IOException e )
+diff --git a/enterprise/security/src/test/java/org/neo4j/server/security/enterprise/auth/integration/bolt/LdapAuthIT.java b/enterprise/security/src/test/java/org/neo4j/server/security/enterprise/auth/integration/bolt/LdapAuthIT.java
+index 6d3ecd56e126..d78596a0aba9 100644
+--- a/enterprise/security/src/test/java/org/neo4j/server/security/enterprise/auth/integration/bolt/LdapAuthIT.java
++++ b/enterprise/security/src/test/java/org/neo4j/server/security/enterprise/auth/integration/bolt/LdapAuthIT.java
+@@ -717,6 +717,25 @@ public void shouldBeAbleToLoginAndAuthorizeReaderWithLdapOnlyUsingStartTls() thr
+         }
+     }
+ 
++    @Test
++    public void shouldFailLoginWrongPasswordWithLdapOnlyUsingStartTls() throws Throwable
++    {
++        getLdapServer().setConfidentialityRequired( true );
++
++        try ( EmbeddedTestCertificates ignore = new EmbeddedTestCertificates() )
++        {
++            // When
++            restartNeo4jServerWithOverriddenSettings( ldapOnlyAuthSettings.andThen( settings ->
++            {
++                settings.put( SecuritySettings.ldap_server, "localhost:10389" );
++                settings.put( SecuritySettings.ldap_use_starttls, "true" );
++            } ) );
++
++            // Then
++            assertAuthFail( "neo", "wrong" );
++        }
++    }
++
+     @Test
+     public void shouldBeAbleToLoginAndAuthorizeReaderWithLdapUserContextUsingStartTls() throws Throwable
+     {
+@@ -737,6 +756,26 @@ public void shouldBeAbleToLoginAndAuthorizeReaderWithLdapUserContextUsingStartTl
+         }
+     }
+ 
++    @Test
++    public void shouldFailLoginWrongPasswordWithLdapUserContextUsingStartTls() throws Throwable
++    {
++        getLdapServer().setConfidentialityRequired( true );
++
++        try ( EmbeddedTestCertificates ignore = new EmbeddedTestCertificates() )
++        {
++            // When
++            restartNeo4jServerWithOverriddenSettings( ldapOnlyAuthSettings.andThen( settings ->
++            {
++                settings.put( SecuritySettings.ldap_authorization_use_system_account, "false" );
++                settings.put( SecuritySettings.ldap_server, "localhost:10389" );
++                settings.put( SecuritySettings.ldap_use_starttls, "true" );
++            } ) );
++
++            // Then
++            assertAuthFail( "neo", "wrong" );
++        }
++    }
++
+     //------------------------------------------------------------------
+     // Active Directory tests on EC2
+     // NOTE: These rely on an external server and are not executed by automated testing

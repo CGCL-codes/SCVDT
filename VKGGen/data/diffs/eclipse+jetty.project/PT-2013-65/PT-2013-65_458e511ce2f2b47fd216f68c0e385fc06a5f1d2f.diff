@@ -1,0 +1,35 @@
+diff --git a/jetty-util/src/main/java/org/eclipse/jetty/util/resource/FileResource.java b/jetty-util/src/main/java/org/eclipse/jetty/util/resource/FileResource.java
+index d2f25028757..a3440a2286e 100644
+--- a/jetty-util/src/main/java/org/eclipse/jetty/util/resource/FileResource.java
++++ b/jetty-util/src/main/java/org/eclipse/jetty/util/resource/FileResource.java
+@@ -32,6 +32,8 @@
+ import java.nio.file.StandardOpenOption;
+ import java.security.Permission;
+ 
++import javax.management.RuntimeErrorException;
++
+ import org.eclipse.jetty.util.IO;
+ import org.eclipse.jetty.util.URIUtil;
+ import org.eclipse.jetty.util.log.Log;
+@@ -148,9 +150,19 @@ private static URL checkAlias(File file)
+         }
+         catch(IOException e)
+         {
+-            LOG.warn(e);
++            LOG.warn("bad alias for {}: {}",file,e.toString());
++            LOG.debug(e);
++            try
++            {
++                return new URL("http://eclipse.org/bad/canonical/alias");
++            }
++            catch(Exception e2)
++            {
++                LOG.ignore(e2);
++                throw new RuntimeException(e);
++            }
+         }
+-          
++
+         return null;
+     }
+     

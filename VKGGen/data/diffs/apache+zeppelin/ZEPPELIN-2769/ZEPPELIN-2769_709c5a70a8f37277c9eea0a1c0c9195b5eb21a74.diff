@@ -1,0 +1,22 @@
+diff --git a/zeppelin-server/src/main/java/org/apache/zeppelin/rest/GetUserList.java b/zeppelin-server/src/main/java/org/apache/zeppelin/rest/GetUserList.java
+index c0270dd98d1..458d5bd8f7f 100644
+--- a/zeppelin-server/src/main/java/org/apache/zeppelin/rest/GetUserList.java
++++ b/zeppelin-server/src/main/java/org/apache/zeppelin/rest/GetUserList.java
+@@ -231,7 +231,7 @@
+         return userlist;
+       }
+ 
+-      userquery = "select " + username + " from " + tablename;
++      userquery = "select ? from ?";
+ 
+     } catch (IllegalAccessException e) {
+       LOG.error("Error while accessing dataSource for JDBC Realm", e);
+@@ -241,6 +241,8 @@
+     try {
+       Connection con = dataSource.getConnection();
+       ps = con.prepareStatement(userquery);
++      ps.setString(1, username);
++      ps.setString(2, tablename);
+       rs = ps.executeQuery();
+       while (rs.next()) {
+         userlist.add(rs.getString(1).trim());

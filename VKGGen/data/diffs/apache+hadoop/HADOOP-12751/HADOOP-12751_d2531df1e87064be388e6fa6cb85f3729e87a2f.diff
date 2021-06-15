@@ -1,0 +1,151 @@
+diff --git a/hadoop-common-project/hadoop-auth/src/main/java/org/apache/hadoop/security/authentication/util/KerberosName.java b/hadoop-common-project/hadoop-auth/src/main/java/org/apache/hadoop/security/authentication/util/KerberosName.java
+index 0bc1109e512d..645fbc6fd0dc 100644
+--- a/hadoop-common-project/hadoop-auth/src/main/java/org/apache/hadoop/security/authentication/util/KerberosName.java
++++ b/hadoop-common-project/hadoop-auth/src/main/java/org/apache/hadoop/security/authentication/util/KerberosName.java
+@@ -323,8 +323,8 @@ String apply(String[] params) throws IOException {
+         }
+       }
+       if (result != null && nonSimplePattern.matcher(result).find()) {
+-        throw new NoMatchingRule("Non-simple name " + result +
+-                                 " after auth_to_local rule " + this);
++        LOG.info("Non-simple name {} after auth_to_local rule {}",
++            result, this);
+       }
+       if (toLowerCase && result != null) {
+         result = result.toLowerCase(Locale.ENGLISH);
+@@ -377,7 +377,7 @@ String apply(String[] params) throws IOException {
+   /**
+    * Get the translation of the principal name into an operating system
+    * user name.
+-   * @return the short name
++   * @return the user name
+    * @throws IOException throws if something is wrong with the rules
+    */
+   public String getShortName() throws IOException {
+@@ -397,7 +397,8 @@ public String getShortName() throws IOException {
+         return result;
+       }
+     }
+-    throw new NoMatchingRule("No rules applied to " + toString());
++    LOG.info("No auth_to_local rules applied to {}", this);
++    return toString();
+   }
+ 
+   /**
+diff --git a/hadoop-common-project/hadoop-auth/src/test/java/org/apache/hadoop/security/authentication/server/TestKerberosAuthenticationHandler.java b/hadoop-common-project/hadoop-auth/src/test/java/org/apache/hadoop/security/authentication/server/TestKerberosAuthenticationHandler.java
+index 408563f29934..e3444ef4b92e 100644
+--- a/hadoop-common-project/hadoop-auth/src/test/java/org/apache/hadoop/security/authentication/server/TestKerberosAuthenticationHandler.java
++++ b/hadoop-common-project/hadoop-auth/src/test/java/org/apache/hadoop/security/authentication/server/TestKerberosAuthenticationHandler.java
+@@ -109,12 +109,7 @@ public void testNameRules() throws Exception {
+     kn = new KerberosName("bar@BAR");
+     Assert.assertEquals("bar", kn.getShortName());
+     kn = new KerberosName("bar@FOO");
+-    try {
+-      kn.getShortName();
+-      Assert.fail();
+-    }
+-    catch (Exception ex) {      
+-    }
++    Assert.assertEquals("bar@FOO", kn.getShortName());
+   }
+ 
+   @Test(timeout=60000)
+diff --git a/hadoop-common-project/hadoop-auth/src/test/java/org/apache/hadoop/security/authentication/util/TestKerberosName.java b/hadoop-common-project/hadoop-auth/src/test/java/org/apache/hadoop/security/authentication/util/TestKerberosName.java
+index 354917efe208..f85b3e11d5a5 100644
+--- a/hadoop-common-project/hadoop-auth/src/test/java/org/apache/hadoop/security/authentication/util/TestKerberosName.java
++++ b/hadoop-common-project/hadoop-auth/src/test/java/org/apache/hadoop/security/authentication/util/TestKerberosName.java
+@@ -72,23 +72,14 @@ private void checkBadName(String name) {
+     }
+   }
+ 
+-  private void checkBadTranslation(String from) {
+-    System.out.println("Checking bad translation for " + from);
+-    KerberosName nm = new KerberosName(from);
+-    try {
+-      nm.getShortName();
+-      Assert.fail("didn't get exception for " + from);
+-    } catch (IOException ie) {
+-      // PASS
+-    }
+-  }
+-
+   @Test
+   public void testAntiPatterns() throws Exception {
+     checkBadName("owen/owen/owen@FOO.COM");
+     checkBadName("owen@foo/bar.com");
+-    checkBadTranslation("foo@ACME.COM");
+-    checkBadTranslation("root/joe@FOO.COM");
++
++    // no rules applied, these should pass
++    checkTranslation("foo@ACME.COM", "foo@ACME.COM");
++    checkTranslation("root/joe@FOO.COM", "root/joe@FOO.COM");
+   }
+ 
+   @Test
+diff --git a/hadoop-common-project/hadoop-common/CHANGES.txt b/hadoop-common-project/hadoop-common/CHANGES.txt
+index 1dc493e40425..6c39bd648ad5 100644
+--- a/hadoop-common-project/hadoop-common/CHANGES.txt
++++ b/hadoop-common-project/hadoop-common/CHANGES.txt
+@@ -28,6 +28,9 @@ Release 2.7.6 - UNRELEASED
+     HADOOP-14842. Hadoop 2.8.2 release build process get stuck due to java
+     issue. Contributed by Junping Du.
+ 
++    HADOOP-12751. While using kerberos Hadoop incorrectly assumes names with
++    '@' to be non-simple. (Bolke de Bruin via stevel).
++
+ Release 2.7.5 - 2017-12-14
+ 
+   INCOMPATIBLE CHANGES
+diff --git a/hadoop-common-project/hadoop-common/src/test/java/org/apache/hadoop/security/TestUserGroupInformation.java b/hadoop-common-project/hadoop-common/src/test/java/org/apache/hadoop/security/TestUserGroupInformation.java
+index 735f9a1f7d4c..ea91af304955 100644
+--- a/hadoop-common-project/hadoop-common/src/test/java/org/apache/hadoop/security/TestUserGroupInformation.java
++++ b/hadoop-common-project/hadoop-common/src/test/java/org/apache/hadoop/security/TestUserGroupInformation.java
+@@ -281,10 +281,15 @@ public void testConstructorWithRules() throws Exception {
+     UserGroupInformation.setConfiguration(conf);
+     testConstructorSuccess("user1", "user1");
+     testConstructorSuccess("user4@OTHER.REALM", "other-user4");
+-    // failure test
+-    testConstructorFailures("user2@DEFAULT.REALM");
+-    testConstructorFailures("user3/cron@DEFAULT.REALM");
+-    testConstructorFailures("user5/cron@OTHER.REALM");
++
++    // pass through test, no transformation
++    testConstructorSuccess("user2@DEFAULT.REALM", "user2@DEFAULT.REALM");
++    testConstructorSuccess("user3/cron@DEFAULT.REALM", "user3/cron@DEFAULT.REALM");
++    testConstructorSuccess("user5/cron@OTHER.REALM", "user5/cron@OTHER.REALM");
++
++    // failures
++    testConstructorFailures("user6@example.com@OTHER.REALM");
++    testConstructorFailures("user7@example.com@DEFAULT.REALM");
+     testConstructorFailures(null);
+     testConstructorFailures("");
+   }
+@@ -298,10 +303,13 @@ public void testConstructorWithKerberos() throws Exception {
+ 
+     testConstructorSuccess("user1", "user1");
+     testConstructorSuccess("user2@DEFAULT.REALM", "user2");
+-    testConstructorSuccess("user3/cron@DEFAULT.REALM", "user3");    
++    testConstructorSuccess("user3/cron@DEFAULT.REALM", "user3");
++
++    // no rules applied, local name remains the same
++    testConstructorSuccess("user4@OTHER.REALM", "user4@OTHER.REALM");
++    testConstructorSuccess("user5/cron@OTHER.REALM", "user5/cron@OTHER.REALM");
++
+     // failure test
+-    testConstructorFailures("user4@OTHER.REALM");
+-    testConstructorFailures("user5/cron@OTHER.REALM");
+     testConstructorFailures(null);
+     testConstructorFailures("");
+   }
+@@ -342,8 +350,9 @@ private void testConstructorFailures(String userName) {
+     } catch (IllegalArgumentException e) {
+       String expect = (userName == null || userName.isEmpty())
+           ? "Null user" : "Illegal principal name "+userName;
+-      assertTrue("Did not find "+ expect + " in " + e,
+-          e.toString().contains(expect));
++      String expect2 = "Malformed Kerberos name: "+userName;
++      assertTrue("Did not find "+ expect + " or " + expect2 + " in " + e,
++          e.toString().contains(expect) || e.toString().contains(expect2));
+     }
+   }
+ 

@@ -1,0 +1,103 @@
+diff --git a/documentation/dist/changelog.html b/documentation/dist/changelog.html
+index 3f600129e4..9c6ebc9565 100644
+--- a/documentation/dist/changelog.html
++++ b/documentation/dist/changelog.html
+@@ -188,6 +188,7 @@ <h3>Openfire New Features</h3>
+ 
+ <h3>Openfire Bug Fixes</h3>
+ <ul>
++<li>[<a href='http://www.igniterealtime.org/issues/browse/JM-1289'>JM-1289</a>] - <font color="red"><b>!</b></font> Fixed DoS attack that could bring the server down.</li>
+ <li>[<a href='http://www.igniterealtime.org/issues/browse/JM-1175'>JM-1175</a>] - Fixed double-byte characters problem. <b>(4 votes)</b></li>
+ <li>[<a href='http://www.igniterealtime.org/issues/browse/JM-1274'>JM-1274</a>] - Fixed sending of presence packets when using direct presences.</li>
+ <li>[<a href='http://www.igniterealtime.org/issues/browse/JM-1275'>JM-1275</a>] - Messages sent to bare JIDs were not considering directed presences.</li>
+diff --git a/src/java/org/jivesoftware/openfire/net/StalledSessionsFilter.java b/src/java/org/jivesoftware/openfire/net/StalledSessionsFilter.java
+new file mode 100644
+index 0000000000..197c0c1df0
+--- /dev/null
++++ b/src/java/org/jivesoftware/openfire/net/StalledSessionsFilter.java
+@@ -0,0 +1,50 @@
++/**
++ * $RCSfile: ConnectionManagerImpl.java,v $
++ * $Revision: $
++ * $Date: $
++ *
++ * Copyright (C) 2008 Jive Software. All rights reserved.
++ *
++ * This software is published under the terms of the GNU Public License (GPL),
++ * a copy of which is included in this distribution.
++ */
++
++package org.jivesoftware.openfire.net;
++
++import org.apache.mina.common.IoFilterAdapter;
++import org.apache.mina.common.IoSession;
++import org.jivesoftware.util.Log;
++import org.jivesoftware.util.JiveGlobals;
++
++import java.io.IOException;
++import java.util.Date;
++
++/**
++ * MINA filter that will close sessions that are failing to read outgoing traffic
++ * and whose outgoing queue is around 5MB. Use the system property <tt>session.stalled.cap</tt>
++ * to set the max number of bytes allowed in the outgoing queue of a session before considering
++ * it stalled.
++ *
++ * @author Gaston Dombiak
++ */
++public class StalledSessionsFilter extends IoFilterAdapter {
++    private static final int bytesCap = JiveGlobals.getIntProperty("session.stalled.cap", 5242880);
++
++    public void filterWrite(NextFilter nextFilter, IoSession session, WriteRequest writeRequest)
++            throws Exception {
++        // Get number of pending requests
++        int pendingBytes = session.getScheduledWriteBytes();
++        if (pendingBytes > bytesCap) {
++            // Get last time we were able to send something to the connected client
++            long writeTime = session.getLastWriteTime();
++            int pendingRequests = session.getScheduledWriteRequests();
++            Log.debug("About to kill session with pendingBytes: " + pendingBytes + " pendingWrites: " +
++                    pendingRequests + " lastWrite: " + new Date(writeTime) + "session: " + session);
++            // Close the session and throw an exception
++            session.close();
++            throw new IOException("Closing session that seems to be stalled. Preventing OOM");
++        }
++        // Call next filter (everything is fine)
++        super.filterWrite(nextFilter, session, writeRequest);
++    }
++}
+diff --git a/src/java/org/jivesoftware/openfire/spi/ConnectionManagerImpl.java b/src/java/org/jivesoftware/openfire/spi/ConnectionManagerImpl.java
+index e6f63a83e3..67d2d00ced 100644
+--- a/src/java/org/jivesoftware/openfire/spi/ConnectionManagerImpl.java
++++ b/src/java/org/jivesoftware/openfire/spi/ConnectionManagerImpl.java
+@@ -1,9 +1,9 @@
+ /**
+  * $RCSfile: ConnectionManagerImpl.java,v $
+- * $Revision: 3159 $
+- * $Date: 2005-12-04 22:56:40 -0300 (Sun, 04 Dec 2005) $
++ * $Revision: $
++ * $Date: $
+  *
+- * Copyright (C) 2007 Jive Software. All rights reserved.
++ * Copyright (C) 2008 Jive Software. All rights reserved.
+  *
+  * This software is published under the terms of the GNU Public License (GPL),
+  * a copy of which is included in this distribution.
+@@ -324,6 +324,8 @@ private void createClientListeners() {
+             socketAcceptor.getDefaultConfig().setThreadModel(threadModel);
+             // Add the XMPP codec filter
+             socketAcceptor.getFilterChain().addFirst("xmpp", new ProtocolCodecFilter(new XMPPCodecFactory()));
++            // Kill sessions whose outgoing queues keep growing and fail to send traffic
++            socketAcceptor.getFilterChain().addAfter("xmpp", "outCap", new StalledSessionsFilter());
+         }
+     }
+ 
+@@ -408,6 +410,8 @@ public Thread newThread( Runnable runnable )
+                 // Add the XMPP codec filter
+                 sslSocketAcceptor.getFilterChain().addFirst("xmpp", new ProtocolCodecFilter(new XMPPCodecFactory()));
+                 sslSocketAcceptor.getFilterChain().addFirst("threadModel", executorFilter);
++                // Kill sessions whose outgoing queues keep growing and fail to send traffic
++                sslSocketAcceptor.getFilterChain().addAfter("xmpp", "outCap", new StalledSessionsFilter());
+ 
+                 // Add the SSL filter now since sockets are "borned" encrypted in the old ssl method
+                 SSLContext sslContext = SSLContext.getInstance(algorithm);

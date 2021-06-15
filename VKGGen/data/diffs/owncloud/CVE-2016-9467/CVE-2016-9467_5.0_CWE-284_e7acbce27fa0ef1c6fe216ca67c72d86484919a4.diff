@@ -1,0 +1,113 @@
+From e7acbce27fa0ef1c6fe216ca67c72d86484919a4 Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Mon, 24 Oct 2016 14:30:49 +0200
+Subject: [PATCH] Exclude more invalid chars from files UI path
+
+Prevent newlines and zero byte chars to be used in files UI URL and
+redirect to root if one is detected.
+
+Added additional hardening in case the request fails with 400 or the
+XMLHttpRequest throw a DOMException, both can happen with invalid paths
+as well.
+---
+ apps/files/js/filelist.js           | 32 ++++++++++++++++++++++-------
+ apps/files/tests/js/filelistSpec.js | 10 ++++++++-
+ 2 files changed, 34 insertions(+), 8 deletions(-)
+
+diff --git a/apps/files/js/filelist.js b/apps/files/js/filelist.js
+index 7e65bf46e30..4a7dbbf701e 100644
+--- a/apps/files/js/filelist.js
++++ b/apps/files/js/filelist.js
+@@ -1329,11 +1329,18 @@
+ 
+ 		_isValidPath: function(path) {
+ 			var sections = path.split('/');
+-			for (var i = 0; i < sections.length; i++) {
++			var i;
++			for (i = 0; i < sections.length; i++) {
+ 				if (sections[i] === '..') {
+ 					return false;
+ 				}
+ 			}
++			var specialChars = [decodeURIComponent('%00'), decodeURIComponent('%0A')];
++			for (i = 0; i < specialChars.length; i++) {
++				if (path.indexOf(specialChars[i]) !== -1) {
++					return false;
++				}
++			}
+ 			return true;
+ 		},
+ 
+@@ -1345,6 +1352,7 @@
+ 		_setCurrentDir: function(targetDir, changeUrl) {
+ 			targetDir = targetDir.replace(/\\/g, '/');
+ 			if (!this._isValidPath(targetDir)) {
++				OC.Notification.showTemporary(t('files', 'Invalid path'));
+ 				targetDir = '/';
+ 				changeUrl = true;
+ 			}
+@@ -1435,12 +1443,22 @@
+ 			this._currentFileModel = null;
+ 			this.$el.find('.select-all').prop('checked', false);
+ 			this.showMask();
+-			this._reloadCall = this.filesClient.getFolderContents(
+-				this.getCurrentDirectory(), {
+-					includeParent: true,
+-					properties: this._getWebdavProperties()
++			try {
++				this._reloadCall = this.filesClient.getFolderContents(
++					this.getCurrentDirectory(), {
++						includeParent: true,
++						properties: this._getWebdavProperties()
++					}
++				);
++			} catch (e) {
++				if (e instanceof DOMException) {
++					console.error(e);
++					this.changeDirectory('/');
++					OC.Notification.showTemporary(t('files', 'Invalid path'));
++					return;
+ 				}
+-			);
++				throw e;
++			}
+ 			if (this._detailsView) {
+ 				// close sidebar
+ 				this._updateDetailsView(null);
+@@ -1457,7 +1475,7 @@
+ 			}
+ 
+ 			// Firewall Blocked request?
+-			if (status === 403) {
++			if (status === 403 || status === 400) {
+ 				// Go home
+ 				this.changeDirectory('/');
+ 				OC.Notification.showTemporary(t('files', 'This operation is forbidden'));
+diff --git a/apps/files/tests/js/filelistSpec.js b/apps/files/tests/js/filelistSpec.js
+index 8b3f6aa28f0..abe66ce35f6 100644
+--- a/apps/files/tests/js/filelistSpec.js
++++ b/apps/files/tests/js/filelistSpec.js
+@@ -1332,7 +1332,9 @@ describe('OCA.Files.FileList tests', function() {
+ 				'/../abc',
+ 				'/abc/..',
+ 				'/abc/../',
+-				'/../abc/'
++				'/../abc/',
++				'/zero' + decodeURIComponent('%00') + 'byte/',
++				'/really who adds new' + decodeURIComponent('%0A') + 'lines in their paths/',
+ 			], function(path) {
+ 				fileList.changeDirectory(path);
+ 				expect(fileList.getCurrentDirectory()).toEqual('/');
+@@ -1348,6 +1350,12 @@ describe('OCA.Files.FileList tests', function() {
+ 				expect(fileList.getCurrentDirectory()).toEqual(path);
+ 			});
+ 		});
++		it('switches to root dir in case of bad request', function() {
++			fileList.changeDirectory('/unexist');
++			// can happen in case of invalid chars in the URL
++			deferredList.reject(400);
++			expect(fileList.getCurrentDirectory()).toEqual('/');
++		});
+ 		it('switches to root dir when current directory does not exist', function() {
+ 			fileList.changeDirectory('/unexist');
+ 			deferredList.reject(404);

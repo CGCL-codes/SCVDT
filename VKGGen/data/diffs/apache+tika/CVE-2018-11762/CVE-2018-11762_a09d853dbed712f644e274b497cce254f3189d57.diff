@@ -1,0 +1,427 @@
+diff --git a/tika-app/src/main/java/org/apache/tika/cli/TikaCLI.java b/tika-app/src/main/java/org/apache/tika/cli/TikaCLI.java
+index 4175f1eccc..87083f2d11 100644
+--- a/tika-app/src/main/java/org/apache/tika/cli/TikaCLI.java
++++ b/tika-app/src/main/java/org/apache/tika/cli/TikaCLI.java
+@@ -56,6 +56,7 @@
+ import java.util.Map.Entry;
+ import java.util.Set;
+ import java.util.TreeSet;
++import java.util.UUID;
+ 
+ import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.io.IOUtils;
+@@ -444,7 +445,13 @@ public void process(String arg) throws Exception {
+         } else if (arg.equals("-d") || arg.equals("--detect")) {
+             type = DETECT;
+         } else if (arg.startsWith("--extract-dir=")) {
+-            extractDir = new File(arg.substring("--extract-dir=".length()));
++            String dirPath = arg.substring("--extract-dir=".length());
++            //if the user accidentally doesn't include
++            //a directory, set the directory to the cwd
++            if (dirPath.length() == 0) {
++                dirPath = ".";
++            }
++            extractDir = new File(dirPath);
+         } else if (arg.equals("-z") || arg.equals("--extract")) {
+             extractInlineImagesFromPDFs();
+             type = NO_OUTPUT;
+@@ -1048,21 +1055,13 @@ public void parseEmbedded(InputStream inputStream, ContentHandler contentHandler
+             }
+             MediaType contentType = detector.detect(inputStream, metadata);
+ 
+-            if (name.indexOf('.')==-1 && contentType!=null) {
+-                try {
+-                    name += config.getMimeRepository().forName(
+-                            contentType.toString()).getExtension();
+-                } catch (MimeTypeException e) {
+-                    e.printStackTrace();
+-                }
++            File outputFile = null;
++            if (name == null) {
++                name = "file" + count++;
+             }
++            outputFile = getOutputFile(name, metadata, contentType);
+ 
+-            String relID = metadata.get(Metadata.EMBEDDED_RELATIONSHIP_ID);
+-            if (relID != null && !name.startsWith(relID)) {
+-                name = relID + "_" + name;
+-            }
+ 
+-            File outputFile = new File(extractDir, FilenameUtils.normalize(name));
+             File parent = outputFile.getParentFile();
+             if (!parent.exists()) {
+                 if (!parent.mkdirs()) {
+@@ -1099,6 +1098,58 @@ public void parseEmbedded(InputStream inputStream, ContentHandler contentHandler
+             }
+         }
+ 
++        private File getOutputFile(String name, Metadata metadata, MediaType contentType) {
++            String ext = getExtension(contentType);
++            if (name.indexOf('.')==-1 && contentType!=null) {
++                name += ext;
++            }
++
++            String relID = metadata.get(TikaCoreProperties.EMBEDDED_RELATIONSHIP_ID);
++            if (relID != null && !name.startsWith(relID)) {
++                name = relID + "_" + name;
++            }
++            //defensively do this so that we don't get an exception
++            //from FilenameUtils.normalize
++            name = name.replaceAll("\u0000", " ");
++            String normalizedName = FilenameUtils.normalize(name);
++
++            if (normalizedName == null) {
++                normalizedName = FilenameUtils.getName(name);
++            }
++
++            if (normalizedName == null) {
++                normalizedName = "file"+count++ +ext;
++            }
++            //strip off initial C:/ or ~/ or /
++            int prefixLength = FilenameUtils.getPrefixLength(normalizedName);
++            if (prefixLength > -1) {
++                normalizedName = normalizedName.substring(prefixLength);
++            }
++            File outputFile = new File(extractDir, normalizedName);
++            //if file already exists, prepend uuid
++            if (outputFile.exists()) {
++                String fileName = FilenameUtils.getName(normalizedName);
++                outputFile = new File(extractDir, UUID.randomUUID().toString()+"-"+fileName);
++            }
++            return outputFile;
++        }
++
++        private String getExtension(MediaType contentType) {
++            try {
++                String ext = config.getMimeRepository().forName(
++                        contentType.toString()).getExtension();
++                if (ext == null) {
++                    return ".bin";
++                } else {
++                    return ext;
++                }
++            } catch (MimeTypeException e) {
++                e.printStackTrace();
++            }
++            return ".bin";
++
++        }
++
+         protected void copy(DirectoryEntry sourceDir, DirectoryEntry destDir)
+                 throws IOException {
+             for (org.apache.poi.poifs.filesystem.Entry entry : sourceDir) {
+@@ -1143,7 +1194,7 @@ public void run() {
+                 } finally {
+                     server.close();
+                 }
+-            } catch (IOException e) { 
++            } catch (IOException e) {
+                 e.printStackTrace();
+             }
+         }
+@@ -1176,7 +1227,7 @@ public void run() {
+         }
+ 
+     }
+-    
++
+     private class NoDocumentMetHandler extends DefaultHandler {
+ 
+         protected final Metadata metadata;
+diff --git a/tika-app/src/test/java/org/apache/tika/cli/TikaCLITest.java b/tika-app/src/test/java/org/apache/tika/cli/TikaCLITest.java
+index def66ebb4e..ef94e40e9f 100644
+--- a/tika-app/src/test/java/org/apache/tika/cli/TikaCLITest.java
++++ b/tika-app/src/test/java/org/apache/tika/cli/TikaCLITest.java
+@@ -17,15 +17,25 @@
+ package org.apache.tika.cli;
+ 
+ import static java.nio.charset.StandardCharsets.UTF_8;
++import static org.junit.Assert.assertEquals;
+ import static org.junit.Assert.assertFalse;
+ import static org.junit.Assert.assertTrue;
+ 
+ import java.io.ByteArrayOutputStream;
+ import java.io.File;
++import java.io.FileOutputStream;
++import java.io.IOException;
++import java.io.InvalidObjectException;
++import java.io.OutputStream;
+ import java.io.PrintStream;
+ import java.net.URI;
++import java.nio.charset.StandardCharsets;
++import java.util.zip.ZipEntry;
++import java.util.zip.ZipFile;
++import java.util.zip.ZipOutputStream;
+ 
+ import org.apache.commons.io.FileUtils;
++import org.apache.commons.io.FilenameUtils;
+ import org.apache.tika.exception.TikaException;
+ import org.junit.After;
+ import org.junit.Before;
+@@ -245,39 +255,74 @@ public void tearDown() throws Exception {
+     }
+ 
+     @Test
+-    public void testExtract() throws Exception {
++    public void testExtractSimple() throws Exception {
++        String[] expectedChildren = new String[]{
++                "MBD002B040A.cdx",
++                "file4.png",
++                "MBD002B0FA6_file5.bin",
++                "MBD00262FE3.txt",
++                "file0.emf"
++        };
++        testExtract("/coffee.xls", expectedChildren, 8);
++    }
++
++    @Test
++    public void testExtractAbsolute() throws Exception {
++        String[] expectedChildren = new String[] {
++                "dangerous/dont/touch.pl",
++        };
++        testExtract("testZip_absolutePath.zip", expectedChildren, 2);
++    }
++
++    @Test
++    public void testExtractRelative() throws Exception {
++        String[] expectedChildren = new String[] {
++                "touch.pl",
++        };
++        testExtract("testZip_relative.zip", expectedChildren);
++    }
++
++    @Test
++    public void testExtractOverlapping() throws Exception {
++        //there should be two files, one with a prepended uuid-f1.txt
++        String[] expectedChildren = new String[] {
++                "f1.txt",
++        };
++        testExtract("testZip_overlappingNames.zip", expectedChildren, 2);
++    }
++
++    @Test
++    public void testExtract0x00() throws Exception {
++        String[] expectedChildren = new String[] {
++                "dang erous.pl",
++        };
++        testExtract("testZip_zeroByte.zip", expectedChildren);
++    }
++
++    private void testExtract(String targetFile, String[] expectedChildrenFileNames) throws Exception {
++        testExtract(targetFile, expectedChildrenFileNames, expectedChildrenFileNames.length);
++    }
++    private void testExtract(String targetFile, String[] expectedChildrenFileNames, int expectedLength) throws Exception {
+         File tempFile = File.createTempFile("tika-test-", "");
+         tempFile.delete();
+-        tempFile.mkdir(); // not really good method for production usage, but ok for tests
+-        // google guava library has better solution
++        tempFile.mkdir();
+ 
+         try {
+-            String[] params = {"--extract-dir="+tempFile.getAbsolutePath(),"-z", resourcePrefix + "/coffee.xls"};
++            String[] params = {"--extract-dir=" + tempFile.getAbsolutePath(), "-z", resourcePrefix + "/"+targetFile};
+ 
+             TikaCLI.main(params);
+ 
+             StringBuffer allFiles = new StringBuffer();
++            assertEquals(expectedLength, tempFile.list().length);
+             for (String f : tempFile.list()) {
++
+                 if (allFiles.length() > 0) allFiles.append(" : ");
+                 allFiles.append(f);
+             }
+ 
+-            // ChemDraw file
+-            File expectedCDX = new File(tempFile, "MBD002B040A.cdx");
+-            // Image of the ChemDraw molecule
+-            File expectedIMG = new File(tempFile, "file4.png");
+-            // OLE10Native
+-            File expectedOLE10 = new File(tempFile, "MBD002B0FA6_file5.bin");
+-            // Something that really isnt a text file... Not sure what it is???
+-            File expected262FE3 = new File(tempFile, "MBD00262FE3.txt");
+-            // Image of one of the embedded resources
+-            File expectedEMF = new File(tempFile, "file0.emf");
+-
+-            assertExtracted(expectedCDX, allFiles.toString());
+-            assertExtracted(expectedIMG, allFiles.toString());
+-            assertExtracted(expectedOLE10, allFiles.toString());
+-            assertExtracted(expected262FE3, allFiles.toString());
+-            assertExtracted(expectedEMF, allFiles.toString());
++            for (String expectedChildName : expectedChildrenFileNames) {
++                assertExtracted(new File(tempFile, expectedChildName), allFiles.toString());
++            }
+         } finally {
+             FileUtils.deleteDirectory(tempFile);
+         }
+@@ -510,5 +555,63 @@ public void testConfigSerializationCustomStatic() throws Exception {
+         assertFalse(content.contains("org.apache.tika.parser.executable.Executable"));
+     }
+ 
+-
++    @Test
++    public void testFileNameNormalization() throws Exception {
++        File z = new File("C:/data/testZip_zeroByte.zip");
++        OutputStream os = new FileOutputStream(z);
++        ZipOutputStream outputStream = new ZipOutputStream(os);
++        ZipEntry zipEntry = new ZipEntry("dang\u0000erous.pl");
++        outputStream.putNextEntry(zipEntry);
++        byte[] bytes = "hello world1".getBytes(StandardCharsets.UTF_8);
++        outputStream.write(bytes, 0,bytes.length);
++        outputStream.closeEntry();
++        outputStream.flush();
++        outputStream.close();
++
++        z = new File("C:/data/testZip_absolutePath.zip");
++        os = new FileOutputStream(z);
++        outputStream = new ZipOutputStream(os);
++        zipEntry = new ZipEntry("C:/dangerous/dont/touch.pl");
++        outputStream.putNextEntry(zipEntry);
++        bytes = "hello world2".getBytes(StandardCharsets.UTF_8);
++        outputStream.write(bytes, 0,bytes.length);
++        outputStream.closeEntry();
++        zipEntry = new ZipEntry("/dangerous/dont/touch.pl");
++        outputStream.putNextEntry(zipEntry);
++        bytes = "hello world3".getBytes(StandardCharsets.UTF_8);
++        outputStream.write(bytes, 0,bytes.length);
++        outputStream.closeEntry();
++
++        outputStream.flush();
++        outputStream.close();
++
++        z = new File("C:/data/testZip_relative.zip");
++        os = new FileOutputStream(z);
++        outputStream = new ZipOutputStream(os);
++        zipEntry = new ZipEntry("../../../dangerous/dont/touch.pl");
++        outputStream.putNextEntry(zipEntry);
++        bytes = "hello world3".getBytes(StandardCharsets.UTF_8);
++        outputStream.write(bytes, 0,bytes.length);
++        outputStream.closeEntry();
++        outputStream.flush();
++        outputStream.close();
++
++        z = new File("C:/data/testZip_overlappingNames.zip");
++        os = new FileOutputStream(z);
++        outputStream = new ZipOutputStream(os);
++        zipEntry = new ZipEntry("f1.txt");
++        outputStream.putNextEntry(zipEntry);
++        bytes = "hello world4".getBytes(StandardCharsets.UTF_8);
++        outputStream.write(bytes, 0,bytes.length);
++        outputStream.closeEntry();
++
++        zipEntry = new ZipEntry("../../../f1.txt");
++        outputStream.putNextEntry(zipEntry);
++        bytes = "hello world5".getBytes(StandardCharsets.UTF_8);
++        outputStream.write(bytes, 0,bytes.length);
++        outputStream.closeEntry();
++
++        outputStream.flush();
++        outputStream.close();
++    }
+ }
+diff --git a/tika-app/src/test/resources/test-data/testZip_absolutePath.zip b/tika-app/src/test/resources/test-data/testZip_absolutePath.zip
+new file mode 100644
+index 0000000000..29affae666
+Binary files /dev/null and b/tika-app/src/test/resources/test-data/testZip_absolutePath.zip differ
+diff --git a/tika-app/src/test/resources/test-data/testZip_overlappingNames.zip b/tika-app/src/test/resources/test-data/testZip_overlappingNames.zip
+new file mode 100644
+index 0000000000..62707c712f
+Binary files /dev/null and b/tika-app/src/test/resources/test-data/testZip_overlappingNames.zip differ
+diff --git a/tika-app/src/test/resources/test-data/testZip_relative.zip b/tika-app/src/test/resources/test-data/testZip_relative.zip
+new file mode 100644
+index 0000000000..e48ed88a7b
+Binary files /dev/null and b/tika-app/src/test/resources/test-data/testZip_relative.zip differ
+diff --git a/tika-app/src/test/resources/test-data/testZip_zeroByte.zip b/tika-app/src/test/resources/test-data/testZip_zeroByte.zip
+new file mode 100644
+index 0000000000..00dc42ca1f
+Binary files /dev/null and b/tika-app/src/test/resources/test-data/testZip_zeroByte.zip differ
+diff --git a/tika-example/src/main/java/org/apache/tika/example/ExtractEmbeddedFiles.java b/tika-example/src/main/java/org/apache/tika/example/ExtractEmbeddedFiles.java
+index fe35bcb460..092e9cfee9 100644
+--- a/tika-example/src/main/java/org/apache/tika/example/ExtractEmbeddedFiles.java
++++ b/tika-example/src/main/java/org/apache/tika/example/ExtractEmbeddedFiles.java
+@@ -21,6 +21,7 @@
+ import java.io.InputStream;
+ import java.nio.file.Files;
+ import java.nio.file.Path;
++import java.util.UUID;
+ 
+ import org.apache.commons.io.FilenameUtils;
+ import org.apache.tika.config.TikaConfig;
+@@ -82,6 +83,11 @@ public void parseEmbedded(InputStream stream, ContentHandler handler, Metadata m
+                 //make sure to select only the file name (not any directory paths
+                 //that might be included in the name) and make sure
+                 //to normalize the name
++                name = name.replaceAll("\u0000", " ");
++                int prefix = FilenameUtils.getPrefixLength(name);
++                if (prefix > -1) {
++                    name = name.substring(prefix);
++                }
+                 name = FilenameUtils.normalize(FilenameUtils.getName(name));
+             }
+ 
+@@ -96,9 +102,11 @@ public void parseEmbedded(InputStream stream, ContentHandler handler, Metadata m
+                     e.printStackTrace();
+                 }
+             }
+-            //should add check to make sure that you aren't overwriting a file
++
+             Path outputFile = outputDir.resolve(name);
+-            //do a better job than this of checking
++            if (Files.exists(outputFile)) {
++                outputFile = outputDir.resolve(UUID.randomUUID().toString()+"-"+name);
++            }
+             Files.createDirectories(outputFile.getParent());
+             Files.copy(stream, outputFile);
+         }
+diff --git a/tika-server/src/main/java/org/apache/tika/server/resource/UnpackerResource.java b/tika-server/src/main/java/org/apache/tika/server/resource/UnpackerResource.java
+index 716d171efb..fd3f4e97cd 100644
+--- a/tika-server/src/main/java/org/apache/tika/server/resource/UnpackerResource.java
++++ b/tika-server/src/main/java/org/apache/tika/server/resource/UnpackerResource.java
+@@ -37,8 +37,10 @@
+ import java.util.Arrays;
+ import java.util.HashMap;
+ import java.util.Map;
++import java.util.UUID;
+ 
+ import au.com.bytecode.opencsv.CSVWriter;
++import org.apache.commons.io.FilenameUtils;
+ import org.apache.commons.lang.mutable.MutableInt;
+ import org.apache.poi.poifs.filesystem.DirectoryEntry;
+ import org.apache.poi.poifs.filesystem.DocumentEntry;
+@@ -220,7 +222,7 @@ public void parseEmbedded(InputStream inputStream, ContentHandler contentHandler
+                 }
+             }
+ 
+-            final String finalName = name;
++            final String finalName = getFinalName(name, zout);
+ 
+             if (data.length > 0) {
+                 zout.put(finalName, data);
+@@ -243,6 +245,28 @@ public void parseEmbedded(InputStream inputStream, ContentHandler contentHandler
+             }
+         }
+ 
++        private String getFinalName(String name, Map<String, byte[]> zout) {
++            name = name.replaceAll("\u0000", " ");
++            String normalizedName = FilenameUtils.normalize(name);
++
++            if (normalizedName == null) {
++                normalizedName = FilenameUtils.getName(name);
++            }
++
++            if (normalizedName == null) {
++                normalizedName = count.toString();
++            }
++            //strip off initial C:/ or ~/ or /
++            int prefixLength = FilenameUtils.getPrefixLength(normalizedName);
++            if (prefixLength > -1) {
++                normalizedName = normalizedName.substring(prefixLength);
++            }
++            if (zout.containsKey(normalizedName)) {
++                return UUID.randomUUID().toString()+"-"+normalizedName;
++            }
++            return normalizedName;
++        }
++
+         protected void copy(DirectoryEntry sourceDir, DirectoryEntry destDir)
+                 throws IOException {
+             for (Entry entry : sourceDir) {

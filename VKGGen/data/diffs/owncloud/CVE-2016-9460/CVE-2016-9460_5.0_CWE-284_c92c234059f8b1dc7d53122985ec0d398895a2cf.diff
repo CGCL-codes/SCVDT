@@ -1,0 +1,78 @@
+From c92c234059f8b1dc7d53122985ec0d398895a2cf Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Wed, 6 Jul 2016 11:55:02 +0200
+Subject: [PATCH] Ignore invalid paths in the JS file list (#25368)
+
+---
+ apps/files/js/filelist.js           | 14 ++++++++++++++
+ apps/files/tests/js/filelistSpec.js | 25 +++++++++++++++++++++++++
+ 2 files changed, 39 insertions(+)
+
+diff --git a/apps/files/js/filelist.js b/apps/files/js/filelist.js
+index b79dd0f66f2..e3f1a1ed02c 100644
+--- a/apps/files/js/filelist.js
++++ b/apps/files/js/filelist.js
+@@ -1327,6 +1327,16 @@
+ 			return OC.linkTo('files', 'index.php')+"?dir="+ encodeURIComponent(dir).replace(/%2F/g, '/');
+ 		},
+ 
++		_isValidPath: function(path) {
++			var sections = path.split('/');
++			for (var i = 0; i < sections.length; i++) {
++				if (sections[i] === '..') {
++					return false;
++				}
++			}
++			return true;
++		},
++
+ 		/**
+ 		 * Sets the current directory name and updates the breadcrumb.
+ 		 * @param targetDir directory to display
+@@ -1334,6 +1344,10 @@
+ 		 */
+ 		_setCurrentDir: function(targetDir, changeUrl) {
+ 			targetDir = targetDir.replace(/\\/g, '/');
++			if (!this._isValidPath(targetDir)) {
++				targetDir = '/';
++				changeUrl = true;
++			}
+ 			var previousDir = this.getCurrentDirectory(),
+ 				baseDir = OC.basename(targetDir);
+ 
+diff --git a/apps/files/tests/js/filelistSpec.js b/apps/files/tests/js/filelistSpec.js
+index a83c8c4c0bc..7ca6c4b16f9 100644
+--- a/apps/files/tests/js/filelistSpec.js
++++ b/apps/files/tests/js/filelistSpec.js
+@@ -1323,6 +1323,31 @@ describe('OCA.Files.FileList tests', function() {
+ 			fileList.changeDirectory('/another\\subdir');
+ 			expect(fileList.getCurrentDirectory()).toEqual('/another/subdir');
+ 		});
++		it('switches to root dir when current directory is invalid', function() {
++			_.each([
++				'..',
++				'/..',
++				'../',
++				'/../',
++				'/../abc',
++				'/abc/..',
++				'/abc/../',
++				'/../abc/'
++			], function(path) {
++				fileList.changeDirectory(path);
++				expect(fileList.getCurrentDirectory()).toEqual('/');
++			});
++		});
++		it('allows paths with dotdot at the beginning or end', function() {
++			_.each([
++				'..abc',
++				'def..',
++				'...'
++			], function(path) {
++				fileList.changeDirectory(path);
++				expect(fileList.getCurrentDirectory()).toEqual(path);
++			});
++		});
+ 		it('switches to root dir when current directory does not exist', function() {
+ 			fileList.changeDirectory('/unexist');
+ 			deferredList.reject(404);

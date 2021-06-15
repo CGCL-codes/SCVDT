@@ -1,0 +1,182 @@
+diff --git a/services/src/main/java/org/keycloak/broker/saml/SAMLEndpoint.java b/services/src/main/java/org/keycloak/broker/saml/SAMLEndpoint.java
+index 6aaecaf0dbc..a6980a989c7 100755
+--- a/services/src/main/java/org/keycloak/broker/saml/SAMLEndpoint.java
++++ b/services/src/main/java/org/keycloak/broker/saml/SAMLEndpoint.java
+@@ -87,12 +87,13 @@
+ import org.keycloak.rotation.HardcodedKeyLocator;
+ import org.keycloak.rotation.KeyLocator;
+ import org.keycloak.saml.processing.core.util.KeycloakKeySamlExtensionGenerator;
++import org.keycloak.saml.validators.ConditionsValidator;
+ import org.keycloak.saml.validators.DestinationValidator;
++import java.net.URI;
+ import java.security.cert.CertificateException;
+ import org.w3c.dom.Element;
+ 
+ import java.util.*;
+-import javax.security.auth.x500.X500Principal;
+ import javax.xml.crypto.dsig.XMLSignature;
+ import org.w3c.dom.NodeList;
+ 
+@@ -412,6 +413,22 @@ protected Response handleLoginResponse(String samlResponse, SAMLDocumentHolder h
+                     identity.setToken(samlResponse);
+                 }
+ 
++                ConditionsValidator.Builder cvb = new ConditionsValidator.Builder(assertion.getID(), assertion.getConditions(), destinationValidator);
++                try {
++                    String issuerURL = getEntityId(session.getContext().getUri(), realm);
++                    cvb.addAllowedAudience(URI.create(issuerURL));
++                    // getDestination has been validated to match request URL already so it matches SAML endpoint
++                    cvb.addAllowedAudience(URI.create(responseType.getDestination()));
++                } catch (IllegalArgumentException ex) {
++                    // warning has been already emitted in DeploymentBuilder
++                }
++                if (! cvb.build().isValid()) {
++                    logger.error("Assertion expired.");
++                    event.event(EventType.IDENTITY_PROVIDER_RESPONSE);
++                    event.error(Errors.INVALID_SAML_RESPONSE);
++                    return ErrorPage.error(session, null, Response.Status.BAD_REQUEST, Messages.EXPIRED_CODE);
++                }
++
+                 AuthnStatementType authn = null;
+                 for (Object statement : assertion.getStatements()) {
+                     if (statement instanceof AuthnStatementType) {
+diff --git a/testsuite/integration-arquillian/tests/base/src/main/java/org/keycloak/testsuite/util/saml/SamlDocumentStepBuilder.java b/testsuite/integration-arquillian/tests/base/src/main/java/org/keycloak/testsuite/util/saml/SamlDocumentStepBuilder.java
+index bd5d2d1028b..21b3126a02a 100644
+--- a/testsuite/integration-arquillian/tests/base/src/main/java/org/keycloak/testsuite/util/saml/SamlDocumentStepBuilder.java
++++ b/testsuite/integration-arquillian/tests/base/src/main/java/org/keycloak/testsuite/util/saml/SamlDocumentStepBuilder.java
+@@ -36,6 +36,7 @@
+ import java.io.ByteArrayInputStream;
+ import java.io.ByteArrayOutputStream;
+ import javax.xml.stream.XMLStreamWriter;
++import org.jboss.logging.Logger;
+ import org.junit.Assert;
+ import org.w3c.dom.Document;
+ 
+@@ -45,6 +46,8 @@
+  */
+ public abstract class SamlDocumentStepBuilder<T extends SAML2Object, This extends SamlDocumentStepBuilder<T, This>> implements Step {
+ 
++    private static final Logger LOG = Logger.getLogger(SamlDocumentStepBuilder.class);
++
+     @FunctionalInterface
+     public interface Saml2ObjectTransformer<T extends SAML2Object> {
+         public T transform(T original) throws Exception;
+@@ -107,7 +110,9 @@ public This transformObject(Saml2ObjectTransformer<T> tr) {
+                 Assert.assertNotNull("Unknown type: <null>", transformed);
+                 Assert.fail("Unknown type: " + transformed.getClass().getName());
+             }
+-            return new String(bos.toByteArray(), GeneralConstants.SAML_CHARSET);
++            String res = new String(bos.toByteArray(), GeneralConstants.SAML_CHARSET);
++            LOG.debugf("  ---> %s", res);
++            return res;
+         };
+         return (This) this;
+     }
+diff --git a/testsuite/integration-arquillian/tests/base/src/test/java/org/keycloak/testsuite/saml/BrokerTest.java b/testsuite/integration-arquillian/tests/base/src/test/java/org/keycloak/testsuite/saml/BrokerTest.java
+index 4c53d2988f0..13ec90c7b93 100644
+--- a/testsuite/integration-arquillian/tests/base/src/test/java/org/keycloak/testsuite/saml/BrokerTest.java
++++ b/testsuite/integration-arquillian/tests/base/src/test/java/org/keycloak/testsuite/saml/BrokerTest.java
+@@ -22,9 +22,13 @@
+ import org.keycloak.broker.saml.SAMLIdentityProviderConfig;
+ import org.keycloak.broker.saml.SAMLIdentityProviderFactory;
+ import org.keycloak.dom.saml.v2.SAML2Object;
++import org.keycloak.dom.saml.v2.assertion.AssertionType;
+ import org.keycloak.dom.saml.v2.assertion.AttributeStatementType;
+ import org.keycloak.dom.saml.v2.assertion.AttributeStatementType.ASTChoiceType;
+ import org.keycloak.dom.saml.v2.assertion.AttributeType;
++import org.keycloak.dom.saml.v2.assertion.ConditionsType;
++import org.keycloak.dom.saml.v2.assertion.NameIDType;
++import org.keycloak.dom.saml.v2.assertion.SubjectType;
+ import org.keycloak.dom.saml.v2.protocol.AuthnRequestType;
+ import org.keycloak.dom.saml.v2.protocol.NameIDPolicyType;
+ import org.keycloak.dom.saml.v2.protocol.ResponseType;
+@@ -36,6 +40,7 @@
+ import org.keycloak.saml.common.exceptions.ConfigurationException;
+ import org.keycloak.saml.common.exceptions.ProcessingException;
+ import org.keycloak.saml.processing.core.saml.v2.common.SAMLDocumentHolder;
++import org.keycloak.saml.processing.core.saml.v2.util.XMLTimeUtil;
+ import org.keycloak.testsuite.updaters.IdentityProviderCreator;
+ import org.keycloak.testsuite.util.IdentityProviderBuilder;
+ import org.keycloak.testsuite.util.SamlClientBuilder;
+@@ -44,6 +49,8 @@
+ import java.util.List;
+ import java.util.Objects;
+ import java.util.UUID;
++import javax.ws.rs.core.Response.Status;
++import javax.xml.datatype.XMLGregorianCalendar;
+ import org.apache.http.Header;
+ import org.apache.http.HttpHeaders;
+ import org.hamcrest.Matchers;
+@@ -185,4 +192,72 @@ public void testRedirectQueryParametersPreserved() throws IOException {
+         }
+     }
+ 
++    @Test
++    public void testExpiredAssertion() throws Exception {
++        XMLGregorianCalendar now = XMLTimeUtil.getIssueInstant();
++        XMLGregorianCalendar notBeforeInPast = XMLTimeUtil.subtract(now, 60 * 60 * 1000);
++        XMLGregorianCalendar notOnOrAfterInPast = XMLTimeUtil.subtract(now, 59 * 60 * 1000);
++        XMLGregorianCalendar notBeforeInFuture = XMLTimeUtil.add(now, 59 * 60 * 1000);
++        XMLGregorianCalendar notOnOrAfterInFuture = XMLTimeUtil.add(now, 60 * 60 * 1000);
++        // Should not pass:
++        assertExpired(notBeforeInPast, notOnOrAfterInPast, false);
++        assertExpired(notBeforeInFuture, notOnOrAfterInPast, false);
++        assertExpired(null, notOnOrAfterInPast, false);
++        assertExpired(notBeforeInFuture, notOnOrAfterInFuture, false);
++        assertExpired(notBeforeInFuture, null, false);
++        // Should pass:
++        assertExpired(notBeforeInPast, notOnOrAfterInFuture, true);
++        assertExpired(notBeforeInPast, null, true);
++        assertExpired(null, notOnOrAfterInFuture, true);
++        assertExpired(null, null, true);
++    }
++
++    @Test(expected = AssertionError.class)
++    public void testNonexpiredAssertionShouldFail() throws Exception {
++        assertExpired(null, null, false);   // Expected result (false) is it should fail but it should pass and throw
++    }
++
++    @Test(expected = AssertionError.class)
++    public void testExpiredAssertionShouldFail() throws Exception {
++        XMLGregorianCalendar now = XMLTimeUtil.getIssueInstant();
++        XMLGregorianCalendar notBeforeInPast = XMLTimeUtil.subtract(now, 60 * 60 * 1000);
++        XMLGregorianCalendar notOnOrAfterInPast = XMLTimeUtil.subtract(now, 59 * 60 * 1000);
++        assertExpired(notBeforeInPast, notOnOrAfterInPast, true);   // Expected result (true) is it should succeed but it should pass and throw
++    }
++
++    private void assertExpired(XMLGregorianCalendar notBefore, XMLGregorianCalendar notOnOrAfter, boolean shouldPass) throws Exception {
++        Status expectedStatus = shouldPass ? Status.OK : Status.BAD_REQUEST;
++        final RealmResource realm = adminClient.realm(REALM_NAME);
++        try (IdentityProviderCreator idp = new IdentityProviderCreator(realm, addIdentityProvider("http://saml.idp/"))) {
++            new SamlClientBuilder()
++              .authnRequest(getAuthServerSamlEndpoint(REALM_NAME), SAML_CLIENT_ID_SALES_POST, SAML_ASSERTION_CONSUMER_URL_SALES_POST, POST).build()
++              .login().idp(SAML_BROKER_ALIAS).build()
++              // Virtually perform login at IdP (return artificial SAML response)
++              .processSamlResponse(REDIRECT)
++              .transformObject(this::createAuthnResponse)
++              .transformObject(resp -> {  // always invent a new user identified by a different email address
++                  ResponseType rt = (ResponseType) resp;
++                  AssertionType a = rt.getAssertions().get(0).getAssertion();
++
++                  NameIDType nameId = new NameIDType();
++                  nameId.setFormat(URI.create(JBossSAMLURIConstants.NAMEID_FORMAT_EMAIL.get()));
++                  nameId.setValue(UUID.randomUUID() + "@random.email.org");
++                  SubjectType subject = new SubjectType();
++                  SubjectType.STSubType subType = new SubjectType.STSubType();
++                  subType.addBaseID(nameId);
++                  subject.setSubType(subType);
++                  a.setSubject(subject);
++
++                  ConditionsType conditions = a.getConditions();
++                  conditions.setNotBefore(notBefore);
++                  conditions.setNotOnOrAfter(notOnOrAfter);
++                  return rt;
++              })
++              .targetAttributeSamlResponse()
++              .targetUri(getSamlBrokerUrl(REALM_NAME))
++              .build()
++              .assertResponse(org.keycloak.testsuite.util.Matchers.statusCodeIsHC(expectedStatus))
++              .execute();
++        }
++    }
+ }

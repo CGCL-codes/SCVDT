@@ -1,0 +1,128 @@
+diff --git a/src/changes/changes.xml b/src/changes/changes.xml
+index bb477f369..7546871d3 100644
+--- a/src/changes/changes.xml
++++ b/src/changes/changes.xml
+@@ -74,6 +74,11 @@ The <action> type attribute can be add,update,fix,remove.
+         It is now possible to specify the arguments of zstd-jni's
+         ZstdOutputStream constructors via Commons Compress as well.
+       </action>
++      <action issue="COMPRESS-463" type="fix" date="2018-08-09">
++        ZipArchiveInputStream#read would silently return -1 on a
++        corrupted stored entry and even return > 0 after hitting the
++        end of the archive.
++      </action>
+     </release>
+     <release version="1.17" date="2018-06-03"
+              description="Release 1.17">
+diff --git a/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStream.java b/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStream.java
+index 0a2c1aa00..e1995d7aa 100644
+--- a/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStream.java
++++ b/src/main/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStream.java
+@@ -525,7 +525,8 @@ private int readStored(final byte[] buffer, final int offset, final int length)
+             buf.position(0);
+             final int l = in.read(buf.array());
+             if (l == -1) {
+-                return -1;
++                buf.limit(0);
++                throw new IOException("Truncated ZIP file");
+             }
+             buf.limit(l);
+ 
+diff --git a/src/test/java/org/apache/commons/compress/archivers/zip/Maven221MultiVolumeTest.java b/src/test/java/org/apache/commons/compress/archivers/zip/Maven221MultiVolumeTest.java
+index c28f3dec4..0a905e3ab 100644
+--- a/src/test/java/org/apache/commons/compress/archivers/zip/Maven221MultiVolumeTest.java
++++ b/src/test/java/org/apache/commons/compress/archivers/zip/Maven221MultiVolumeTest.java
+@@ -96,6 +96,13 @@ public void testRead7ZipMultiVolumeArchiveForStream() throws IOException {
+                 assertEquals("Truncated ZIP file", e.getMessage());
+             }
+ 
++            try {
++                zi.read(buffer);
++                fail("shouldn't be able to read from truncated entry after exception");
++            } catch (final IOException e) {
++                assertEquals("Truncated ZIP file", e.getMessage());
++            }
++
+             // and now we get another entry, which should also yield
+             // an exception
+             try {
+diff --git a/src/test/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStreamTest.java b/src/test/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStreamTest.java
+index 5b6595682..b9395fbfd 100644
+--- a/src/test/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStreamTest.java
++++ b/src/test/java/org/apache/commons/compress/archivers/zip/ZipArchiveInputStreamTest.java
+@@ -421,6 +421,75 @@ private void multiByteReadConsistentlyReturnsMinusOneAtEof(File file) throws Exc
+         }
+     }
+ 
++    @Test
++    public void singleByteReadThrowsAtEofForCorruptedStoredEntry() throws Exception {
++        byte[] content;
++        try (FileInputStream fs = new FileInputStream(getFile("COMPRESS-264.zip"))) {
++            content = IOUtils.toByteArray(fs);
++        }
++        // make size much bigger than entry's real size
++        for (int i = 17; i < 26; i++) {
++            content[i] = (byte) 0xff;
++        }
++        try (ByteArrayInputStream in = new ByteArrayInputStream(content);
++             ZipArchiveInputStream archive = new ZipArchiveInputStream(in)) {
++            ArchiveEntry e = archive.getNextEntry();
++            try {
++                IOUtils.toByteArray(archive);
++                fail("expected exception");
++            } catch (IOException ex) {
++                assertEquals("Truncated ZIP file", ex.getMessage());
++            }
++            try {
++                archive.read();
++                fail("expected exception");
++            } catch (IOException ex) {
++                assertEquals("Truncated ZIP file", ex.getMessage());
++            }
++            try {
++                archive.read();
++                fail("expected exception");
++            } catch (IOException ex) {
++                assertEquals("Truncated ZIP file", ex.getMessage());
++            }
++        }
++    }
++
++    @Test
++    public void multiByteReadThrowsAtEofForCorruptedStoredEntry() throws Exception {
++        byte[] content;
++        try (FileInputStream fs = new FileInputStream(getFile("COMPRESS-264.zip"))) {
++            content = IOUtils.toByteArray(fs);
++        }
++        // make size much bigger than entry's real size
++        for (int i = 17; i < 26; i++) {
++            content[i] = (byte) 0xff;
++        }
++        byte[] buf = new byte[2];
++        try (ByteArrayInputStream in = new ByteArrayInputStream(content);
++             ZipArchiveInputStream archive = new ZipArchiveInputStream(in)) {
++            ArchiveEntry e = archive.getNextEntry();
++            try {
++                IOUtils.toByteArray(archive);
++                fail("expected exception");
++            } catch (IOException ex) {
++                assertEquals("Truncated ZIP file", ex.getMessage());
++            }
++            try {
++                archive.read(buf);
++                fail("expected exception");
++            } catch (IOException ex) {
++                assertEquals("Truncated ZIP file", ex.getMessage());
++            }
++            try {
++                archive.read(buf);
++                fail("expected exception");
++            } catch (IOException ex) {
++                assertEquals("Truncated ZIP file", ex.getMessage());
++            }
++        }
++    }
++
+     private static byte[] readEntry(ZipArchiveInputStream zip, ZipArchiveEntry zae) throws IOException {
+         final int len = (int)zae.getSize();
+         final byte[] buff = new byte[len];

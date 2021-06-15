@@ -1,0 +1,94 @@
+From b6ed9865d0614332fa419fe4b6d0fe81bc2e660d Mon Sep 17 00:00:00 2001
+From: Colm O hEigeartaigh <coheigea@apache.org>
+Date: Wed, 7 Mar 2018 17:26:25 +0000
+Subject: [PATCH] Make sure DocTypes are disallowed
+
+---
+ .../apache/cxf/fediz/core/util/DOMUtils.java  |  5 ++-
+ .../cxf/fediz/systests/idp/IdpTest.java       | 41 +++++++++++++++++++
+ .../idp/src/test/resources/entity_wreq2.xml   |  1 +
+ 3 files changed, 45 insertions(+), 2 deletions(-)
+ create mode 100644 systests/idp/src/test/resources/entity_wreq2.xml
+
+diff --git a/plugins/core/src/main/java/org/apache/cxf/fediz/core/util/DOMUtils.java b/plugins/core/src/main/java/org/apache/cxf/fediz/core/util/DOMUtils.java
+index effd00a4..9c533fc7 100644
+--- a/plugins/core/src/main/java/org/apache/cxf/fediz/core/util/DOMUtils.java
++++ b/plugins/core/src/main/java/org/apache/cxf/fediz/core/util/DOMUtils.java
+@@ -62,14 +62,15 @@
+  */
+ public final class DOMUtils {
+     private static final Logger LOG = LoggerFactory.getLogger(DOMUtils.class);
+-    
++
+     private static final String XMLNAMESPACE = "xmlns";
+ 
+     private static final DocumentBuilderFactory DBF = DocumentBuilderFactory.newInstance();
+-    
++
+     static {
+         try {
+             DBF.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
++            DBF.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+ 
+             DBF.setValidating(false);
+             DBF.setIgnoringComments(false);
+diff --git a/systests/idp/src/test/java/org/apache/cxf/fediz/systests/idp/IdpTest.java b/systests/idp/src/test/java/org/apache/cxf/fediz/systests/idp/IdpTest.java
+index ee585e64..3744052b 100644
+--- a/systests/idp/src/test/java/org/apache/cxf/fediz/systests/idp/IdpTest.java
++++ b/systests/idp/src/test/java/org/apache/cxf/fediz/systests/idp/IdpTest.java
+@@ -433,6 +433,47 @@ public void testEntityExpansionWReq() throws Exception {
+         webClient.close();
+     }
+ 
++    // Send an entity expansion attack for the wreq value
++    @org.junit.Test
++    public void testEntityExpansionWReq2() throws Exception {
++        String url = "https://localhost:" + getIdpHttpsPort() + "/fediz-idp/federation?";
++        url += "wa=wsignin1.0";
++        url += "&whr=urn:org:apache:cxf:fediz:idp:realm-A";
++        url += "&wtrealm=urn:org:apache:cxf:fediz:fedizhelloworld";
++        String wreply = "https://localhost:" + getRpHttpsPort() + "/" + getServletContextName() + "/secure/fedservlet";
++        url += "&wreply=" + wreply;
++
++        InputStream is = this.getClass().getClassLoader().getResource("entity_wreq2.xml").openStream();
++        String entity = IOUtils.toString(is, "UTF-8");
++        is.close();
++        String validWreq =
++            "<RequestSecurityToken xmlns=\"http://docs.oasis-open.org/ws-sx/ws-trust/200512\">"
++            + "<TokenType>&m;http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV2.0</TokenType>"
++            + "</RequestSecurityToken>";
++
++        url += "&wreq=" + URLEncoder.encode(entity + validWreq, "UTF-8");
++
++        String user = "alice";
++        String password = "ecila";
++
++        final WebClient webClient = new WebClient();
++        webClient.getOptions().setUseInsecureSSL(true);
++        webClient.getCredentialsProvider().setCredentials(
++            new AuthScope("localhost", Integer.parseInt(getIdpHttpsPort())),
++            new UsernamePasswordCredentials(user, password));
++
++        webClient.getOptions().setJavaScriptEnabled(false);
++
++        try {
++            webClient.getPage(url);
++            Assert.fail("Failure expected on a bad wreq value");
++        } catch (FailingHttpStatusCodeException ex) {
++            Assert.assertEquals(ex.getStatusCode(), 400);
++        }
++
++        webClient.close();
++    }
++
+     // Send an malformed wreq value
+     @org.junit.Test
+     public void testMalformedWReq() throws Exception {
+diff --git a/systests/idp/src/test/resources/entity_wreq2.xml b/systests/idp/src/test/resources/entity_wreq2.xml
+new file mode 100644
+index 00000000..5a8cec52
+--- /dev/null
++++ b/systests/idp/src/test/resources/entity_wreq2.xml
+@@ -0,0 +1 @@
++<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE RequestSecurityTokenResponseCollection [<!ENTITY m SYSTEM "/etc/hosts">]>
+\ No newline at end of file

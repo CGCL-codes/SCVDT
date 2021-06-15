@@ -1,0 +1,54 @@
+diff --git a/release-notes/VERSION b/release-notes/VERSION
+index 9e4df5a7..3e408922 100644
+--- a/release-notes/VERSION
++++ b/release-notes/VERSION
+@@ -12,6 +12,7 @@ No changes since 2.7.
+ 
+ #210: In `ToXmlGenerator` `WRITE_BIGDECIMAL_AS_PLAIN` is used the wrong way round
+  (reported by xmluzr@github)
++#211: Disable `SUPPORT_DTD` for `XMLInputFactory` unless explicitly overridden
+ 
+ 2.7.7 (27-Aug-2016)
+ 
+diff --git a/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java b/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java
+index 4f135c59..a91d4734 100644
+--- a/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java
++++ b/src/main/java/com/fasterxml/jackson/dataformat/xml/XmlFactory.java
+@@ -113,6 +113,8 @@ protected XmlFactory(ObjectCodec oc, int xpFeatures, int xgFeatures,
+             xmlIn = XMLInputFactory.newInstance();
+             // as per [dataformat-xml#190], disable external entity expansion by default
+             xmlIn.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
++            // and ditto wrt [dataformat-xml#211], SUPPORT_DTD
++            xmlIn.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
+         }
+         if (xmlOut == null) {
+             xmlOut = XMLOutputFactory.newInstance();
+diff --git a/src/test/java/com/fasterxml/jackson/dataformat/xml/failing/SupportDTDDefaultsTest.java b/src/test/java/com/fasterxml/jackson/dataformat/xml/failing/SupportDTDDefaultsTest.java
+new file mode 100644
+index 00000000..b28c68c0
+--- /dev/null
++++ b/src/test/java/com/fasterxml/jackson/dataformat/xml/failing/SupportDTDDefaultsTest.java
+@@ -0,0 +1,23 @@
++package com.fasterxml.jackson.dataformat.xml.failing;
++
++import java.util.Map;
++
++import com.fasterxml.jackson.dataformat.xml.*;
++
++// for [databind-xml#211]
++public class SupportDTDDefaultsTest extends XmlTestBase
++{
++    public void testDTDAttempt() throws Exception
++    {
++        XmlMapper mapper = new XmlMapper();
++        String XML = "<?xml version='1.0' encoding='UTF-8'?><!DOCTYPE foo SYSTEM 'http://127.0.0.1:8001' [ ]>\n"
++                +"<foo/>";
++
++        try {
++            /*Map<String, String> info =*/ mapper.readValue(XML, Map.class);
++            //At this point a GET request would have been sent to localhost:8001. You will see a Connection Refused in case you don't have a server listening there.
++        } catch (Exception e){
++            fail("Should not try to resolve external DTD subset: "+e);
++        }
++    }
++}

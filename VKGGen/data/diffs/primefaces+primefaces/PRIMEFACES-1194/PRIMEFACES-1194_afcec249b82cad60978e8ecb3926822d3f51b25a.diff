@@ -1,0 +1,13 @@
+diff --git a/src/main/java/org/primefaces/application/DialogNavigationHandler.java b/src/main/java/org/primefaces/application/DialogNavigationHandler.java
+index b694a0c484..ac72873919 100644
+--- a/src/main/java/org/primefaces/application/DialogNavigationHandler.java
++++ b/src/main/java/org/primefaces/application/DialogNavigationHandler.java
+@@ -84,7 +84,7 @@ public void handleNavigation(FacesContext context, String fromAction, String out
+ 
+                     sb.append(optionName).append(":");
+                     if (optionValue instanceof String) {
+-                        sb.append("'").append(optionValue).append("'");
++                        sb.append("'").append(ComponentUtils.escapeEcmaScriptText((String) optionValue)).append("'");
+                     }
+                     else {
+                         sb.append(optionValue);

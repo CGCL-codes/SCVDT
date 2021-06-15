@@ -1,0 +1,295 @@
+diff --git a/contrib/views/files/src/main/java/org/apache/ambari/view/filebrowser/PropertyValidator.java b/contrib/views/files/src/main/java/org/apache/ambari/view/filebrowser/PropertyValidator.java
+index 41b9b057ca6..2ad779c5a16 100644
+--- a/contrib/views/files/src/main/java/org/apache/ambari/view/filebrowser/PropertyValidator.java
++++ b/contrib/views/files/src/main/java/org/apache/ambari/view/filebrowser/PropertyValidator.java
+@@ -19,14 +19,10 @@
+ package org.apache.ambari.view.filebrowser;
+ 
+ import org.apache.ambari.view.ViewInstanceDefinition;
++import org.apache.ambari.view.utils.ambari.ValidatorUtils;
+ import org.apache.ambari.view.validation.ValidationResult;
+ import org.apache.ambari.view.validation.Validator;
+ 
+-import java.net.MalformedURLException;
+-import java.net.URI;
+-import java.net.URISyntaxException;
+-import java.net.URL;
+-
+ public class PropertyValidator implements Validator {
+ 
+   public static final String WEBHDFS_URL = "webhdfs.url";
+@@ -41,9 +37,7 @@ public ValidationResult validateProperty(String property, ViewInstanceDefinition
+     if (property.equals(WEBHDFS_URL)) {
+       String webhdfsUrl = viewInstanceDefinition.getPropertyMap().get(WEBHDFS_URL);
+       if (webhdfsUrl != null) {
+-        try {
+-          new URI(webhdfsUrl);
+-        } catch (URISyntaxException e) {
++        if (!ValidatorUtils.validateHdfsURL(webhdfsUrl)) {
+           return new InvalidPropertyValidationResult(false, "Must be valid URL");
+         }
+       }
+diff --git a/contrib/views/files/src/test/java/org/apache/ambari/view/filebrowser/PropertyValidatorTest.java b/contrib/views/files/src/test/java/org/apache/ambari/view/filebrowser/PropertyValidatorTest.java
+new file mode 100644
+index 00000000000..5af65abb8e5
+--- /dev/null
++++ b/contrib/views/files/src/test/java/org/apache/ambari/view/filebrowser/PropertyValidatorTest.java
+@@ -0,0 +1,75 @@
++/**
++ * Licensed to the Apache Software Foundation (ASF) under one
++ * or more contributor license agreements.  See the NOTICE file
++ * distributed with this work for additional information
++ * regarding copyright ownership.  The ASF licenses this file
++ * to you under the Apache License, Version 2.0 (the
++ * "License"); you may not use this file except in compliance
++ * with the License.  You may obtain a copy of the License at
++ *
++ *     http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.apache.ambari.view.filebrowser;
++
++import org.apache.ambari.view.ViewInstanceDefinition;
++import org.apache.ambari.view.validation.ValidationResult;
++import org.junit.Test;
++
++import java.util.HashMap;
++import java.util.Map;
++
++import static org.easymock.EasyMock.createNiceMock;
++import static org.easymock.EasyMock.expect;
++import static org.easymock.EasyMock.replay;
++import static org.junit.Assert.assertEquals;
++
++public class PropertyValidatorTest {
++
++  @Test
++  public void testValidatePropertyWithValidWebhdfsURI(){
++    Map<String,String> propertyMap = new HashMap<String, String>();
++    propertyMap.put(PropertyValidator.WEBHDFS_URL,"webhdfs://host:1234/");
++    ViewInstanceDefinition instanceDefinition = getInstanceDef(propertyMap);
++
++    ValidationResult result =  new PropertyValidator().validateProperty(PropertyValidator.WEBHDFS_URL,instanceDefinition,null);
++    assertEquals(result, ValidationResult.SUCCESS);
++    assertEquals(result.isValid(),true);
++  }
++
++  @Test
++  public void testValidatePropertyWithValidHdfsURI(){
++    Map<String,String> propertyMap = new HashMap<String, String>();
++    propertyMap.put(PropertyValidator.WEBHDFS_URL,"hdfs://host:1234/");
++    ViewInstanceDefinition instanceDefinition = getInstanceDef(propertyMap);
++
++    ValidationResult result =  new PropertyValidator().validateProperty(PropertyValidator.WEBHDFS_URL,instanceDefinition,null);
++    assertEquals(result, ValidationResult.SUCCESS);
++    assertEquals(result.isValid(),true);
++  }
++
++  @Test
++  public void testValidatePropertyWithLocalFileURI(){
++    Map<String,String> propertyMap = new HashMap<String, String>();
++    propertyMap.put(PropertyValidator.WEBHDFS_URL,"file:///");
++    ViewInstanceDefinition instanceDefinition = getInstanceDef(propertyMap);
++
++    ValidationResult result =  new PropertyValidator().validateProperty(PropertyValidator.WEBHDFS_URL,instanceDefinition,null);
++    assertEquals(result.getClass(), PropertyValidator.InvalidPropertyValidationResult.class);
++    assertEquals(result.isValid(),false);
++    assertEquals(result.getDetail(),"Must be valid URL");
++  }
++
++  private ViewInstanceDefinition getInstanceDef(Map<String,String> propertyMap){
++    ViewInstanceDefinition instanceDefinition = createNiceMock(ViewInstanceDefinition.class);
++    expect(instanceDefinition.getPropertyMap()).andReturn(propertyMap);
++    replay(instanceDefinition);
++    return  instanceDefinition;
++  }
++}
+diff --git a/contrib/views/hive/src/main/java/org/apache/ambari/view/hive/PropertyValidator.java b/contrib/views/hive/src/main/java/org/apache/ambari/view/hive/PropertyValidator.java
+index e97196e54fe..ae73bc0b098 100644
+--- a/contrib/views/hive/src/main/java/org/apache/ambari/view/hive/PropertyValidator.java
++++ b/contrib/views/hive/src/main/java/org/apache/ambari/view/hive/PropertyValidator.java
+@@ -19,10 +19,9 @@
+ package org.apache.ambari.view.hive;
+ 
+ import org.apache.ambari.view.ViewInstanceDefinition;
++import org.apache.ambari.view.utils.ambari.ValidatorUtils;
+ import org.apache.ambari.view.validation.ValidationResult;
+ import org.apache.ambari.view.validation.Validator;
+-import org.apache.commons.validator.routines.RegexValidator;
+-import org.apache.commons.validator.routines.UrlValidator;
+ 
+ public class PropertyValidator implements Validator {
+ 
+@@ -61,7 +60,7 @@ public ValidationResult validateProperty(String property, ViewInstanceDefinition
+     // Cluster associated properties
+     if (property.equals(WEBHDFS_URL)) {
+       String webhdfsUrl = viewInstanceDefinition.getPropertyMap().get(WEBHDFS_URL);
+-      if (!validateHdfsURL(webhdfsUrl)) {
++      if (!ValidatorUtils.validateHdfsURL(webhdfsUrl)) {
+         return new InvalidPropertyValidationResult(false, "Must be valid URL");
+       }
+     }
+@@ -82,7 +81,7 @@ public ValidationResult validateProperty(String property, ViewInstanceDefinition
+ 
+     if (property.equals(YARN_ATS_URL)) {
+       String atsUrl = viewInstanceDefinition.getPropertyMap().get(YARN_ATS_URL);
+-      if (!validateHttpURL(atsUrl)) {
++      if (!ValidatorUtils.validateHttpURL(atsUrl)) {
+         return new InvalidPropertyValidationResult(false, "Must be valid URL");
+       }
+     }
+@@ -90,27 +89,6 @@ public ValidationResult validateProperty(String property, ViewInstanceDefinition
+     return ValidationResult.SUCCESS;
+   }
+ 
+-  /**
+-   * Validates filesystem URL
+-   * @param webhdfsUrl url
+-   * @return is url valid
+-   */
+-  private boolean validateHdfsURL(String webhdfsUrl) {
+-    String[] schemes = {"webhdfs", "hdfs", "s3", "file"};
+-    return validateURL(webhdfsUrl, schemes);
+-  }
+-
+-  private boolean validateHttpURL(String webhdfsUrl) {
+-    String[] schemes = {"http", "https"};
+-    return validateURL(webhdfsUrl, schemes);
+-  }
+-
+-  private boolean validateURL(String webhdfsUrl, String[] schemes) {
+-    RegexValidator authority = new RegexValidator(".*");
+-    UrlValidator urlValidator = new UrlValidator(schemes, authority, UrlValidator.ALLOW_LOCAL_URLS);
+-    return urlValidator.isValid(webhdfsUrl);
+-  }
+-
+   public static class InvalidPropertyValidationResult implements ValidationResult {
+     private boolean valid;
+     private String detail;
+diff --git a/contrib/views/pig/src/main/java/org/apache/ambari/view/pig/PropertyValidator.java b/contrib/views/pig/src/main/java/org/apache/ambari/view/pig/PropertyValidator.java
+index c36561f05c0..d3c9866c982 100644
+--- a/contrib/views/pig/src/main/java/org/apache/ambari/view/pig/PropertyValidator.java
++++ b/contrib/views/pig/src/main/java/org/apache/ambari/view/pig/PropertyValidator.java
+@@ -19,10 +19,9 @@
+ package org.apache.ambari.view.pig;
+ 
+ import org.apache.ambari.view.ViewInstanceDefinition;
++import org.apache.ambari.view.utils.ambari.ValidatorUtils;
+ import org.apache.ambari.view.validation.ValidationResult;
+ import org.apache.ambari.view.validation.Validator;
+-import org.apache.commons.validator.routines.RegexValidator;
+-import org.apache.commons.validator.routines.UrlValidator;
+ 
+ public class PropertyValidator implements Validator {
+ 
+@@ -48,7 +47,7 @@ public ValidationResult validateProperty(String property, ViewInstanceDefinition
+     // 3. Cluster associated properties
+     if (property.equals(WEBHDFS_URL)) {
+       String webhdfsUrl = viewInstanceDefinition.getPropertyMap().get(WEBHDFS_URL);
+-      if (!validateHdfsURL(webhdfsUrl)) {
++      if (!ValidatorUtils.validateHdfsURL(webhdfsUrl)) {
+         return new InvalidPropertyValidationResult(false, "Must be valid URL");
+       }
+     }
+@@ -70,27 +69,6 @@ public ValidationResult validateProperty(String property, ViewInstanceDefinition
+     return ValidationResult.SUCCESS;
+   }
+ 
+-  /**
+-   * Validates filesystem URL
+-   * @param webhdfsUrl url
+-   * @return is url valid
+-   */
+-  private boolean validateHdfsURL(String webhdfsUrl) {
+-    String[] schemes = {"webhdfs", "hdfs", "s3", "file"};
+-    return validateURL(webhdfsUrl, schemes);
+-  }
+-
+-  private boolean validateHttpURL(String webhdfsUrl) {
+-    String[] schemes = {"http", "https"};
+-    return validateURL(webhdfsUrl, schemes);
+-  }
+-
+-  private boolean validateURL(String webhdfsUrl, String[] schemes) {
+-    RegexValidator authority = new RegexValidator(".*");
+-    UrlValidator urlValidator = new UrlValidator(schemes, authority, UrlValidator.ALLOW_LOCAL_URLS);
+-    return urlValidator.isValid(webhdfsUrl);
+-  }
+-
+   public static class InvalidPropertyValidationResult implements ValidationResult {
+     private boolean valid;
+     private String detail;
+diff --git a/contrib/views/utils/pom.xml b/contrib/views/utils/pom.xml
+index 1adb3fbfe8f..d3cc683fb86 100644
+--- a/contrib/views/utils/pom.xml
++++ b/contrib/views/utils/pom.xml
+@@ -138,6 +138,11 @@
+       <artifactId>hadoop-azure</artifactId>
+       <version>${hadoop.version}</version>
+     </dependency>
++    <dependency>
++      <groupId>commons-validator</groupId>
++      <artifactId>commons-validator</artifactId>
++      <version>1.4.0</version>
++    </dependency>
+   </dependencies>
+ 
+   <properties>
+diff --git a/contrib/views/utils/src/main/java/org/apache/ambari/view/utils/ambari/ValidatorUtils.java b/contrib/views/utils/src/main/java/org/apache/ambari/view/utils/ambari/ValidatorUtils.java
+new file mode 100644
+index 00000000000..f5654f20314
+--- /dev/null
++++ b/contrib/views/utils/src/main/java/org/apache/ambari/view/utils/ambari/ValidatorUtils.java
+@@ -0,0 +1,46 @@
++/**
++ * Licensed to the Apache Software Foundation (ASF) under one
++ * or more contributor license agreements.  See the NOTICE file
++ * distributed with this work for additional information
++ * regarding copyright ownership.  The ASF licenses this file
++ * to you under the Apache License, Version 2.0 (the
++ * "License"); you may not use this file except in compliance
++ * with the License.  You may obtain a copy of the License at
++ *
++ *     http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package org.apache.ambari.view.utils.ambari;
++
++
++import org.apache.commons.validator.routines.RegexValidator;
++import org.apache.commons.validator.routines.UrlValidator;
++
++public class ValidatorUtils {
++  /**
++   * Validates filesystem URL
++   * @param webhdfsUrl url
++   * @return is url valid
++   */
++  public static boolean validateHdfsURL(String webhdfsUrl) {
++    String[] schemes = {"webhdfs", "hdfs", "s3","wasb"};
++    return validateURL(webhdfsUrl, schemes);
++  }
++
++  public static boolean validateHttpURL(String webhdfsUrl) {
++    String[] schemes = {"http", "https"};
++    return validateURL(webhdfsUrl, schemes);
++  }
++
++  public static boolean validateURL(String webhdfsUrl, String[] schemes) {
++    RegexValidator authority = new RegexValidator(".*");
++    UrlValidator urlValidator = new UrlValidator(schemes, authority, UrlValidator.ALLOW_LOCAL_URLS);
++    return urlValidator.isValid(webhdfsUrl);
++  }
++}

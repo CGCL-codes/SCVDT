@@ -1,0 +1,103 @@
+From b5a5be24c418033cb2ef965a4f3f06b7b4213845 Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Tue, 25 Oct 2016 10:16:25 +0200
+Subject: [PATCH] [stable9.1] Merge pull request #26459 from
+ owncloud/limit-carddav-image-export-mime-types
+
+Limit carddav image export mime types
+---
+ apps/dav/lib/carddav/imageexportplugin.php       | 10 ++++++++--
+ .../tests/unit/carddav/imageexportplugintest.php | 16 ++++++++++------
+ 2 files changed, 18 insertions(+), 8 deletions(-)
+
+diff --git a/apps/dav/lib/carddav/imageexportplugin.php b/apps/dav/lib/carddav/imageexportplugin.php
+index fcd36b3ff35..1a0e99b28e7 100644
+--- a/apps/dav/lib/carddav/imageexportplugin.php
++++ b/apps/dav/lib/carddav/imageexportplugin.php
+@@ -86,6 +86,7 @@ function httpGet(RequestInterface $request, ResponseInterface $response) {
+ 
+ 		if ($result = $this->getPhoto($node)) {
+ 			$response->setHeader('Content-Type', $result['Content-Type']);
++			$response->setHeader('Content-Disposition', 'attachment');
+ 			$response->setStatus(200);
+ 
+ 			$response->setBody($result['body']);
+@@ -120,6 +121,11 @@ function getPhoto(Card $node) {
+ 				}
+ 				$val = file_get_contents($val);
+ 			}
++
++			if (!in_array($type, ['image/png', 'image/jpeg', 'image/gif'])) {
++				$type = 'application/octet-stream';
++			}
++
+ 			return [
+ 				'Content-Type' => $type,
+ 				'body' => $val
+@@ -136,7 +142,7 @@ private function readCard($cardData) {
+ 
+ 	/**
+ 	 * @param Binary $photo
+-	 * @return Parameter
++	 * @return string
+ 	 */
+ 	private function getType($photo) {
+ 		$params = $photo->parameters();
+@@ -151,6 +157,6 @@ private function getType($photo) {
+ 				return 'image/' . strtolower($type);
+ 			}
+ 		}
+-		return '';
++		return 'application/octet-stream';
+ 	}
+ }
+diff --git a/apps/dav/tests/unit/carddav/imageexportplugintest.php b/apps/dav/tests/unit/carddav/imageexportplugintest.php
+index 3a9dc144584..25a367cbd94 100644
+--- a/apps/dav/tests/unit/carddav/imageexportplugintest.php
++++ b/apps/dav/tests/unit/carddav/imageexportplugintest.php
+@@ -92,7 +92,7 @@ public function testNotACard() {
+ 	 * @param bool $expected
+ 	 * @param array $getPhotoResult
+ 	 */
+-	public function testCardWithOrWithoutPhoto($expected, $getPhotoResult) {
++	public function testCardWithOrWithoutPhoto($expectedContentType, $getPhotoResult) {
+ 		$this->request->expects($this->once())->method('getQueryParameters')->willReturn(['photo' => true]);
+ 		$this->request->expects($this->once())->method('getPath')->willReturn('/files/welcome.txt');
+ 
+@@ -101,20 +101,22 @@ public function testCardWithOrWithoutPhoto($expected, $getPhotoResult) {
+ 
+ 		$this->plugin->expects($this->once())->method('getPhoto')->willReturn($getPhotoResult);
+ 
+-		if (!$expected) {
+-			$this->response->expects($this->once())->method('setHeader');
+-			$this->response->expects($this->once())->method('setStatus');
++		if (is_string($expectedContentType)) {
++			$this->response->expects($this->exactly(2))->method('setHeader')->withConsecutive(
++				['Content-Type', $expectedContentType],
++				['Content-Disposition', 'attachment']);
++			$this->response->expects($this->once())->method('setStatus')->with(200);
+ 			$this->response->expects($this->once())->method('setBody');
+ 		}
+ 
+ 		$result = $this->plugin->httpGet($this->request, $this->response);
+-		$this->assertEquals($expected, $result);
++		$this->assertEquals(!is_string($expectedContentType), $result);
+ 	}
+ 
+ 	public function providesCardWithOrWithoutPhoto() {
+ 		return [
+ 			[true, null],
+-			[false, ['Content-Type' => 'image/jpeg', 'body' => '1234']],
++			['image/jpeg', ['Content-Type' => 'image/jpeg', 'body' => '1234']],
+ 		];
+ 	}
+ 
+@@ -143,6 +145,8 @@ public function providesPhotoData() {
+ 			'vcard 3 with PHOTO URL' => [false, "BEGIN:VCARD\r\nVERSION:3.0\r\nPRODID:-//Sabre//Sabre VObject 3.5.0//EN\r\nUID:12345\r\nFN:12345\r\nN:12345;;;;\r\nPHOTO;TYPE=JPEG;VALUE=URI:http://example.com/photo.jpg\r\nEND:VCARD\r\n"],
+ 			'vcard 4 with PHOTO' => [['Content-Type' => 'image/jpeg', 'body' => '12345'], "BEGIN:VCARD\r\nVERSION:4.0\r\nPRODID:-//Sabre//Sabre VObject 3.5.0//EN\r\nUID:12345\r\nFN:12345\r\nN:12345;;;;\r\nPHOTO:data:image/jpeg;base64,MTIzNDU=\r\nEND:VCARD\r\n"],
+ 			'vcard 4 with PHOTO URL' => [false, "BEGIN:VCARD\r\nVERSION:4.0\r\nPRODID:-//Sabre//Sabre VObject 3.5.0//EN\r\nUID:12345\r\nFN:12345\r\nN:12345;;;;\r\nPHOTO;MEDIATYPE=image/jpeg:http://example.org/photo.jpg\r\nEND:VCARD\r\n"],
++			'vcard 3 with bad PHOTO' => [['Content-Type' => 'application/octet-stream', 'body' => '12345'], "BEGIN:VCARD\r\nVERSION:3.0\r\nPRODID:-//Sabre//Sabre VObject 4.1.1//EN\r\nUID:12345\r\nFN:12345\r\nN:12345;;;;\r\nPHOTO;ENCODING=b;TYPE=TXT:MTIzNDU=\r\nEND:VCARD\r\n"],
++			'vcard 4 with bad PHOTO' => [['Content-Type' => 'application/octet-stream', 'body' => '12345'], "BEGIN:VCARD\r\nVERSION:4.0\r\nPRODID:-//Sabre//Sabre VObject 4.1.1//EN\r\nUID:12345\r\nFN:12345\r\nN:12345;;;;\r\nPHOTO:data:video/mpeg;base64,MTIzNDU=\r\nEND:VCARD\r\n"],
+ 		];
+ 	}
+ }

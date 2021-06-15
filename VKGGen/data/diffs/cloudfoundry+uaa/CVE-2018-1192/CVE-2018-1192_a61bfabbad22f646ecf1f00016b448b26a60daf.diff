@@ -1,0 +1,90 @@
+diff --git a/server/src/main/java/org/cloudfoundry/identity/uaa/authentication/UaaAuthenticationDetails.java b/server/src/main/java/org/cloudfoundry/identity/uaa/authentication/UaaAuthenticationDetails.java
+index 31c9d683c2..51d37aef24 100644
+--- a/server/src/main/java/org/cloudfoundry/identity/uaa/authentication/UaaAuthenticationDetails.java
++++ b/server/src/main/java/org/cloudfoundry/identity/uaa/authentication/UaaAuthenticationDetails.java
+@@ -12,14 +12,14 @@
+  *******************************************************************************/
+ package org.cloudfoundry.identity.uaa.authentication;
+ 
++import javax.servlet.http.HttpServletRequest;
++import java.io.Serializable;
++
+ import com.fasterxml.jackson.annotation.JsonProperty;
+ import org.bouncycastle.util.encoders.Base64;
+ import org.springframework.security.web.authentication.WebAuthenticationDetails;
+ import org.springframework.util.StringUtils;
+ 
+-import javax.servlet.http.HttpServletRequest;
+-import java.io.Serializable;
+-
+ /**
+  * Contains additional information about the authentication request which may be
+  * of use in auditing etc.
+@@ -113,12 +113,6 @@ public String toString() {
+             }
+             sb.append("clientId=").append(clientId);
+         }
+-        if (sessionId != null) {
+-            if (sb.length() > 0) {
+-                sb.append(", ");
+-            }
+-            sb.append("sessionId=").append(sessionId);
+-        }
+         return sb.toString();
+     }
+ 
+diff --git a/server/src/test/java/org/cloudfoundry/identity/uaa/authentication/event/UserAuthenticationSuccessEventTests.java b/server/src/test/java/org/cloudfoundry/identity/uaa/authentication/event/UserAuthenticationSuccessEventTests.java
+new file mode 100644
+index 0000000000..1c624a3703
+--- /dev/null
++++ b/server/src/test/java/org/cloudfoundry/identity/uaa/authentication/event/UserAuthenticationSuccessEventTests.java
+@@ -0,0 +1,48 @@
++/*
++ * ****************************************************************************
++ *     Cloud Foundry
++ *     Copyright (c) [2009-2018] Pivotal Software, Inc. All Rights Reserved.
++ *
++ *     This product is licensed to you under the Apache License, Version 2.0 (the "License").
++ *     You may not use this product except in compliance with the License.
++ *
++ *     This product includes a number of subcomponents with
++ *     separate copyright notices and license terms. Your use of these
++ *     subcomponents is subject to the terms and conditions of the
++ *     subcomponent's license, as noted in the LICENSE file.
++ * ****************************************************************************
++ */
++
++package org.cloudfoundry.identity.uaa.authentication.event;
++
++import org.cloudfoundry.identity.uaa.authentication.UaaAuthenticationDetails;
++import org.cloudfoundry.identity.uaa.user.UaaUser;
++
++import org.junit.Test;
++import org.springframework.mock.web.MockHttpServletRequest;
++import org.springframework.mock.web.MockHttpSession;
++import org.springframework.security.core.Authentication;
++
++import static org.hamcrest.MatcherAssert.assertThat;
++import static org.hamcrest.Matchers.containsString;
++import static org.hamcrest.Matchers.not;
++import static org.mockito.Mockito.mock;
++
++public class UserAuthenticationSuccessEventTests {
++
++    @Test
++    public void get_origin_from_request() throws Exception {
++        MockHttpSession session = new MockHttpSession(null, "the-id");
++        MockHttpServletRequest request = new MockHttpServletRequest("GET","/oauth/authorize");
++        request.setSession(session);
++        request.setRemoteAddr("127.10.10.10");
++        UaaAuthenticationDetails details = new UaaAuthenticationDetails(request, "client-id");
++
++        UserAuthenticationSuccessEvent event = new UserAuthenticationSuccessEvent(mock(UaaUser.class), mock(Authentication.class));
++        String origin = event.getOrigin(details);
++
++        assertThat(origin, containsString("remoteAddress=127.10.10.10"));
++        assertThat(origin, containsString("clientId=client-id"));
++        assertThat(origin, not(containsString("sessionId=")));
++    }
++}
+\ No newline at end of file

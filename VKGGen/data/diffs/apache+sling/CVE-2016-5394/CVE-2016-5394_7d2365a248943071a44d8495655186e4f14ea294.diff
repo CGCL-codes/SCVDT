@@ -1,0 +1,44 @@
+diff --git a/bundles/extensions/xss/src/main/java/org/apache/sling/xss/impl/XSSAPIImpl.java b/bundles/extensions/xss/src/main/java/org/apache/sling/xss/impl/XSSAPIImpl.java
+index 8abd350a44..e0fc15fea1 100644
+--- a/bundles/extensions/xss/src/main/java/org/apache/sling/xss/impl/XSSAPIImpl.java
++++ b/bundles/extensions/xss/src/main/java/org/apache/sling/xss/impl/XSSAPIImpl.java
+@@ -429,7 +429,7 @@ public String encodeForXMLAttr(String source) {
+      */
+     @Override
+     public String encodeForJSString(String source) {
+-        return source == null ? null : Encode.forJavaScriptSource(source);
++        return source == null ? null : Encode.forJavaScript(source).replace("\\-", "\\u002D");
+     }
+ 
+     /**
+diff --git a/bundles/extensions/xss/src/test/java/org/apache/sling/xss/impl/XSSAPIImplTest.java b/bundles/extensions/xss/src/test/java/org/apache/sling/xss/impl/XSSAPIImplTest.java
+index 714c575121..e6f3c87bd2 100644
+--- a/bundles/extensions/xss/src/test/java/org/apache/sling/xss/impl/XSSAPIImplTest.java
++++ b/bundles/extensions/xss/src/test/java/org/apache/sling/xss/impl/XSSAPIImplTest.java
+@@ -400,10 +400,13 @@ public void testEncodeForJSString() {
+                 {null, null},
+                 {"simple", "simple"},
+ 
+-                {"break\"out", "break\\\"out"},
+-                {"break'out", "break\\'out"},
+-                {"'alert(document.cookie)", "\\'alert(document.cookie)"},
+-                {"2014-04-22T10:11:24.002+01:00", "2014-04-22T10:11:24.002+01:00"}
++                {"break\"out", "break\\x22out"},
++                {"break'out", "break\\x27out"},
++
++                {"</script>", "<\\/script>"},
++
++                {"'alert(document.cookie)", "\\x27alert(document.cookie)"},
++                {"2014-04-22T10:11:24.002+01:00", "2014\\u002D04\\u002D22T10:11:24.002+01:00"}
+         };
+ 
+         for (String[] aTestData : testData) {
+@@ -430,7 +433,7 @@ public void testGetValidJSToken() {
+                 {"\"literal string\"", "\"literal string\""},
+                 {"'literal string'", "'literal string'"},
+                 {"\"bad literal'", RUBBISH},
+-                {"'literal'); junk'", "'literal\\'); junk'"},
++                {"'literal'); junk'", "'literal\\x27); junk'"},
+ 
+                 {"1200", "1200"},
+                 {"3.14", "3.14"},

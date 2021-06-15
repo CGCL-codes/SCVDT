@@ -1,0 +1,367 @@
+accumulo	accumulo							
+accumulo-project	accumulo							
+activemq-parent	activemq	activemq_apollo	activemq_artemis					
+org.apache.aries.jmx.blueprint								
+org.apache.aries.jmx.blueprint.api								
+org.apache.aries.jmx.blueprint.core								
+org.apache.aries.jmx.core								
+org.apache.aries.component-dsl.parent								
+org.apache.aries.ejb.modeller								
+org.apache.aries.ejb.modeller.itest								
+org.apache.aries.blueprint.noosgi								
+org.apache.aries.blueprint.sample								
+org.apache.aries.blueprint.sample.war								
+org.apache.aries.blueprint.web								
+org.apache.aries.blueprint.webosgi								
+org.apache.aries.jmx.api								
+org.apache.aries.blueprint.testbundlea								
+org.apache.aries.blueprint.testbundleb								
+org.apache.aries.cdi								
+org.apache.aries.blueprint.spring								
+org.apache.aries.blueprint.testquiescebundle								
+org.apache.aries.jmx								
+org.apache.aries.jmx.itests								
+org.apache.aries.jndi								
+calcite	calcite							
+optiq								
+camel-parent	camel							
+airavata								
+ambari	ambari							
+optiq-parent								
+archiva-parent	archiva							
+archiva	archiva							
+redback	redback							
+aries								
+application								
+application-modeller-standalone								
+application-modeller-common-test								
+blueprint								
+async	ironport_asyncos	async-http-client	asyncos	httpasyncclient	asyncssh	asyncpg	async-git	async-h1
+blueprint-maven-plugin								
+blueprint-parser								
+blueprint-maven-plugin-annotation								
+blueprint-maven-plugin-pax-cdi-handlers								
+blueprint-maven-plugin-spi								
+blueprint-maven-plugin-spring-handlers								
+blueprint-parent								
+jmx								
+eba-maven-plugin								
+esa-maven-plugin								
+jndi								
+jpa	openjpa	spring_data_jpa						
+org.apache.aries.application								
+org.apache.aries.application.modeller								
+org.apache.aries.application.resolve.transform.cm								
+org.apache.aries.application.converters								
+org.apache.aries.application.resolve.transform.cm.itests								
+org.apache.aries.application.resolver.noop								
+org.apache.aries.application.resolver.obr								
+org.apache.aries.application.api								
+org.apache.aries.application.default.local.platform								
+org.apache.aries.application.deployment.management								
+org.apache.aries.application.install								
+org.apache.aries.application.runtime.isolated								
+org.apache.aries.application.runtime.repository								
+org.apache.aries.blueprint.annotation.api								
+org.apache.aries.application.management								
+org.apache.aries.application.runtime.itest.interfaces								
+org.apache.aries.blueprint								
+org.apache.aries.blueprint.annotation.itests								
+org.apache.aries.application.runtime								
+org.apache.aries.application.runtime.framework								
+org.apache.aries.application.runtime.framework.management								
+org.apache.aries.application.tooling.repository.generator								
+org.apache.aries.application.utils								
+org.apache.aries.blueprint.cm								
+org.apache.aries.blueprint.core								
+org.apache.aries.application.runtime.isolated.itests								
+org.apache.aries.blueprint.annotation.impl								
+org.apache.aries.blueprint.compatibility								
+org.apache.aries.blueprint.itests								
+org.apache.aries.blueprint.jexl.evaluator								
+org.apache.aries.blueprint.api								
+org.apache.aries.blueprint.core.compatibility								
+org.apache.aries.blueprint.authz								
+org.apache.aries.blueprint.spring.extender								
+org.apache.aries.blueprint.sample-annotation								
+org.apache.aries.blueprint.sample-fragment								
+wicket-parent	wicket	wicket-jquery-ui						
+org.apache.aries.ejb.openejb.extender.itest								
+org.apache.aries.ejb.openejb.extender								
+org.apache.aries.jmx.core.whiteboard								
+org.apache.aries.jndi.core								
+org.apache.aries.jpa.api								
+org.apache.aries.jpa.blueprint.aries								
+org.apache.aries.jpa.container								
+org.apache.aries.jpa.container.advanced.itest.bundle								
+org.apache.aries.jpa.container.context								
+org.apache.aries.jndi.api								
+org.apache.aries.jndi.legacy.support								
+org.apache.aries.jndi.url.itest.biz								
+org.apache.aries.jpa.main								
+org.apache.aries.proxy								
+org.apache.aries.proxy.api								
+org.apache.aries.proxy.impl								
+org.apache.aries.jmx.whiteboard								
+org.apache.aries.jndi.url								
+org.apache.aries.jpa.blueprint.itest.bundle								
+org.apache.aries.quiesce.api								
+org.apache.aries.quiesce.manager.itest								
+org.apache.aries.jndi.rmi								
+org.apache.aries.jndi.url.itest								
+org.apache.aries.jndi.url.itest.web								
+org.apache.aries.proxy-distro								
+org.apache.aries.jpa.container.itest.bundle								
+org.apache.aries.spifly.dynamic.bundle								
+org.apache.aries.spifly.dynamic.framework.extension								
+org.apache.aries.spifly.static.bundle								
+org.apache.aries.spifly.static.tool								
+org.apache.aries.spifly.weaver-internal								
+org.apache.aries.subsystem								
+org.apache.aries.jpa.container.itest								
+org.apache.aries.spifly.core-internal								
+org.apache.aries.subsystem.core								
+org.apache.aries.subsystem.obr								
+org.apache.aries.transaction.manager								
+org.apache.aries.proxy.itests								
+org.apache.aries.quiesce.manager								
+org.apache.aries.subsystem.api								
+org.apache.aries.transaction.blueprint								
+org.apache.aries.util								
+org.apache.aries.testsupport.unit								
+org.apache.aries.transaction.jdbc								
+org.apache.aries.transaction.jms								
+org.apache.aries.subsystem.gogo-command								
+org.apache.aries.transaction.testbundle								
+org.apache.aries.transaction.itests								
+org.apache.aries.versioning								
+org.apache.aries.versioning.checker								
+org.apache.aries.versioning.plugin								
+org.apache.aries.transaction.wrappers								
+org.apache.aries.util-parent								
+quiesce								
+samples								
+org.apache.aries.transaction.testds								
+org.apache.aries.web.itests								
+org.apache.aries.web.urlhandler								
+proxy	proxy							
+spifly								
+testsupport								
+transaction								
+tx-control								
+spi-fly-examples								
+web								
+apache-asterixdb-hyracks								
+apache-asterixdb-fullstack								
+asterix								
+apache-asterixdb								
+fullstack								
+hyracks								
+apache-atlas	atlas							
+avro-toplevel								
+bigtop								
+bookkeeper								
+bval-parent								
+avatica-parent								
+druid	druid							
+camel	camel							
+cassandra	cassandra	cassandra_nntp_server						
+cayenne-parent	cayenne							
+chukwa								
+clerezza								
+clerezza-reactor								
+reactor	php(reactor)	newsreactor	phpreactor	reactor_netty				
+cloudstack	cloudstack							
+jaxrs.utils								
+release20130710-reactor								
+cocoon-archetypes								
+cocoon-bootstrap								
+cocoon	cocoon							
+cocoon-22-archetype-block								
+cocoon-apples								
+cocoon-core								
+cocoon-ajax-impl								
+cocoon-blocks-fw-impl								
+cocoon-commons-modules								
+cocoon-deployer								
+commons-bcel6								
+bcel								
+commons-beanutils	commons_beanutils							
+commons-bsf								
+commons-codec	mpeg-4_codec	libavcodec	j2k-codec	k-lite_codec	thor_video_codec			
+commons-collections4	commons_collections							
+chimera	chimera_web_portal							
+commons-crypto								
+commons-csv								
+cocoon-22-archetype-webapp								
+cocoon-ajax								
+cocoon-blocks-fw								
+cocoon-commons								
+cocoon-deployer-core								
+cocoon-blocks-modules								
+cocoon-core-modules								
+commons-chain								
+commons-cli								
+commons-compress	commons-compress							
+cocoon-template								
+cocoon-tools-modules								
+commons-collections	commons_collections							
+cocoon-project	cocoon							
+cocoon-deployer-modules								
+cocoon-flowscript-impl								
+cocoon-forms-impl								
+cocoon-template-impl								
+cocoon-deployer-plugin								
+cocoon-forms								
+cocoon-licenses								
+commons-dbcp2								
+commons-dbutils								
+commons-digester								
+commons-email	commons_email							
+commons-dbcp								
+commons-exec								
+commons-fileupload	commons_fileupload							
+commons-imaging	commons_imaging							
+sanselan								
+commons-digester3								
+commons-functor								
+commons-geometry-parent								
+commons-io								
+commons-jci								
+commons-jcs								
+commons-jexl								
+jcs								
+commons-jcs3								
+commons-jexl3								
+commons-jxpath								
+commons-lang3								
+commons-lang								
+commons-math								
+commons-math3								
+commons-net								
+commons-pool2								
+commons-logging								
+commons-pool								
+commons-proxy								
+commons-numbers-parent								
+commons-rdf-parent								
+commons-release-plugin								
+commons-rng-parent								
+commons-validator								
+commons-text								
+commons-scxml2								
+commons-vfs2-project								
+commons-scxml								
+api	api							
+commons-rdf								
+commons-rng								
+commons-vfs-project								
+commons-weaver-base								
+continuum-parent	continuum							
+commons-weaver-parent								
+continuum	continuum							
+continuum-data-management								
+continuum-docs								
+apache-rat-project								
+ctakes								
+curator								
+apache-curator								
+cxf	cxf							
+apache-cxf	cxf							
+drill-root	drill							
+hbase	hbase							
+dubbo-parent	dubbo							
+eagle-parent	communications_eagle_lnp_application_processor	communications_eagle_application_processor	eaglesoft	communications_eagle_local_number_portability_application_processor	eagle_tester			
+falcon-main	falcon_web_server							
+stratosphere								
+flink-parent	flink							
+falcon-website	falcon_web_server							
+geronimo	geronimo							
+car-maven-plugin								
+helix	helix_universal_server	helix_universal_mobile_server	helix_universal_mobile_server_and_gateway	helix_player	helix_dna_server	helix_server	helix_mobile_server	helix_server_mobile
+groovy	groovy							
+hadoop-main	hadoop							
+hama-core								
+hama-parent								
+hama								
+httpcomponents-asyncclient	httpasyncclient							
+hive	hive							
+apache-ignite	ignite							
+hive-passthrough								
+ignite	ignite	igniteui						
+iotdb-parent	iotdb							
+isis-all								
+root								
+jackrabbit	jackrabbit	jackrabbit_oak						
+isis								
+jackrabbit-core								
+jackrabbit-jcr-commons								
+jackrabbit-jcr-rmi								
+jspwiki-builder								
+jackrabbit-classloader								
+jackrabbit-jcr-server								
+juddi-parent	juddi							
+jspwiki	jspwiki							
+karaf	karaf							
+log4j	log4j							
+gateway-site								
+gateway	gateway							
+kylin	kylin							
+maven	maven							
+phoenix	phoenix							
+build								
+mina								
+mina-parent								
+myfaces-core-project	myfaces							
+struts2-parent	struts2-showcase	struts						
+myfaces-core-module	myfaces							
+nifi	nifi							
+oozie-main	oozie							
+openjpa	openjpa							
+openjpa-parent	openjpa							
+openmeetings-parent	openmeetings							
+opennlp	opennlp							
+pdfbox	pdfbox							
+apache-streams	streams							
+streams-project	streams							
+storm	storm							
+pivot	pivot							
+pivot-archetype-quickstart								
+rampart-project	rampart/c							
+axis2	axis2	apache_axis2/c						
+ratis								
+ranger	ranger							
+reef-project								
+rya-project								
+access	access							
+sentry	sentry	asg-sentry	realsecure_sentry					
+sharding-jdbc								
+sharding-sphere	shardingsphere							
+shardingsphere	shardingsphere							
+shindig-project	shindig	shindig-integrator	shindigintegrator					
+shiro-root	shiro							
+site-template	accio_responsive_onepage_parallax_site_template	almera_responsive_portfolio_site_template						
+sis	sis							
+apm	apm-j601-ws_firmware	apm-h803-mpc_firmware	apm32f103_firmware	dynamic_apm				
+skywalking	skywalking							
+spark-parent_2.11	spark							
+spark	spark	spark_browser						
+spark-parent	spark	spark_browser						
+spark-parent_2.10	spark							
+spark-parent_2.12	spark							
+syncope	syncope							
+Apache-Synapse-Incubating	synapse							
+Apache-Synapse	synapse							
+syncope-root	synapse							
+tez								
+syncope-archetype								
+tajo-main								
+tiles-parent	tiles							
+tiles-reactor								
+tika	tika							
+openejb								
+tomee-project	tomee							
+unomi-root	unomi							
+wicket	wicket	wicket-jquery-ui						
+zeppelin	zeppelin							
+zookeeper	zookeeper							

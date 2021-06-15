@@ -1,0 +1,155 @@
+diff --git a/retrofit/src/main/java/retrofit2/RequestBuilder.java b/retrofit/src/main/java/retrofit2/RequestBuilder.java
+index 98dd66690..79fac3bc1 100644
+--- a/retrofit/src/main/java/retrofit2/RequestBuilder.java
++++ b/retrofit/src/main/java/retrofit2/RequestBuilder.java
+@@ -16,6 +16,7 @@
+ package retrofit2;
+ 
+ import java.io.IOException;
++import java.util.regex.Pattern;
+ import javax.annotation.Nullable;
+ import okhttp3.FormBody;
+ import okhttp3.Headers;
+@@ -32,6 +33,21 @@
+       { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+   private static final String PATH_SEGMENT_ALWAYS_ENCODE_SET = " \"<>^`{}|\\?#";
+ 
++  /**
++   * Matches strings that contain {@code .} or {@code ..} as a complete path segment. This also
++   * matches dots in their percent-encoded form, {@code %2E}.
++   *
++   * <p>It is okay to have these strings within a larger path segment (like {@code a..z} or {@code
++   * index.html}) but when alone they have a special meaning. A single dot resolves to no path
++   * segment so {@code /one/./three/} becomes {@code /one/three/}. A double-dot pops the preceding
++   * directory, so {@code /one/../three/} becomes {@code /three/}.
++   *
++   * <p>We forbid these in Retrofit paths because they're likely to have the unintended effect.
++   * For example, passing {@code ..} to {@code DELETE /account/book/{isbn}/} yields {@code DELETE
++   * /account/}.
++   */
++  private static final Pattern PATH_TRAVERSAL = Pattern.compile("(.*/)?(\\.|%2e|%2E){1,2}(/.*)?");
++
+   private final String method;
+ 
+   private final HttpUrl baseUrl;
+@@ -91,7 +107,13 @@ void addPathParam(String name, String value, boolean encoded) {
+       // The relative URL is cleared when the first query parameter is set.
+       throw new AssertionError();
+     }
+-    relativeUrl = relativeUrl.replace("{" + name + "}", canonicalizeForPath(value, encoded));
++    String replacement = canonicalizeForPath(value, encoded);
++    String newRelativeUrl = relativeUrl.replace("{" + name + "}", replacement);
++    if (PATH_TRAVERSAL.matcher(newRelativeUrl).matches()) {
++      throw new IllegalArgumentException(
++          "@Path parameters shouldn't perform path traversal ('.' or '..'): " + value);
++    }
++    relativeUrl = newRelativeUrl;
+   }
+ 
+   private static String canonicalizeForPath(String input, boolean alreadyEncoded) {
+diff --git a/retrofit/src/test/java/retrofit2/RequestFactoryTest.java b/retrofit/src/test/java/retrofit2/RequestFactoryTest.java
+index 97d178677..602d5cd8f 100644
+--- a/retrofit/src/test/java/retrofit2/RequestFactoryTest.java
++++ b/retrofit/src/test/java/retrofit2/RequestFactoryTest.java
+@@ -878,6 +878,88 @@
+     assertThat(request.body()).isNull();
+   }
+ 
++  @Test public void pathParametersAndPathTraversal() {
++    class Example {
++      @GET("/foo/bar/{ping}/") //
++      Call<ResponseBody> method(@Path(value = "ping") String ping) {
++        return null;
++      }
++    }
++
++    assertMalformedRequest(Example.class, ".");
++    assertMalformedRequest(Example.class, "..");
++
++    assertThat(buildRequest(Example.class, "./a").url().encodedPath())
++        .isEqualTo("/foo/bar/.%2Fa/");
++    assertThat(buildRequest(Example.class, "a/.").url().encodedPath())
++        .isEqualTo("/foo/bar/a%2F./");
++    assertThat(buildRequest(Example.class, "a/..").url().encodedPath())
++        .isEqualTo("/foo/bar/a%2F../");
++    assertThat(buildRequest(Example.class, "../a").url().encodedPath())
++        .isEqualTo("/foo/bar/..%2Fa/");
++    assertThat(buildRequest(Example.class, "..\\..").url().encodedPath())
++        .isEqualTo("/foo/bar/..%5C../");
++
++    assertThat(buildRequest(Example.class, "%2E").url().encodedPath())
++        .isEqualTo("/foo/bar/%252E/");
++    assertThat(buildRequest(Example.class, "%2E%2E").url().encodedPath())
++        .isEqualTo("/foo/bar/%252E%252E/");
++  }
++
++  @Test public void encodedPathParametersAndPathTraversal() {
++    class Example {
++      @GET("/foo/bar/{ping}/") //
++      Call<ResponseBody> method(@Path(value = "ping", encoded = true) String ping) {
++        return null;
++      }
++    }
++
++    assertMalformedRequest(Example.class, ".");
++    assertMalformedRequest(Example.class, "%2E");
++    assertMalformedRequest(Example.class, "%2e");
++    assertMalformedRequest(Example.class, "..");
++    assertMalformedRequest(Example.class, "%2E.");
++    assertMalformedRequest(Example.class, "%2e.");
++    assertMalformedRequest(Example.class, ".%2E");
++    assertMalformedRequest(Example.class, ".%2e");
++    assertMalformedRequest(Example.class, "%2E%2e");
++    assertMalformedRequest(Example.class, "%2e%2E");
++    assertMalformedRequest(Example.class, "./a");
++    assertMalformedRequest(Example.class, "a/.");
++    assertMalformedRequest(Example.class, "../a");
++    assertMalformedRequest(Example.class, "a/..");
++    assertMalformedRequest(Example.class, "a/../b");
++    assertMalformedRequest(Example.class, "a/%2e%2E/b");
++
++    assertThat(buildRequest(Example.class, "...").url().encodedPath())
++        .isEqualTo("/foo/bar/.../");
++    assertThat(buildRequest(Example.class, "a..b").url().encodedPath())
++        .isEqualTo("/foo/bar/a..b/");
++    assertThat(buildRequest(Example.class, "a..").url().encodedPath())
++        .isEqualTo("/foo/bar/a../");
++    assertThat(buildRequest(Example.class, "a..b").url().encodedPath())
++        .isEqualTo("/foo/bar/a..b/");
++    assertThat(buildRequest(Example.class, "..b").url().encodedPath())
++        .isEqualTo("/foo/bar/..b/");
++    assertThat(buildRequest(Example.class, "..\\..").url().encodedPath())
++        .isEqualTo("/foo/bar/..%5C../");
++  }
++
++  @Test public void dotDotsOkayWhenNotFullPathSegment() {
++    class Example {
++      @GET("/foo{ping}bar/") //
++      Call<ResponseBody> method(@Path(value = "ping", encoded = true) String ping) {
++        return null;
++      }
++    }
++
++    assertMalformedRequest(Example.class, "/./");
++    assertMalformedRequest(Example.class, "/../");
++
++    assertThat(buildRequest(Example.class, ".").url().encodedPath()).isEqualTo("/foo.bar/");
++    assertThat(buildRequest(Example.class, "..").url().encodedPath()).isEqualTo("/foo..bar/");
++  }
++
+   @Test public void pathParamRequired() {
+     class Example {
+       @GET("/foo/bar/{ping}/") //
+@@ -2783,4 +2865,12 @@ private static void assertBody(RequestBody body, String expected) {
+ 
+     return buildRequest(cls, retrofitBuilder, args);
+   }
++
++  static void assertMalformedRequest(Class<?> cls, Object... args) {
++    try {
++      Request request = buildRequest(cls, args);
++      fail("expected a malformed request but was " + request);
++    } catch (IllegalArgumentException expected) {
++    }
++  }
+ }

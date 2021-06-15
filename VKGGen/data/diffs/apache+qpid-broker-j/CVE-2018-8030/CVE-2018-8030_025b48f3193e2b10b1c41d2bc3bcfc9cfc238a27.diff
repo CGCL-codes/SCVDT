@@ -1,0 +1,105 @@
+diff --git a/broker-plugins/amqp-0-8-protocol/src/main/java/org/apache/qpid/server/protocol/v0_8/AMQChannel.java b/broker-plugins/amqp-0-8-protocol/src/main/java/org/apache/qpid/server/protocol/v0_8/AMQChannel.java
+index e7bafd0d07..ac9ea952b8 100644
+--- a/broker-plugins/amqp-0-8-protocol/src/main/java/org/apache/qpid/server/protocol/v0_8/AMQChannel.java
++++ b/broker-plugins/amqp-0-8-protocol/src/main/java/org/apache/qpid/server/protocol/v0_8/AMQChannel.java
+@@ -2217,7 +2217,10 @@ public void receiveMessageHeader(final BasicContentHeaderProperties properties,
+                 closeChannel(ErrorCodes.MESSAGE_TOO_LARGE,
+                              "Message size of " + bodySize + " greater than allowed maximum of " + _connection.getMaxMessageSize());
+             }
+-            publishContentHeader(new ContentHeaderBody(properties, bodySize));
++            else
++            {
++                publishContentHeader(new ContentHeaderBody(properties, bodySize));
++            }
+         }
+         else
+         {
+diff --git a/systests/protocol-tests-amqp-0-8/src/test/java/org/apache/qpid/tests/protocol/v0_8/extension/maxsize/MaximumMessageSize.java b/systests/protocol-tests-amqp-0-8/src/test/java/org/apache/qpid/tests/protocol/v0_8/extension/maxsize/MaximumMessageSize.java
+new file mode 100644
+index 0000000000..837b6e5b4f
+--- /dev/null
++++ b/systests/protocol-tests-amqp-0-8/src/test/java/org/apache/qpid/tests/protocol/v0_8/extension/maxsize/MaximumMessageSize.java
+@@ -0,0 +1,83 @@
++/*
++ *
++ * Licensed to the Apache Software Foundation (ASF) under one
++ * or more contributor license agreements.  See the NOTICE file
++ * distributed with this work for additional information
++ * regarding copyright ownership.  The ASF licenses this file
++ * to you under the Apache License, Version 2.0 (the
++ * "License"); you may not use this file except in compliance
++ * with the License.  You may obtain a copy of the License at
++ *
++ *   http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing,
++ * software distributed under the License is distributed on an
++ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++ * KIND, either express or implied.  See the License for the
++ * specific language governing permissions and limitations
++ * under the License.
++ *
++ */
++package org.apache.qpid.tests.protocol.v0_8.extension.maxsize;
++
++import static org.apache.qpid.tests.utils.BrokerAdmin.KIND_BROKER_J;
++import static org.hamcrest.CoreMatchers.equalTo;
++import static org.hamcrest.CoreMatchers.is;
++import static org.hamcrest.MatcherAssert.assertThat;
++
++import java.net.InetSocketAddress;
++import java.util.stream.Collectors;
++import java.util.stream.Stream;
++
++import org.junit.Before;
++import org.junit.Test;
++
++import org.apache.qpid.server.protocol.v0_8.transport.ChannelCloseBody;
++import org.apache.qpid.server.protocol.v0_8.transport.ChannelOpenOkBody;
++import org.apache.qpid.server.protocol.v0_8.transport.ConnectionCloseOkBody;
++import org.apache.qpid.tests.protocol.ChannelClosedResponse;
++import org.apache.qpid.tests.protocol.v0_8.FrameTransport;
++import org.apache.qpid.tests.protocol.v0_8.Interaction;
++import org.apache.qpid.tests.utils.BrokerAdmin;
++import org.apache.qpid.tests.utils.BrokerAdminUsingTestBase;
++import org.apache.qpid.tests.utils.BrokerSpecific;
++import org.apache.qpid.tests.utils.ConfigItem;
++
++@BrokerSpecific(kind = KIND_BROKER_J)
++@ConfigItem(name = "qpid.max_message_size", value = "1000")
++public class MaximumMessageSize extends BrokerAdminUsingTestBase
++{
++    private InetSocketAddress _brokerAddress;
++
++    @Before
++    public void setUp()
++    {
++        _brokerAddress = getBrokerAdmin().getBrokerAddress(BrokerAdmin.PortType.ANONYMOUS_AMQP);
++        getBrokerAdmin().createQueue(BrokerAdmin.TEST_QUEUE_NAME);
++    }
++
++    @Test
++    public void limitExceeded() throws Exception
++    {
++        String content = Stream.generate(() -> String.valueOf('.')).limit(1001).collect(Collectors.joining());
++        try(FrameTransport transport = new FrameTransport(_brokerAddress).connect())
++        {
++            final Interaction interaction = transport.newInteraction();
++            interaction.openAnonymousConnection()
++                       .channel().open().consumeResponse(ChannelOpenOkBody.class)
++                       .basic().contentHeaderPropertiesContentType("text/plain")
++                       .contentHeaderPropertiesDeliveryMode((byte)1)
++                       .contentHeaderPropertiesPriority((byte)1)
++                       .publishExchange("")
++                       .publishRoutingKey(BrokerAdmin.TEST_QUEUE_NAME)
++                       .content(content)
++                       .publishMessage()
++                       .consumeResponse(ChannelCloseBody.class)
++                       .channel().closeOk()
++                       .connection().close()
++                       .consumeResponse(ConnectionCloseOkBody.class, ChannelClosedResponse.class);
++
++            assertThat(getBrokerAdmin().getQueueDepthMessages(BrokerAdmin.TEST_QUEUE_NAME), is(equalTo(0)));
++        }
++    }
++}

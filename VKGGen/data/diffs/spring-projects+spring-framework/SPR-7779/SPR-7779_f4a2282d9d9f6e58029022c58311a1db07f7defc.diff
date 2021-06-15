@@ -1,0 +1,100 @@
+diff --git a/org.springframework.core/src/main/java/org/springframework/util/StringUtils.java b/org.springframework.core/src/main/java/org/springframework/util/StringUtils.java
+index f2505f21c44..823532d2886 100644
+--- a/org.springframework.core/src/main/java/org/springframework/util/StringUtils.java
++++ b/org.springframework.core/src/main/java/org/springframework/util/StringUtils.java
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2002-2010 the original author or authors.
++ * Copyright 2002-2011 the original author or authors.
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+@@ -643,7 +643,7 @@ public static boolean pathEquals(String path1, String path2) {
+ 	}
+ 
+ 	/**
+-	 * Parse the given <code>localeString</code> into a {@link Locale}.
++	 * Parse the given <code>localeString</code> value into a {@link Locale}.
+ 	 * <p>This is the inverse operation of {@link Locale#toString Locale's toString}.
+ 	 * @param localeString the locale string, following <code>Locale's</code>
+ 	 * <code>toString()</code> format ("en", "en_UK", etc);
+@@ -651,6 +651,13 @@ public static boolean pathEquals(String path1, String path2) {
+ 	 * @return a corresponding <code>Locale</code> instance
+ 	 */
+ 	public static Locale parseLocaleString(String localeString) {
++		for (int i = 0; i < localeString.length(); i++) {
++			char ch = localeString.charAt(i);
++			if (ch != '_' && !Character.isLetterOrDigit(ch)) {
++				throw new IllegalArgumentException(
++						"Locale value \"" + localeString + "\" contains invalid characters");
++			}
++		}
+ 		String[] parts = tokenizeToStringArray(localeString, "_ ", false, false);
+ 		String language = (parts.length > 0 ? parts[0] : "");
+ 		String country = (parts.length > 1 ? parts[1] : "");
+diff --git a/org.springframework.core/src/test/java/org/springframework/util/StringUtilsTests.java b/org.springframework.core/src/test/java/org/springframework/util/StringUtilsTests.java
+index 320b7363c61..eb676b8294f 100644
+--- a/org.springframework.core/src/test/java/org/springframework/util/StringUtilsTests.java
++++ b/org.springframework.core/src/test/java/org/springframework/util/StringUtilsTests.java
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2002-2008 the original author or authors.
++ * Copyright 2002-2011 the original author or authors.
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+@@ -611,4 +611,17 @@ public void testParseLocaleWithMultiValuedVariantUsingUnderscoresAsSeparatorsWit
+ 		assertEquals("Multi-valued variant portion of the Locale not extracted correctly.", variant, locale.getVariant());
+ 	}
+ 
++	/**
++	 * <a href="http://opensource.atlassian.com/projects/spring/browse/SPR-7779">See SPR-7779</a>.
++	 */
++	public void testParseLocaleWithInvalidCharacters() {
++		try {
++			StringUtils.parseLocaleString("%0D%0AContent-length:30%0D%0A%0D%0A%3Cscript%3Ealert%28123%29%3C/script%3E");
++			fail("Should have thrown IllegalArgumentException");
++		}
++		catch (IllegalArgumentException ex) {
++			// expected
++		}
++	}
++
+ }
+diff --git a/org.springframework.web.servlet/src/main/java/org/springframework/web/servlet/i18n/LocaleChangeInterceptor.java b/org.springframework.web.servlet/src/main/java/org/springframework/web/servlet/i18n/LocaleChangeInterceptor.java
+index d6b9a90e716..a39919c3e85 100644
+--- a/org.springframework.web.servlet/src/main/java/org/springframework/web/servlet/i18n/LocaleChangeInterceptor.java
++++ b/org.springframework.web.servlet/src/main/java/org/springframework/web/servlet/i18n/LocaleChangeInterceptor.java
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2002-2008 the original author or authors.
++ * Copyright 2002-2011 the original author or authors.
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+@@ -16,13 +16,11 @@
+ 
+ package org.springframework.web.servlet.i18n;
+ 
+-import java.util.Locale;
+-
+ import javax.servlet.ServletException;
+ import javax.servlet.http.HttpServletRequest;
+ import javax.servlet.http.HttpServletResponse;
+ 
+-import org.springframework.beans.propertyeditors.LocaleEditor;
++import org.springframework.util.StringUtils;
+ import org.springframework.web.servlet.LocaleResolver;
+ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+ import org.springframework.web.servlet.support.RequestContextUtils;
+@@ -72,9 +70,7 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
+ 			if (localeResolver == null) {
+ 				throw new IllegalStateException("No LocaleResolver found: not in a DispatcherServlet request?");
+ 			}
+-			LocaleEditor localeEditor = new LocaleEditor();
+-			localeEditor.setAsText(newLocale);
+-			localeResolver.setLocale(request, response, (Locale) localeEditor.getValue());
++			localeResolver.setLocale(request, response, StringUtils.parseLocaleString(newLocale));
+ 		}
+ 		// Proceed in any case.
+ 		return true;

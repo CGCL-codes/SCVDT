@@ -1,0 +1,76 @@
+diff --git a/plugins/config-browser/src/main/java/org/apache/struts2/config_browser/ShowBeansAction.java b/plugins/config-browser/src/main/java/org/apache/struts2/config_browser/ShowBeansAction.java
+index debc17c05..8ad85c9b6 100644
+--- a/plugins/config-browser/src/main/java/org/apache/struts2/config_browser/ShowBeansAction.java
++++ b/plugins/config-browser/src/main/java/org/apache/struts2/config_browser/ShowBeansAction.java
+@@ -50,6 +50,7 @@
+ 
+     @Inject
+     public void setContainer(Container container) {
++        super.setContainer(container);
+         bindings = new TreeMap<String, Set<Binding>>();
+         bindings.put(ObjectFactory.class.getName(), addBindings(container, ObjectFactory.class, StrutsConstants.STRUTS_OBJECTFACTORY));
+         bindings.put(XWorkConverter.class.getName(), addBindings(container, XWorkConverter.class, StrutsConstants.STRUTS_XWORKCONVERTER));
+diff --git a/plugins/config-browser/src/main/java/org/apache/struts2/config_browser/ShowConstantsAction.java b/plugins/config-browser/src/main/java/org/apache/struts2/config_browser/ShowConstantsAction.java
+index cf292e02a..3b056452d 100644
+--- a/plugins/config-browser/src/main/java/org/apache/struts2/config_browser/ShowConstantsAction.java
++++ b/plugins/config-browser/src/main/java/org/apache/struts2/config_browser/ShowConstantsAction.java
+@@ -36,6 +36,7 @@
+ 
+     @Inject
+     public void setContainer(Container container) {
++        super.setContainer(container);
+         constants = new HashMap<String, String>();
+         for (String key : container.getInstanceNames(String.class)) {
+             constants.put(key, container.getInstance(String.class, key));
+diff --git a/plugins/config-browser/src/main/resources/config-browser/actionNames.ftl b/plugins/config-browser/src/main/resources/config-browser/actionNames.ftl
+index d7e86510d..30d73c52d 100644
+--- a/plugins/config-browser/src/main/resources/config-browser/actionNames.ftl
++++ b/plugins/config-browser/src/main/resources/config-browser/actionNames.ftl
+@@ -22,7 +22,7 @@
+ -->
+ <#include "tigris-macros.ftl">
+ <@startPage pageTitle="Actions in namespace"/>
+-<h3>Actions in <#if namespace == ""> default namespace <#else> ${namespace} </#if></h3>
++<h3>Actions in <#if namespace == ""> default namespace <#else> ${namespace?html} </#if></h3>
+ <table>
+ 	<tr>
+ 		<td>
+diff --git a/plugins/config-browser/src/main/resources/config-browser/showConfig.ftl b/plugins/config-browser/src/main/resources/config-browser/showConfig.ftl
+index 34987a17f..d140fca51 100644
+--- a/plugins/config-browser/src/main/resources/config-browser/showConfig.ftl
++++ b/plugins/config-browser/src/main/resources/config-browser/showConfig.ftl
+@@ -29,7 +29,7 @@
+ 	<tr><td>Action name:</td><td>${actionName}</td></tr>
+ 	<tr><td>Namespace:</td><td> ${namespace}</td></tr>
+ 	<tr><td>Action class:</td><td> ${config.className}</td></tr>
+-	<tr><td>Action method:</td><td> <#if config.methodName?exists>${config.methodName}</#if></td></tr>
++	<tr><td>Action method:</td><td> <#if config.methodName??>${config.methodName}</#if></td></tr>
+ 	<tr><td>Parameters:</td><td> <#list config.params?keys as p>
+ 		${p}
+ 	</#list></td></tr>
+@@ -41,9 +41,9 @@
+ </table>
+ 
+ <!-- URLTag is faulty -->
+-<@s.url id="url" action="showConfig" includeParams="none">
+-    <@s.param name="namespace">${namespace}</@s.param>
+-    <@s.param name="actionName">${actionName}</@s.param>
++<@s.url var="url" action="showConfig" includeParams="none">
++    <@s.param name="namespace">${namespace?html}</@s.param>
++    <@s.param name="actionName">${actionName?html}</@s.param>
+ </@s.url>
+ <#assign url = url + "&amp;detailView=">
+ <!-- Set all to false -->
+diff --git a/plugins/config-browser/src/main/resources/config-browser/validatorDetails.ftl b/plugins/config-browser/src/main/resources/config-browser/validatorDetails.ftl
+index d890a9d67..77f4264ce 100644
+--- a/plugins/config-browser/src/main/resources/config-browser/validatorDetails.ftl
++++ b/plugins/config-browser/src/main/resources/config-browser/validatorDetails.ftl
+@@ -25,7 +25,7 @@
+ <#call startPage pageTitle="Validator Details"/>
+ <table>
+ <tr><td>Validated Class:</td><td>${action.stripPackage(clazz)}</td></tr>
+-<tr><td>Context:</td><td>${context}</td></tr>
++<tr><td>Context:</td><td>${context?html}</td></tr>
+ <tr><td>Validator Number:</td><td>${selected}</td></tr>
+ <tr><td>Validator Type:</td><td>${action.stripPackage(selectedValidator.class)}</td></tr>
+ </table>

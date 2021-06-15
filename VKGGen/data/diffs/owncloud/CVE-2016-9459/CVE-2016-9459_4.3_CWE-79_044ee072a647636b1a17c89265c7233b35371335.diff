@@ -1,0 +1,36 @@
+From 044ee072a647636b1a17c89265c7233b35371335 Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Wed, 6 Jul 2016 22:47:16 +0200
+Subject: [PATCH] [stable8.1] Set content type when downloading log file to
+ force download in some browsers (#25382)
+
+---
+ settings/controller/logsettingscontroller.php           | 1 +
+ tests/settings/controller/logsettingscontrollertest.php | 3 +++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/settings/controller/logsettingscontroller.php b/settings/controller/logsettingscontroller.php
+index cae0d419e2b..4f3db00295b 100644
+--- a/settings/controller/logsettingscontroller.php
++++ b/settings/controller/logsettingscontroller.php
+@@ -103,6 +103,7 @@ public function getEntries($count=50, $offset=0) {
+ 	 */
+ 	public function download() {
+ 		$resp = new StreamResponse(\OC_Log_Owncloud::getLogFilePath());
++		$resp->addHeader('Content-Type', 'application/octet-stream');
+ 		$resp->addHeader('Content-Disposition', 'attachment; filename="owncloud.log"');
+ 		return $resp;
+ 	}
+diff --git a/tests/settings/controller/logsettingscontrollertest.php b/tests/settings/controller/logsettingscontrollertest.php
+index 60680ba4647..88d5d9bf93a 100644
+--- a/tests/settings/controller/logsettingscontrollertest.php
++++ b/tests/settings/controller/logsettingscontrollertest.php
+@@ -70,5 +70,8 @@ public function testDownload() {
+ 		$response = $this->logSettingsController->download();
+ 
+ 		$this->assertInstanceOf('\OCP\AppFramework\Http\StreamResponse', $response);
++		$headers = $response->getHeaders();
++		$this->assertEquals('application/octet-stream', $headers['Content-Type']);
++		$this->assertEquals('attachment; filename="owncloud.log"', $headers['Content-Disposition']);
+ 	}
+ }

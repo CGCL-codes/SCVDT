@@ -1,0 +1,122 @@
+diff --git a/geode-core/src/main/java/org/apache/geode/internal/cache/tier/sockets/CacheClientNotifier.java b/geode-core/src/main/java/org/apache/geode/internal/cache/tier/sockets/CacheClientNotifier.java
+index 81bad217738..7d67b37d6a3 100755
+--- a/geode-core/src/main/java/org/apache/geode/internal/cache/tier/sockets/CacheClientNotifier.java
++++ b/geode-core/src/main/java/org/apache/geode/internal/cache/tier/sockets/CacheClientNotifier.java
+@@ -14,7 +14,8 @@
+  */
+ package org.apache.geode.internal.cache.tier.sockets;
+ 
+-import static org.apache.geode.distributed.ConfigurationProperties.*;
++import static org.apache.geode.distributed.ConfigurationProperties.SECURITY_CLIENT_ACCESSOR_PP;
++import static org.apache.geode.distributed.ConfigurationProperties.SECURITY_CLIENT_AUTHENTICATOR;
+ 
+ import java.io.BufferedOutputStream;
+ import java.io.DataInputStream;
+@@ -327,20 +328,25 @@ protected void registerGFEClient(DataInputStream dis, DataOutputStream dos, Sock
+               new IllegalArgumentException("Invalid conflation byte"), clientVersion);
+           return;
+       }
+-
+-      proxy = registerClient(socket, proxyID, proxy, isPrimary, clientConflation, clientVersion,
+-          acceptorId, notifyBySubscription);
+-
++      Object subject = null;
+       Properties credentials =
+           HandShake.readCredentials(dis, dos, system, this.cache.getSecurityService());
+-      if (credentials != null && proxy != null) {
++      if (credentials != null) {
+         if (securityLogWriter.fineEnabled()) {
+           securityLogWriter
+               .fine("CacheClientNotifier: verifying credentials for proxyID: " + proxyID);
+         }
+-        Object subject =
++        subject =
+             HandShake.verifyCredentials(authenticator, credentials, system.getSecurityProperties(),
+                 this.logWriter, this.securityLogWriter, member, this.cache.getSecurityService());
++      }
++
++      Subject shiroSubject =
++          subject != null && subject instanceof Subject ? (Subject) subject : null;
++      proxy = registerClient(socket, proxyID, proxy, isPrimary, clientConflation, clientVersion,
++          acceptorId, notifyBySubscription, shiroSubject);
++
++      if (proxy != null && subject != null) {
+         if (subject instanceof Principal) {
+           Principal principal = (Principal) subject;
+           if (securityLogWriter.fineEnabled()) {
+@@ -361,8 +367,6 @@ protected void registerGFEClient(DataInputStream dis, DataOutputStream dos, Sock
+             authzCallback.init(principal, member, this.getCache());
+           }
+           proxy.setPostAuthzCallback(authzCallback);
+-        } else if (subject instanceof Subject) {
+-          proxy.setSubject((Subject) subject);
+         }
+       }
+     } catch (ClassNotFoundException e) {
+@@ -413,7 +417,8 @@ protected void registerGFEClient(DataInputStream dis, DataOutputStream dos, Sock
+    */
+   private CacheClientProxy registerClient(Socket socket, ClientProxyMembershipID proxyId,
+       CacheClientProxy proxy, boolean isPrimary, byte clientConflation, Version clientVersion,
+-      long acceptorId, boolean notifyBySubscription) throws IOException, CacheException {
++      long acceptorId, boolean notifyBySubscription, Subject subject)
++      throws IOException, CacheException {
+     CacheClientProxy l_proxy = proxy;
+ 
+     // Initialize the socket
+@@ -456,10 +461,12 @@ private CacheClientProxy registerClient(Socket socket, ClientProxyMembershipID p
+               "CacheClientNotifier: No proxy exists for durable client with id {}. It must be created.",
+               proxyId.getDurableId());
+         }
+-        l_proxy = new CacheClientProxy(this, socket, proxyId, isPrimary, clientConflation,
+-            clientVersion, acceptorId, notifyBySubscription, this.cache.getSecurityService());
++        l_proxy =
++            new CacheClientProxy(this, socket, proxyId, isPrimary, clientConflation, clientVersion,
++                acceptorId, notifyBySubscription, this.cache.getSecurityService(), subject);
+         successful = this.initializeProxy(l_proxy);
+       } else {
++        l_proxy.setSubject(subject);
+         if (proxy.isPrimary()) {
+           epType = (byte) 2;
+         } else {
+@@ -534,8 +541,9 @@ private CacheClientProxy registerClient(Socket socket, ClientProxyMembershipID p
+ 
+       if (toCreateNewProxy) {
+         // Create the new proxy for this non-durable client
+-        l_proxy = new CacheClientProxy(this, socket, proxyId, isPrimary, clientConflation,
+-            clientVersion, acceptorId, notifyBySubscription, this.cache.getSecurityService());
++        l_proxy =
++            new CacheClientProxy(this, socket, proxyId, isPrimary, clientConflation, clientVersion,
++                acceptorId, notifyBySubscription, this.cache.getSecurityService(), subject);
+         successful = this.initializeProxy(l_proxy);
+       }
+     }
+diff --git a/geode-core/src/main/java/org/apache/geode/internal/cache/tier/sockets/CacheClientProxy.java b/geode-core/src/main/java/org/apache/geode/internal/cache/tier/sockets/CacheClientProxy.java
+index f915b0da21a..d584825be23 100644
+--- a/geode-core/src/main/java/org/apache/geode/internal/cache/tier/sockets/CacheClientProxy.java
++++ b/geode-core/src/main/java/org/apache/geode/internal/cache/tier/sockets/CacheClientProxy.java
+@@ -337,7 +337,7 @@
+   protected CacheClientProxy(CacheClientNotifier ccn, Socket socket,
+       ClientProxyMembershipID proxyID, boolean isPrimary, byte clientConflation,
+       Version clientVersion, long acceptorId, boolean notifyBySubscription,
+-      SecurityService securityService) throws CacheException {
++      SecurityService securityService, Subject subject) throws CacheException {
+ 
+     initializeTransientFields(socket, proxyID, isPrimary, clientConflation, clientVersion);
+     this._cacheClientNotifier = ccn;
+@@ -351,6 +351,7 @@ protected CacheClientProxy(CacheClientNotifier ccn, Socket socket,
+     this._statistics =
+         new CacheClientProxyStats(factory, "id_" + this.proxyID.getDistributedMember().getId()
+             + "_at_" + this._remoteHostAddress + ":" + this._socket.getPort());
++    this.subject = subject;
+ 
+     // Create the interest list
+     this.cils[RegisterInterestTracker.interestListIndex] =
+@@ -392,7 +393,7 @@ public void setSubject(Subject subject) {
+     // TODO:hitesh synchronization
+     synchronized (this.clientUserAuthsLock) {
+       if (this.subject != null) {
+-        subject.logout();
++        this.subject.logout();
+       }
+       this.subject = subject;
+     }

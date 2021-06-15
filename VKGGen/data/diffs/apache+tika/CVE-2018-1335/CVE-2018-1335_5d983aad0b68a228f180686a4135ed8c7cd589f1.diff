@@ -1,0 +1,13 @@
+diff --git a/tika-parsers/src/main/java/org/apache/tika/parser/chm/accessor/ChmDirectoryListingSet.java b/tika-parsers/src/main/java/org/apache/tika/parser/chm/accessor/ChmDirectoryListingSet.java
+index b379142063..5b3d3f699b 100644
+--- a/tika-parsers/src/main/java/org/apache/tika/parser/chm/accessor/ChmDirectoryListingSet.java
++++ b/tika-parsers/src/main/java/org/apache/tika/parser/chm/accessor/ChmDirectoryListingSet.java
+@@ -158,7 +158,7 @@ private void enumerateChmDirectoryListingList(ChmItsfHeader chmItsHeader,
+                 i=nextBlock;
+                 dir_chunk = null;
+             }
+-            System.out.println("done");
++
+         } catch (ChmParsingException e) {
+             LOG.warn("Chm parse exception", e);
+         } finally {

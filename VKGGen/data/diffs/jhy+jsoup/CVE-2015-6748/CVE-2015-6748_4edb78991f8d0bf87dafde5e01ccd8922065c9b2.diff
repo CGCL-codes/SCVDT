@@ -1,0 +1,28 @@
+diff --git a/src/main/java/org/jsoup/parser/TokeniserState.java b/src/main/java/org/jsoup/parser/TokeniserState.java
+index ee2bc448a..4168c8ae9 100644
+--- a/src/main/java/org/jsoup/parser/TokeniserState.java
++++ b/src/main/java/org/jsoup/parser/TokeniserState.java
+@@ -757,6 +757,7 @@ void read(Tokeniser t, CharacterReader r) {
+                     break;
+                 case eof:
+                     t.eofError(this);
++                    t.emitTagPending();
+                     t.transition(Data);
+                     break;
+                 case '>':
+diff --git a/src/test/java/org/jsoup/parser/XmlTreeBuilderTest.java b/src/test/java/org/jsoup/parser/XmlTreeBuilderTest.java
+index 275307fa1..71e3b2275 100644
+--- a/src/test/java/org/jsoup/parser/XmlTreeBuilderTest.java
++++ b/src/test/java/org/jsoup/parser/XmlTreeBuilderTest.java
+@@ -121,4 +121,11 @@ public void testDoesNotForceSelfClosingKnownTags() {
+         Document doc = Jsoup.parse("x", "", Parser.xmlParser());
+         assertEquals(Syntax.xml, doc.outputSettings().syntax());
+     }
++
++    @Test
++    public void testDoesHandleEOFInTag() {
++        String html = "<img src=asdf onerror=\"alert(1)\" x=";
++        Document xmlDoc = Jsoup.parse(html, "", Parser.xmlParser());
++        assertEquals("<img src=\"asdf\" onerror=\"alert(1)\" x=\"\" />", xmlDoc.html());
++    }
+ }

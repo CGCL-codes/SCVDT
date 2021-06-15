@@ -1,0 +1,12 @@
+diff --git a/src/android/FileTransfer.java b/src/android/FileTransfer.java
+index 2aa40083..22a1ed76 100644
+--- a/src/android/FileTransfer.java
++++ b/src/android/FileTransfer.java
+@@ -206,6 +206,7 @@ private static void addHeadersToRequest(URLConnection connection, JSONObject hea
+                 String headerKey = iter.next().toString();
+                 headerKey = headerKey.replaceAll("\\n","")
+                         .replaceAll("\\s+","")
++                        .replaceAll(":", "")
+                         .replaceAll("[^\\x20-\\x7E]+", "");
+ 
+                 JSONArray headerValues = headers.optJSONArray(headerKey);

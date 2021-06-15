@@ -1,0 +1,192 @@
+From d31720b6f1e8c8dfeb5e8805ab35ad7c8000b2f1 Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Fri, 1 Jul 2016 11:30:04 +0200
+Subject: [PATCH] Hide revert button when no permission to revert
+
+---
+ apps/files_versions/lib/storage.php    |   8 ++
+ apps/files_versions/tests/versions.php | 143 +++++++++++++++++++++++++
+ 2 files changed, 151 insertions(+)
+
+diff --git a/apps/files_versions/lib/storage.php b/apps/files_versions/lib/storage.php
+index 02320139115..e222ab101ee 100644
+--- a/apps/files_versions/lib/storage.php
++++ b/apps/files_versions/lib/storage.php
+@@ -274,8 +274,16 @@ public static function rollback($file, $revision) {
+ 			// add expected leading slash
+ 			$file = '/' . ltrim($file, '/');
+ 			list($uid, $filename) = self::getUidAndFilename($file);
++			if ($uid === null || trim($filename, '/') === '') {
++				return false;
++			}
+ 			$users_view = new \OC\Files\View('/'.$uid);
+ 			$files_view = new \OC\Files\View('/'.\OCP\User::getUser().'/files');
++
++			if (!$files_view->isUpdatable($filename)) {
++				return false;
++			}
++
+ 			$versionCreated = false;
+ 
+ 			//first create a new version
+diff --git a/apps/files_versions/tests/versions.php b/apps/files_versions/tests/versions.php
+index 34664c6aadc..48a92c2c02b 100644
+--- a/apps/files_versions/tests/versions.php
++++ b/apps/files_versions/tests/versions.php
+@@ -535,6 +535,68 @@ public function testRestoreCrossStorage() {
+ 		$this->doTestRestore();
+ 	}
+ 
++	public function testRestoreNoPermission() {
++		$this->loginAsUser(self::TEST_VERSIONS_USER);
++
++		$userHome = \OC::$server->getUserFolder(self::TEST_VERSIONS_USER);
++		$node = $userHome->newFolder('folder');
++		$file = $node->newFile('test.txt');
++
++		\OCP\Share::shareItem(
++			'folder',
++			$file->getId(),
++			\OCP\Share::SHARE_TYPE_USER,
++			self::TEST_VERSIONS_USER2,
++			\OCP\Constants::PERMISSION_READ
++		);
++
++		$versions = $this->createAndCheckVersions(
++			\OC\Files\Filesystem::getView(),
++			'folder/test.txt'
++		);
++
++		$file->putContent('test file');
++
++		$this->loginAsUser(self::TEST_VERSIONS_USER2);
++
++		$firstVersion = current($versions);
++
++		$this->assertFalse(\OCA\Files_Versions\Storage::rollback('folder/test.txt', $firstVersion['version']), 'Revert did not happen');
++
++		$this->loginAsUser(self::TEST_VERSIONS_USER);
++
++		$this->assertEquals('test file', $file->getContent(), 'File content has not changed');
++	}
++
++	/**
++	 * @param string $hookName name of hook called
++	 * @param string $params variable to recieve parameters provided by hook
++	 */
++	private function connectMockHooks($hookName, &$params) {
++		if ($hookName === null) {
++			return;
++		}
++
++		$eventHandler = $this->getMockBuilder('\stdclass')
++			->setMethods(['callback'])
++			->getMock();
++
++		$eventHandler->expects($this->any())
++			->method('callback')
++			->will($this->returnCallback(
++				function($p) use (&$params) {
++					$params = $p;
++				}
++			));
++
++		\OCP\Util::connectHook(
++			'\OCP\Versions',
++			$hookName,
++			$eventHandler,
++			'callback'
++		);
++	}
++
+ 	private function doTestRestore() {
+ 		$filePath = self::TEST_VERSIONS_USER . '/files/sub/test.txt';
+ 		$this->rootView->file_put_contents($filePath, 'test file');
+@@ -617,6 +679,87 @@ private function doTestRestore() {
+ 		);
+ 	}
+ 
++	/**
++	 * Test whether versions are created when overwriting as owner
++	 */
++	public function testStoreVersionAsOwner() {
++		$this->loginAsUser(self::TEST_VERSIONS_USER);
++
++		$this->createAndCheckVersions(
++			\OC\Files\Filesystem::getView(),
++			'test.txt'
++		);
++	}
++
++	/**
++	 * Test whether versions are created when overwriting as share recipient
++	 */
++	public function testStoreVersionAsRecipient() {
++		$this->loginAsUser(self::TEST_VERSIONS_USER);
++
++		\OC\Files\Filesystem::mkdir('folder');
++		\OC\Files\Filesystem::file_put_contents('folder/test.txt', 'test file');
++		$fileInfo = \OC\Files\Filesystem::getFileInfo('folder');
++
++		\OCP\Share::shareItem(
++			'folder',
++			$fileInfo['fileid'],
++			\OCP\Share::SHARE_TYPE_USER,
++			self::TEST_VERSIONS_USER2,
++			\OCP\Constants::PERMISSION_ALL
++		);
++
++		$this->loginAsUser(self::TEST_VERSIONS_USER2);
++
++		$this->createAndCheckVersions(
++			\OC\Files\Filesystem::getView(),
++			'folder/test.txt'
++		);
++	}
++
++	/**
++	 * Test whether versions are created when overwriting anonymously.
++	 *
++	 * When uploading through a public link or publicwebdav, no user
++	 * is logged in. File modification must still be able to find
++	 * the owner and create versions.
++	 */
++	public function testStoreVersionAsAnonymous() {
++		$this->logout();
++
++		// note: public link upload does this,
++		// needed to make the hooks fire
++		\OC_Util::setupFS(self::TEST_VERSIONS_USER);
++
++		$userView = new \OC\Files\View('/' . self::TEST_VERSIONS_USER . '/files');
++		$this->createAndCheckVersions(
++			$userView,
++			'test.txt'
++		);
++	}
++
++	private function createAndCheckVersions($view, $path) {
++		$view->file_put_contents($path, 'test file');
++		$view->file_put_contents($path, 'version 1');
++		$view->file_put_contents($path, 'version 2');
++
++		$this->loginAsUser(self::TEST_VERSIONS_USER);
++
++		// need to scan for the versions
++		list($rootStorage,) = $this->rootView->resolvePath(self::TEST_VERSIONS_USER . '/files_versions');
++		$rootStorage->getScanner()->scan('files_versions');
++
++		$versions = \OCA\Files_Versions\Storage::getVersions(
++			self::TEST_VERSIONS_USER, '/' . $path
++		);
++
++		// note: we cannot predict how many versions are created due to
++		// test run timing
++		$this->assertGreaterThan(0, count($versions));
++
++		return $versions;
++	}
++
+ 	/**
+ 	 * @param string $user
+ 	 * @param bool $create

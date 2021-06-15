@@ -1,0 +1,35 @@
+diff --git a/nifi-nar-bundles/nifi-framework-bundle/nifi-framework/nifi-framework-core/src/main/java/org/apache/nifi/groups/StandardProcessGroup.java b/nifi-nar-bundles/nifi-framework-bundle/nifi-framework/nifi-framework-core/src/main/java/org/apache/nifi/groups/StandardProcessGroup.java
+index 5d5d0f4e18a..bc5ef295332 100644
+--- a/nifi-nar-bundles/nifi-framework-bundle/nifi-framework/nifi-framework-core/src/main/java/org/apache/nifi/groups/StandardProcessGroup.java
++++ b/nifi-nar-bundles/nifi-framework-bundle/nifi-framework/nifi-framework-core/src/main/java/org/apache/nifi/groups/StandardProcessGroup.java
+@@ -2028,19 +2028,23 @@ public ControllerServiceNode getControllerService(final String id) {
+ 
+     @Override
+     public Set<ControllerServiceNode> getControllerServices(final boolean recursive) {
++        final Set<ControllerServiceNode> services = new HashSet<>();
++
+         readLock.lock();
+         try {
+-            final Set<ControllerServiceNode> services = new HashSet<>();
+             services.addAll(controllerServices.values());
+-
+-            if (recursive && parent.get() != null) {
+-                services.addAll(parent.get().getControllerServices(true));
+-            }
+-
+-            return services;
+         } finally {
+             readLock.unlock();
+         }
++
++        if (recursive) {
++            final ProcessGroup parentGroup = parent.get();
++            if (parentGroup != null) {
++                services.addAll(parentGroup.getControllerServices(true));
++            }
++        }
++
++        return services;
+     }
+ 
+     @Override

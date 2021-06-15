@@ -1,0 +1,990 @@
+diff --git a/src/java/org/apache/commons/collections/functors/CloneTransformer.java b/src/java/org/apache/commons/collections/functors/CloneTransformer.java
+index 6334911f0..5b4df19a9 100644
+--- a/src/java/org/apache/commons/collections/functors/CloneTransformer.java
++++ b/src/java/org/apache/commons/collections/functors/CloneTransformer.java
+@@ -16,6 +16,9 @@
+  */
+ package org.apache.commons.collections.functors;
+ 
++import java.io.IOException;
++import java.io.ObjectInputStream;
++import java.io.ObjectOutputStream;
+ import java.io.Serializable;
+ 
+ import org.apache.commons.collections.Transformer;
+@@ -24,7 +27,17 @@
+  * Transformer implementation that returns a clone of the input object.
+  * <p>
+  * Clone is performed using <code>PrototypeFactory.getInstance(input).create()</code>.
+- * 
++ * <p>
++ * <b>WARNING:</b> from v3.2.2 onwards this class will throw an
++ * {@link UnsupportedOperationException} when trying to serialize or
++ * de-serialize an instance to prevent potential remote code execution exploits.
++ * <p>
++ * In order to re-enable serialization support for {@code CloneTransformer}
++ * the following system property can be used (via -Dproperty=true):
++ * <pre>
++ * org.apache.commons.collections.enableUnsafeSerialization
++ * </pre>
++ *
+  * @since Commons Collections 3.0
+  * @version $Revision$ $Date$
+  *
+@@ -68,4 +81,21 @@ public Object transform(Object input) {
+         return PrototypeFactory.getInstance(input).create();
+     }
+ 
++    /**
++     * Overrides the default writeObject implementation to prevent
++     * serialization (see COLLECTIONS-580).
++     */
++    private void writeObject(ObjectOutputStream os) throws IOException {
++        FunctorUtils.checkUnsafeSerialization(CloneTransformer.class);
++        os.defaultWriteObject();
++    }
++
++    /**
++     * Overrides the default readObject implementation to prevent
++     * de-serialization (see COLLECTIONS-580).
++     */
++    private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {
++        FunctorUtils.checkUnsafeSerialization(CloneTransformer.class);
++        is.defaultReadObject();
++    }
+ }
+diff --git a/src/java/org/apache/commons/collections/functors/ForClosure.java b/src/java/org/apache/commons/collections/functors/ForClosure.java
+index 8e6ec1419..5febf0dc1 100644
+--- a/src/java/org/apache/commons/collections/functors/ForClosure.java
++++ b/src/java/org/apache/commons/collections/functors/ForClosure.java
+@@ -16,13 +16,26 @@
+  */
+ package org.apache.commons.collections.functors;
+ 
++import java.io.IOException;
++import java.io.ObjectInputStream;
++import java.io.ObjectOutputStream;
+ import java.io.Serializable;
+ 
+ import org.apache.commons.collections.Closure;
+ 
+ /**
+  * Closure implementation that calls another closure n times, like a for loop.
+- * 
++ * <p>
++ * <b>WARNING:</b> from v3.2.2 onwards this class will throw an
++ * {@link UnsupportedOperationException} when trying to serialize or
++ * de-serialize an instance to prevent potential remote code execution exploits.
++ * <p>
++ * In order to re-enable serialization support for {@code ForClosure}
++ * the following system property can be used (via -Dproperty=true):
++ * <pre>
++ * org.apache.commons.collections.enableUnsafeSerialization
++ * </pre>
++ *
+  * @since Commons Collections 3.0
+  * @version $Revision$ $Date$
+  *
+@@ -102,4 +115,22 @@ public int getCount() {
+         return iCount;
+     }
+ 
++    /**
++     * Overrides the default writeObject implementation to prevent
++     * serialization (see COLLECTIONS-580).
++     */
++    private void writeObject(ObjectOutputStream os) throws IOException {
++        FunctorUtils.checkUnsafeSerialization(ForClosure.class);
++        os.defaultWriteObject();
++    }
++
++    /**
++     * Overrides the default readObject implementation to prevent
++     * de-serialization (see COLLECTIONS-580).
++     */
++    private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {
++        FunctorUtils.checkUnsafeSerialization(ForClosure.class);
++        is.defaultReadObject();
++    }
++
+ }
+diff --git a/src/java/org/apache/commons/collections/functors/FunctorUtils.java b/src/java/org/apache/commons/collections/functors/FunctorUtils.java
+index 78f357ed1..30fc80012 100644
+--- a/src/java/org/apache/commons/collections/functors/FunctorUtils.java
++++ b/src/java/org/apache/commons/collections/functors/FunctorUtils.java
+@@ -16,6 +16,8 @@
+  */
+ package org.apache.commons.collections.functors;
+ 
++import java.security.AccessController;
++import java.security.PrivilegedAction;
+ import java.util.Collection;
+ import java.util.Iterator;
+ 
+@@ -34,6 +36,10 @@
+  */
+ class FunctorUtils {
+     
++    /** System property key to enable unsafe serialization */
++    final static String UNSAFE_SERIALIZABLE_PROPERTY
++        = "org.apache.commons.collections.enableUnsafeSerialization";
++    
+     /**
+      * Restricted constructor.
+      */
+@@ -152,4 +158,33 @@ static void validate(Transformer[] transformers) {
+         }
+     }
+ 
++    /**
++     * Package-private helper method to check if serialization support is
++     * enabled for unsafe classes.
++     *
++     * @param clazz  the clazz to check for serialization support
++     * @throws UnsupportedOperationException if unsafe serialization is disabled
++     */
++    static void checkUnsafeSerialization(Class clazz) {
++        String unsafeSerializableProperty;
++        
++        try {
++            unsafeSerializableProperty = 
++                (String) AccessController.doPrivileged(new PrivilegedAction() {
++                    public Object run() {
++                        return System.getProperty(UNSAFE_SERIALIZABLE_PROPERTY);
++                    }
++                });
++        } catch (SecurityException ex) {
++            unsafeSerializableProperty = null;
++        }
++
++        if (!"true".equalsIgnoreCase(unsafeSerializableProperty)) {
++            throw new UnsupportedOperationException(
++                    "Serialization support for " + clazz.getName() + " is disabled for security reasons. " +
++                    "To enable it set system property '" + UNSAFE_SERIALIZABLE_PROPERTY + "' to 'true', " +
++                    "but you must ensure that your application does not de-serialize objects from untrusted sources.");
++        }
++    }
++
+ }
+diff --git a/src/java/org/apache/commons/collections/functors/InstantiateFactory.java b/src/java/org/apache/commons/collections/functors/InstantiateFactory.java
+index 50310446c..4320aaa95 100644
+--- a/src/java/org/apache/commons/collections/functors/InstantiateFactory.java
++++ b/src/java/org/apache/commons/collections/functors/InstantiateFactory.java
+@@ -16,6 +16,9 @@
+  */
+ package org.apache.commons.collections.functors;
+ 
++import java.io.IOException;
++import java.io.ObjectInputStream;
++import java.io.ObjectOutputStream;
+ import java.io.Serializable;
+ import java.lang.reflect.Constructor;
+ import java.lang.reflect.InvocationTargetException;
+@@ -25,7 +28,17 @@
+ 
+ /**
+  * Factory implementation that creates a new object instance by reflection.
+- * 
++ * <p>
++ * <b>WARNING:</b> from v3.2.2 onwards this class will throw an
++ * {@link UnsupportedOperationException} when trying to serialize or
++ * de-serialize an instance to prevent potential remote code execution exploits.
++ * <p>
++ * In order to re-enable serialization support for {@code InstantiateTransformer}
++ * the following system property can be used (via -Dproperty=true):
++ * <pre>
++ * org.apache.commons.collections.enableUnsafeSerialization
++ * </pre>
++ *
+  * @since Commons Collections 3.0
+  * @version $Revision$ $Date$
+  *
+@@ -136,5 +149,23 @@ public Object create() {
+             throw new FunctorException("InstantiateFactory: Constructor threw an exception", ex);
+         }
+     }
+-    
++
++    /**
++     * Overrides the default writeObject implementation to prevent
++     * serialization (see COLLECTIONS-580).
++     */
++    private void writeObject(ObjectOutputStream os) throws IOException {
++        FunctorUtils.checkUnsafeSerialization(InstantiateFactory.class);
++        os.defaultWriteObject();
++    }
++
++    /**
++     * Overrides the default readObject implementation to prevent
++     * de-serialization (see COLLECTIONS-580).
++     */
++    private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {
++        FunctorUtils.checkUnsafeSerialization(InstantiateFactory.class);
++        is.defaultReadObject();
++    }
++
+ }
+diff --git a/src/java/org/apache/commons/collections/functors/InstantiateTransformer.java b/src/java/org/apache/commons/collections/functors/InstantiateTransformer.java
+index e5abc2177..e809f5093 100644
+--- a/src/java/org/apache/commons/collections/functors/InstantiateTransformer.java
++++ b/src/java/org/apache/commons/collections/functors/InstantiateTransformer.java
+@@ -16,6 +16,9 @@
+  */
+ package org.apache.commons.collections.functors;
+ 
++import java.io.IOException;
++import java.io.ObjectInputStream;
++import java.io.ObjectOutputStream;
+ import java.io.Serializable;
+ import java.lang.reflect.Constructor;
+ import java.lang.reflect.InvocationTargetException;
+@@ -25,7 +28,17 @@
+ 
+ /**
+  * Transformer implementation that creates a new object instance by reflection.
+- * 
++ * <p>
++ * <b>WARNING:</b> from v3.2.2 onwards this class will throw an
++ * {@link UnsupportedOperationException} when trying to serialize or
++ * de-serialize an instance to prevent potential remote code execution exploits.
++ * <p>
++ * In order to re-enable serialization support for {@code InstantiateTransformer}
++ * the following system property can be used (via -Dproperty=true):
++ * <pre>
++ * org.apache.commons.collections.enableUnsafeSerialization
++ * </pre>
++ *
+  * @since Commons Collections 3.0
+  * @version $Revision$ $Date$
+  *
+@@ -116,4 +129,22 @@ public Object transform(Object input) {
+         }
+     }
+ 
++    /**
++     * Overrides the default writeObject implementation to prevent
++     * serialization (see COLLECTIONS-580).
++     */
++    private void writeObject(ObjectOutputStream os) throws IOException {
++        FunctorUtils.checkUnsafeSerialization(InstantiateTransformer.class);
++        os.defaultWriteObject();
++    }
++
++    /**
++     * Overrides the default readObject implementation to prevent
++     * de-serialization (see COLLECTIONS-580).
++     */
++    private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {
++        FunctorUtils.checkUnsafeSerialization(InstantiateTransformer.class);
++        is.defaultReadObject();
++    }
++
+ }
+diff --git a/src/java/org/apache/commons/collections/functors/InvokerTransformer.java b/src/java/org/apache/commons/collections/functors/InvokerTransformer.java
+index 580a22926..49cc95304 100644
+--- a/src/java/org/apache/commons/collections/functors/InvokerTransformer.java
++++ b/src/java/org/apache/commons/collections/functors/InvokerTransformer.java
+@@ -22,8 +22,6 @@
+ import java.io.Serializable;
+ import java.lang.reflect.InvocationTargetException;
+ import java.lang.reflect.Method;
+-import java.security.AccessController;
+-import java.security.PrivilegedAction;
+ 
+ import org.apache.commons.collections.FunctorException;
+ import org.apache.commons.collections.Transformer;
+@@ -32,14 +30,13 @@
+  * Transformer implementation that creates a new object instance by reflection.
+  * <p>
+  * <b>WARNING:</b> from v3.2.2 onwards this class will throw an
+- * {@link UnsupportedOperationException} when trying to de-serialize an
+- * instance from a {@link ObjectOutputStream} to prevent potential
+- * remote code execution exploits.
++ * {@link UnsupportedOperationException} when trying to serialize or
++ * de-serialize an instance to prevent potential remote code execution exploits.
+  * <p>
+- * In order to re-enable de-serialization of {@code InvokerTransformer}
+- * instances, the following system property can be used (via -Dproperty=true):
++ * In order to re-enable serialization support for {@code InvokerTransformer}
++ * the following system property can be used (via -Dproperty=true):
+  * <pre>
+- * org.apache.commons.collections.invokertransformer.enableDeserialization
++ * org.apache.commons.collections.enableUnsafeSerialization
+  * </pre>
+  * 
+  * @since Commons Collections 3.0
+@@ -52,10 +49,6 @@
+     /** The serial version */
+     private static final long serialVersionUID = -8653385846894047688L;
+ 
+-    /** System property key to enable de-serialization */
+-    public final static String DESERIALIZE
+-        = "org.apache.commons.collections.invokertransformer.enableDeserialization";
+-
+     /** The method name to call */
+     private final String iMethodName;
+     /** The array of reflection parameter types */
+@@ -154,30 +147,21 @@ public Object transform(Object input) {
+         }
+     }
+ 
++    /**
++     * Overrides the default writeObject implementation to prevent
++     * serialization (see COLLECTIONS-580).
++     */
++    private void writeObject(ObjectOutputStream os) throws IOException {
++        FunctorUtils.checkUnsafeSerialization(InvokerTransformer.class);
++        os.defaultWriteObject();
++    }
++
+     /**
+      * Overrides the default readObject implementation to prevent
+      * de-serialization (see COLLECTIONS-580).
+      */
+     private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {
+-        String deserializeProperty;
+-        
+-        try {
+-            deserializeProperty = 
+-                (String) AccessController.doPrivileged(new PrivilegedAction() {
+-                    public Object run() {
+-                        return System.getProperty(DESERIALIZE);
+-                    }
+-                });
+-        } catch (SecurityException ex) {
+-            deserializeProperty = null;
+-        }
+-
+-        if (!"true".equalsIgnoreCase(deserializeProperty)) {
+-            throw new UnsupportedOperationException(
+-                    "Deserialization of InvokerTransformer is disabled for security reasons. " +
+-                    "To re-enable it set system property '" + DESERIALIZE + "' to 'true'");
+-        }
+-        
++        FunctorUtils.checkUnsafeSerialization(InvokerTransformer.class);
+         is.defaultReadObject();
+     }
+ }
+diff --git a/src/java/org/apache/commons/collections/functors/WhileClosure.java b/src/java/org/apache/commons/collections/functors/WhileClosure.java
+index 0d897dd0f..9e33a04ee 100644
+--- a/src/java/org/apache/commons/collections/functors/WhileClosure.java
++++ b/src/java/org/apache/commons/collections/functors/WhileClosure.java
+@@ -16,6 +16,9 @@
+  */
+ package org.apache.commons.collections.functors;
+ 
++import java.io.IOException;
++import java.io.ObjectInputStream;
++import java.io.ObjectOutputStream;
+ import java.io.Serializable;
+ 
+ import org.apache.commons.collections.Closure;
+@@ -24,7 +27,17 @@
+ /**
+  * Closure implementation that executes a closure repeatedly until a condition is met,
+  * like a do-while or while loop.
+- * 
++ * <p>
++ * <b>WARNING:</b> from v3.2.2 onwards this class will throw an
++ * {@link UnsupportedOperationException} when trying to serialize or
++ * de-serialize an instance to prevent potential remote code execution exploits.
++ * <p>
++ * In order to re-enable serialization support for {@code WhileClosure}
++ * the following system property can be used (via -Dproperty=true):
++ * <pre>
++ * org.apache.commons.collections.enableUnsafeSerialization
++ * </pre>
++ *
+  * @since Commons Collections 3.0
+  * @version $Revision$ $Date$
+  *
+@@ -120,4 +133,22 @@ public boolean isDoLoop() {
+         return iDoLoop;
+     }
+ 
++    /**
++     * Overrides the default writeObject implementation to prevent
++     * serialization (see COLLECTIONS-580).
++     */
++    private void writeObject(ObjectOutputStream os) throws IOException {
++        FunctorUtils.checkUnsafeSerialization(WhileClosure.class);
++        os.defaultWriteObject();
++    }
++
++    /**
++     * Overrides the default readObject implementation to prevent
++     * de-serialization (see COLLECTIONS-580).
++     */
++    private void readObject(ObjectInputStream is) throws ClassNotFoundException, IOException {
++        FunctorUtils.checkUnsafeSerialization(WhileClosure.class);
++        is.defaultReadObject();
++    }
++
+ }
+diff --git a/src/java/org/apache/commons/collections/functors/package.html b/src/java/org/apache/commons/collections/functors/package.html
+index 7139fee63..d73ee6238 100644
+--- a/src/java/org/apache/commons/collections/functors/package.html
++++ b/src/java/org/apache/commons/collections/functors/package.html
+@@ -24,4 +24,32 @@
+ {@link org.apache.commons.collections.Factory Factory} interfaces.
+ These provide simple callbacks for processing with collections.
+ </p>
++<p>
++<b>WARNING:</b> from v3.2.2 onwards this several classes in this package will
++throw an {@link UnsupportedOperationException} when trying to serialize or
++de-serialize an instance to prevent potential remote code execution exploits.
++</p>
++<p>
++Classes considered to be unsafe are:
++</p>
++<ul>
++  <li>CloneTransformer</li>
++  <li>ForClosure</li>
++  <li>InstantiateFactory</li>
++  <li>InstantiateTransformer</li>
++  <li>InvokerTransformer</li>
++  <li>WhileClosure</li>
++</ul>
++<p>
++In order to re-enable serialization support for these unsafe classes, the
++following system property can be used (via -Dproperty=true):
++<pre>
++org.apache.commons.collections.enableUnsafeSerialization
++</pre>
++<p>
++Be warned though that enabling serialization support for these unsafe classes
++makes your application vulnerable to known exploits and you must ensure that
++your application does not de-serialize objects from untrusted sources.
++</p>
++
+ </BODY>
+diff --git a/src/test/org/apache/commons/collections/TestAllPackages.java b/src/test/org/apache/commons/collections/TestAllPackages.java
+index f081862f9..024f88f56 100644
+--- a/src/test/org/apache/commons/collections/TestAllPackages.java
++++ b/src/test/org/apache/commons/collections/TestAllPackages.java
+@@ -40,6 +40,7 @@ public static Test suite() {
+         suite.addTest(org.apache.commons.collections.buffer.TestAll.suite());
+         suite.addTest(org.apache.commons.collections.collection.TestAll.suite());
+         suite.addTest(org.apache.commons.collections.comparators.TestAll.suite());
++        suite.addTest(org.apache.commons.collections.functors.TestAll.suite());
+         suite.addTest(org.apache.commons.collections.iterators.TestAll.suite());
+         suite.addTest(org.apache.commons.collections.keyvalue.TestAll.suite());
+         suite.addTest(org.apache.commons.collections.list.TestAll.suite());
+diff --git a/src/test/org/apache/commons/collections/functors/AbstractTestSerialization.java b/src/test/org/apache/commons/collections/functors/AbstractTestSerialization.java
+new file mode 100644
+index 000000000..cb41dea40
+--- /dev/null
++++ b/src/test/org/apache/commons/collections/functors/AbstractTestSerialization.java
+@@ -0,0 +1,120 @@
++/*
++ *  Licensed to the Apache Software Foundation (ASF) under one or more
++ *  contributor license agreements.  See the NOTICE file distributed with
++ *  this work for additional information regarding copyright ownership.
++ *  The ASF licenses this file to You under the Apache License, Version 2.0
++ *  (the "License"); you may not use this file except in compliance with
++ *  the License.  You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ *  Unless required by applicable law or agreed to in writing, software
++ *  distributed under the License is distributed on an "AS IS" BASIS,
++ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ *  See the License for the specific language governing permissions and
++ *  limitations under the License.
++ */
++package org.apache.commons.collections.functors;
++
++
++import java.io.ByteArrayInputStream;
++import java.io.ByteArrayOutputStream;
++import java.io.IOException;
++import java.io.ObjectInputStream;
++import java.io.ObjectOutputStream;
++
++import junit.framework.Assert;
++
++import org.apache.commons.collections.BulkTest;
++
++/**
++ * Abstract test class for testing serialization support
++ * of the functor package.
++ */
++public abstract class AbstractTestSerialization extends BulkTest {
++
++    /**
++     * JUnit constructor.
++     * 
++     * @param testName  the test class name
++     */
++    public AbstractTestSerialization(String testName) {
++        super(testName);
++    }
++
++    //-----------------------------------------------------------------------
++    /**
++     * Implements the abstract superclass method to return the comparator.
++     * 
++     * @return a full iterator
++     */
++    public abstract Object makeObject();
++
++    /**
++     * Returns the class being tested for serialization.
++     * 
++     * @return the test class
++     */
++    public abstract Class getTestClass();
++
++    //-----------------------------------------------------------------------
++    
++    public void testSerializationDisabled() throws Exception {
++        Assert.assertNull(System.getProperty(FunctorUtils.UNSAFE_SERIALIZABLE_PROPERTY));
++        Object object = makeObject();
++        try {
++            serialize(object);
++            fail("serialization of InvokerTransformer should be disabled by default");
++        } catch (UnsupportedOperationException ex) {
++            // expected
++        }
++        System.setProperty(FunctorUtils.UNSAFE_SERIALIZABLE_PROPERTY, "true");
++        byte[] data = serialize(object);
++        System.getProperties().remove(FunctorUtils.UNSAFE_SERIALIZABLE_PROPERTY);
++        Assert.assertNull(System.getProperty(FunctorUtils.UNSAFE_SERIALIZABLE_PROPERTY));
++        Assert.assertNotNull(data);
++        try {
++            deserialize(data);
++            fail("de-serialization of " + getTestClass().getName() + " should be disabled by default");
++        } catch (UnsupportedOperationException ex) {
++            // expected
++        }
++    }
++
++    public void testSerializationEnabled() throws Exception {
++        Assert.assertNull(System.getProperty(FunctorUtils.UNSAFE_SERIALIZABLE_PROPERTY));
++        System.setProperty(FunctorUtils.UNSAFE_SERIALIZABLE_PROPERTY, "true");
++
++        try {
++            Object object = makeObject();
++            byte[] data = serialize(object);
++            Assert.assertNotNull(data);
++            try {
++                Object obj = deserialize(data);
++                Assert.assertTrue(getTestClass().isInstance(obj));
++            } catch (UnsupportedOperationException ex) {
++                fail("de-serialization of " + getTestClass().getName() + " should be enabled");
++            }
++        } finally {
++            System.clearProperty(FunctorUtils.UNSAFE_SERIALIZABLE_PROPERTY);
++        }
++    }
++    
++    private byte[] serialize(Object object) throws IOException {
++        ByteArrayOutputStream baos = new ByteArrayOutputStream();
++        ObjectOutputStream oos = new ObjectOutputStream(baos);
++
++        oos.writeObject(object);
++        oos.close();
++
++        return baos.toByteArray();
++    }
++    
++    private Object deserialize(byte[] data) throws IOException, ClassNotFoundException {
++        ByteArrayInputStream bais = new ByteArrayInputStream(data);
++        ObjectInputStream iis = new ObjectInputStream(bais);
++        
++        return iis.readObject();
++    }
++
++}
+diff --git a/src/test/org/apache/commons/collections/functors/TestAll.java b/src/test/org/apache/commons/collections/functors/TestAll.java
+new file mode 100644
+index 000000000..5337628a4
+--- /dev/null
++++ b/src/test/org/apache/commons/collections/functors/TestAll.java
+@@ -0,0 +1,48 @@
++/*
++ *  Licensed to the Apache Software Foundation (ASF) under one or more
++ *  contributor license agreements.  See the NOTICE file distributed with
++ *  this work for additional information regarding copyright ownership.
++ *  The ASF licenses this file to You under the Apache License, Version 2.0
++ *  (the "License"); you may not use this file except in compliance with
++ *  the License.  You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ *  Unless required by applicable law or agreed to in writing, software
++ *  distributed under the License is distributed on an "AS IS" BASIS,
++ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ *  See the License for the specific language governing permissions and
++ *  limitations under the License.
++ */
++package org.apache.commons.collections.functors;
++
++import junit.framework.Test;
++import junit.framework.TestCase;
++import junit.framework.TestSuite;
++
++/**
++ * Entry point for all Functor tests.
++ */
++public class TestAll extends TestCase {
++    
++    public TestAll(String testName) {
++        super(testName);
++    }
++
++    public static Test suite() {
++        TestSuite suite = new TestSuite();
++        suite.addTest(TestCloneTransformer.suite());
++        suite.addTest(TestForClosure.suite());
++        suite.addTest(TestInstantiateTransformer.suite());
++        suite.addTest(TestInstantiateFactory.suite());
++        suite.addTest(TestInvokerTransformer.suite());
++        suite.addTest(TestWhileClosure.suite());
++        return suite;
++    }
++        
++    public static void main(String args[]) {
++        String[] testCaseName = { TestAll.class.getName() };
++        junit.textui.TestRunner.main(testCaseName);
++    }
++    
++}
+diff --git a/src/test/org/apache/commons/collections/functors/TestCloneTransformer.java b/src/test/org/apache/commons/collections/functors/TestCloneTransformer.java
+new file mode 100644
+index 000000000..7ba4da416
+--- /dev/null
++++ b/src/test/org/apache/commons/collections/functors/TestCloneTransformer.java
+@@ -0,0 +1,45 @@
++/*
++ *  Licensed to the Apache Software Foundation (ASF) under one or more
++ *  contributor license agreements.  See the NOTICE file distributed with
++ *  this work for additional information regarding copyright ownership.
++ *  The ASF licenses this file to You under the Apache License, Version 2.0
++ *  (the "License"); you may not use this file except in compliance with
++ *  the License.  You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ *  Unless required by applicable law or agreed to in writing, software
++ *  distributed under the License is distributed on an "AS IS" BASIS,
++ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ *  See the License for the specific language governing permissions and
++ *  limitations under the License.
++ */
++package org.apache.commons.collections.functors;
++
++import junit.framework.Test;
++import junit.framework.TestSuite;
++
++public class TestCloneTransformer extends AbstractTestSerialization {
++
++    // conventional
++    // ------------------------------------------------------------------------
++
++    public TestCloneTransformer(String testName) {
++        super(testName);
++    }
++
++    public static Test suite() {
++        return new TestSuite(TestCloneTransformer.class);
++    }
++
++    // ------------------------------------------------------------------------
++
++    public Object makeObject() {
++        return CloneTransformer.INSTANCE;
++    }
++
++    public Class getTestClass() {
++        return CloneTransformer.class;
++    }
++
++}
+diff --git a/src/test/org/apache/commons/collections/functors/TestForClosure.java b/src/test/org/apache/commons/collections/functors/TestForClosure.java
+new file mode 100644
+index 000000000..30bdf73de
+--- /dev/null
++++ b/src/test/org/apache/commons/collections/functors/TestForClosure.java
+@@ -0,0 +1,45 @@
++/*
++ *  Licensed to the Apache Software Foundation (ASF) under one or more
++ *  contributor license agreements.  See the NOTICE file distributed with
++ *  this work for additional information regarding copyright ownership.
++ *  The ASF licenses this file to You under the Apache License, Version 2.0
++ *  (the "License"); you may not use this file except in compliance with
++ *  the License.  You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ *  Unless required by applicable law or agreed to in writing, software
++ *  distributed under the License is distributed on an "AS IS" BASIS,
++ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ *  See the License for the specific language governing permissions and
++ *  limitations under the License.
++ */
++package org.apache.commons.collections.functors;
++
++import junit.framework.Test;
++import junit.framework.TestSuite;
++
++public class TestForClosure extends AbstractTestSerialization {
++
++    // conventional
++    // ------------------------------------------------------------------------
++
++    public TestForClosure(String testName) {
++        super(testName);
++    }
++
++    public static Test suite() {
++        return new TestSuite(TestForClosure.class);
++    }
++
++    // ------------------------------------------------------------------------
++
++    public Object makeObject() {
++        return new ForClosure(10, NOPClosure.INSTANCE);
++    }
++
++    public Class getTestClass() {
++        return ForClosure.class;
++    }
++
++}
+diff --git a/src/test/org/apache/commons/collections/functors/TestInstantiateFactory.java b/src/test/org/apache/commons/collections/functors/TestInstantiateFactory.java
+new file mode 100644
+index 000000000..6d8476e79
+--- /dev/null
++++ b/src/test/org/apache/commons/collections/functors/TestInstantiateFactory.java
+@@ -0,0 +1,45 @@
++/*
++ *  Licensed to the Apache Software Foundation (ASF) under one or more
++ *  contributor license agreements.  See the NOTICE file distributed with
++ *  this work for additional information regarding copyright ownership.
++ *  The ASF licenses this file to You under the Apache License, Version 2.0
++ *  (the "License"); you may not use this file except in compliance with
++ *  the License.  You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ *  Unless required by applicable law or agreed to in writing, software
++ *  distributed under the License is distributed on an "AS IS" BASIS,
++ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ *  See the License for the specific language governing permissions and
++ *  limitations under the License.
++ */
++package org.apache.commons.collections.functors;
++
++import junit.framework.Test;
++import junit.framework.TestSuite;
++
++public class TestInstantiateFactory extends AbstractTestSerialization {
++
++    // conventional
++    // ------------------------------------------------------------------------
++
++    public TestInstantiateFactory(String testName) {
++        super(testName);
++    }
++
++    public static Test suite() {
++        return new TestSuite(TestInstantiateFactory.class);
++    }
++
++    // ------------------------------------------------------------------------
++
++    public Object makeObject() {
++        return new InstantiateFactory(String.class);
++    }
++
++    public Class getTestClass() {
++        return InstantiateFactory.class;
++    }
++
++}
+diff --git a/src/test/org/apache/commons/collections/functors/TestInstantiateTransformer.java b/src/test/org/apache/commons/collections/functors/TestInstantiateTransformer.java
+new file mode 100644
+index 000000000..25ee96145
+--- /dev/null
++++ b/src/test/org/apache/commons/collections/functors/TestInstantiateTransformer.java
+@@ -0,0 +1,45 @@
++/*
++ *  Licensed to the Apache Software Foundation (ASF) under one or more
++ *  contributor license agreements.  See the NOTICE file distributed with
++ *  this work for additional information regarding copyright ownership.
++ *  The ASF licenses this file to You under the Apache License, Version 2.0
++ *  (the "License"); you may not use this file except in compliance with
++ *  the License.  You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ *  Unless required by applicable law or agreed to in writing, software
++ *  distributed under the License is distributed on an "AS IS" BASIS,
++ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ *  See the License for the specific language governing permissions and
++ *  limitations under the License.
++ */
++package org.apache.commons.collections.functors;
++
++import junit.framework.Test;
++import junit.framework.TestSuite;
++
++public class TestInstantiateTransformer extends AbstractTestSerialization {
++
++    // conventional
++    // ------------------------------------------------------------------------
++
++    public TestInstantiateTransformer(String testName) {
++        super(testName);
++    }
++
++    public static Test suite() {
++        return new TestSuite(TestInstantiateTransformer.class);
++    }
++
++    // ------------------------------------------------------------------------
++
++    public Object makeObject() {
++        return new InstantiateTransformer(new Class[0], new Object[0]);
++    }
++
++    public Class getTestClass() {
++        return InstantiateTransformer.class;
++    }
++
++}
+diff --git a/src/test/org/apache/commons/collections/functors/TestInvokerTransformer.java b/src/test/org/apache/commons/collections/functors/TestInvokerTransformer.java
+index 883f5047d..e37e86af6 100644
+--- a/src/test/org/apache/commons/collections/functors/TestInvokerTransformer.java
++++ b/src/test/org/apache/commons/collections/functors/TestInvokerTransformer.java
+@@ -16,19 +16,10 @@
+  */
+ package org.apache.commons.collections.functors;
+ 
+-import java.io.ByteArrayInputStream;
+-import java.io.ByteArrayOutputStream;
+-import java.io.IOException;
+-import java.io.ObjectInputStream;
+-import java.io.ObjectOutputStream;
+-
+-import org.apache.commons.collections.BulkTest;
+-
+-import junit.framework.Assert;
+ import junit.framework.Test;
+ import junit.framework.TestSuite;
+ 
+-public class TestInvokerTransformer extends BulkTest {
++public class TestInvokerTransformer extends AbstractTestSerialization {
+ 
+     // conventional
+     // ------------------------------------------------------------------------
+@@ -43,53 +34,12 @@ public static Test suite() {
+ 
+     // ------------------------------------------------------------------------
+ 
+-    public void testSerializationDisabled() throws Exception {
+-        Assert.assertNull(System.getProperty(InvokerTransformer.DESERIALIZE));
+-        InvokerTransformer transformer = new InvokerTransformer("toString", new Class[0], new Object[0]);
+-        byte[] data = serialize(transformer);
+-        Assert.assertNotNull(data);
+-        try {
+-            deserialize(data);
+-            fail("de-serialization of InvokerTransformer should be disabled by default");
+-        } catch (UnsupportedOperationException ex) {
+-            // expected
+-        }
++    public Object makeObject() {
++        return new InvokerTransformer("toString", new Class[0], new Object[0]);
+     }
+ 
+-    public void testSerializationEnabled() throws Exception {
+-        Assert.assertNull(System.getProperty(InvokerTransformer.DESERIALIZE));
+-        System.setProperty(InvokerTransformer.DESERIALIZE, "true");
+-
+-        try {
+-            InvokerTransformer transformer = new InvokerTransformer("toString", new Class[0], new Object[0]);
+-            byte[] data = serialize(transformer);
+-            Assert.assertNotNull(data);
+-            try {
+-                Object obj = deserialize(data);
+-                Assert.assertTrue(obj instanceof InvokerTransformer);
+-            } catch (UnsupportedOperationException ex) {
+-                fail("de-serialization of InvokerTransformer should be enabled");
+-            }
+-        } finally {
+-            System.clearProperty(InvokerTransformer.DESERIALIZE);
+-        }
+-    }
+-    
+-    private byte[] serialize(InvokerTransformer transformer) throws IOException {
+-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+-        ObjectOutputStream oos = new ObjectOutputStream(baos);
+-
+-        oos.writeObject(transformer);
+-        oos.close();
+-
+-        return baos.toByteArray();
+-    }
+-    
+-    private Object deserialize(byte[] data) throws IOException, ClassNotFoundException {
+-        ByteArrayInputStream bais = new ByteArrayInputStream(data);
+-        ObjectInputStream iis = new ObjectInputStream(bais);
+-        
+-        return iis.readObject();
++    public Class getTestClass() {
++        return InvokerTransformer.class;
+     }
+ 
+ }
+diff --git a/src/test/org/apache/commons/collections/functors/TestWhileClosure.java b/src/test/org/apache/commons/collections/functors/TestWhileClosure.java
+new file mode 100644
+index 000000000..4c6a317e2
+--- /dev/null
++++ b/src/test/org/apache/commons/collections/functors/TestWhileClosure.java
+@@ -0,0 +1,45 @@
++/*
++ *  Licensed to the Apache Software Foundation (ASF) under one or more
++ *  contributor license agreements.  See the NOTICE file distributed with
++ *  this work for additional information regarding copyright ownership.
++ *  The ASF licenses this file to You under the Apache License, Version 2.0
++ *  (the "License"); you may not use this file except in compliance with
++ *  the License.  You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ *  Unless required by applicable law or agreed to in writing, software
++ *  distributed under the License is distributed on an "AS IS" BASIS,
++ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ *  See the License for the specific language governing permissions and
++ *  limitations under the License.
++ */
++package org.apache.commons.collections.functors;
++
++import junit.framework.Test;
++import junit.framework.TestSuite;
++
++public class TestWhileClosure extends AbstractTestSerialization {
++
++    // conventional
++    // ------------------------------------------------------------------------
++
++    public TestWhileClosure(String testName) {
++        super(testName);
++    }
++
++    public static Test suite() {
++        return new TestSuite(TestWhileClosure.class);
++    }
++
++    // ------------------------------------------------------------------------
++
++    public Object makeObject() {
++        return new WhileClosure(FalsePredicate.INSTANCE, NOPClosure.INSTANCE, true);
++    }
++
++    public Class getTestClass() {
++        return WhileClosure.class;
++    }
++
++}

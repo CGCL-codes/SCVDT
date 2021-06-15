@@ -1,0 +1,147 @@
+diff --git a/src/com/facebook/buck/cli/ParserCacheCommand.java b/src/com/facebook/buck/cli/ParserCacheCommand.java
+index e4485737610..bf7fde10864 100644
+--- a/src/com/facebook/buck/cli/ParserCacheCommand.java
++++ b/src/com/facebook/buck/cli/ParserCacheCommand.java
+@@ -17,6 +17,7 @@
+ package com.facebook.buck.cli;
+ 
+ import com.facebook.buck.parser.ParserConfig;
++import com.facebook.buck.parser.ParserStateObjectInputStream;
+ import com.facebook.buck.parser.thrift.RemoteDaemonicParserState;
+ import com.facebook.buck.util.ExitCode;
+ import com.facebook.buck.util.json.ObjectMappers;
+@@ -88,7 +89,7 @@ public ExitCode runWithoutHelp(CommandRunnerParams params)
+           ZipInputStream zipis = new ZipInputStream(fis)) {
+         ZipEntry entry = zipis.getNextEntry();
+         Preconditions.checkState(entry.getName().equals("parser_data"));
+-        try (ObjectInputStream ois = new ObjectInputStream(zipis)) {
++        try (ObjectInputStream ois = new ParserStateObjectInputStream(zipis)) {
+           RemoteDaemonicParserState state;
+           try {
+             state = (RemoteDaemonicParserState) ois.readObject();
+diff --git a/src/com/facebook/buck/parser/BUCK b/src/com/facebook/buck/parser/BUCK
+index b7c45ed0fdb..f3419fa4984 100644
+--- a/src/com/facebook/buck/parser/BUCK
++++ b/src/com/facebook/buck/parser/BUCK
+@@ -35,6 +35,7 @@ java_immutables_library(
+         "Parser.java",
+         "ParserMessages.java",
+         "ParserPythonInterpreterProvider.java",
++        "ParserStateObjectInputStream.java",
+         "ParserTargetNodeFactory.java",
+         "PerBuildState.java",
+         "PipelineNodeCache.java",
+diff --git a/src/com/facebook/buck/parser/ParserStateObjectInputStream.java b/src/com/facebook/buck/parser/ParserStateObjectInputStream.java
+new file mode 100644
+index 00000000000..6cd7f2ebc3e
+--- /dev/null
++++ b/src/com/facebook/buck/parser/ParserStateObjectInputStream.java
+@@ -0,0 +1,48 @@
++/*
++ * Copyright 2013-present Facebook, Inc.
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License"); you may
++ * not use this file except in compliance with the License. You may obtain
++ * a copy of the License at
++ *
++ *     http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++ * License for the specific language governing permissions and limitations
++ * under the License.
++ */
++
++package com.facebook.buck.parser;
++
++import com.facebook.buck.parser.thrift.RemoteDaemonicParserState;
++import java.io.IOException;
++import java.io.InputStream;
++import java.io.InvalidClassException;
++import java.io.ObjectInputStream;
++import java.io.ObjectStreamClass;
++import java.util.HashSet;
++import java.util.Set;
++
++/** A ObjectInputStream that will deserialize only RemoteDaemonicParserState. */
++public class ParserStateObjectInputStream extends ObjectInputStream {
++
++  private Set<String> whitelist;
++
++  public ParserStateObjectInputStream(InputStream inputStream) throws IOException {
++    super(inputStream);
++
++    whitelist = new HashSet<>();
++    whitelist.add(RemoteDaemonicParserState.class.getName());
++  }
++
++  @Override
++  protected Class<?> resolveClass(ObjectStreamClass desc)
++      throws IOException, ClassNotFoundException {
++    if (!whitelist.contains(desc.getName())) {
++      throw new InvalidClassException(desc.getName(), "Can't deserialize this class");
++    }
++    return super.resolveClass(desc);
++  }
++}
+diff --git a/test/com/facebook/buck/cli/ParserCacheCommandIntegrationTest.java b/test/com/facebook/buck/cli/ParserCacheCommandIntegrationTest.java
+index 50a9ed9e723..0de3e511a10 100644
+--- a/test/com/facebook/buck/cli/ParserCacheCommandIntegrationTest.java
++++ b/test/com/facebook/buck/cli/ParserCacheCommandIntegrationTest.java
+@@ -28,17 +28,26 @@
+ import com.facebook.buck.testutil.integration.TestDataHelper;
+ import com.facebook.buck.util.HumanReadableException;
+ import com.facebook.buck.util.NamedTemporaryFile;
++import java.io.FileOutputStream;
+ import java.io.IOException;
++import java.io.InvalidClassException;
++import java.io.ObjectOutputStream;
+ import java.nio.charset.StandardCharsets;
+ import java.nio.file.Files;
+ import java.nio.file.Path;
++import java.util.HashMap;
++import java.util.Map;
++import java.util.zip.ZipEntry;
++import java.util.zip.ZipOutputStream;
+ import org.hamcrest.Matchers;
+ import org.junit.Rule;
+ import org.junit.Test;
++import org.junit.rules.ExpectedException;
+ 
+ public class ParserCacheCommandIntegrationTest {
+ 
+   @Rule public TemporaryPaths tmp = new TemporaryPaths();
++  @Rule public ExpectedException thrown = ExpectedException.none();
+ 
+   @Test
+   public void testSaveAndLoad() throws IOException {
+@@ -146,4 +155,28 @@ public void testInvalidate() throws IOException {
+           e.getMessage(), Matchers.containsString("//Apps:TestAppsLibrary could not be found"));
+     }
+   }
++
++  @Test
++  public void testInvalidData() throws IOException {
++    Map<String, String> invalidData = new HashMap();
++    invalidData.put("foo", "bar");
++
++    NamedTemporaryFile tempFile = new NamedTemporaryFile("invalid_parser_data", null);
++    try (FileOutputStream fos = new FileOutputStream(tempFile.get().toString());
++        ZipOutputStream zipos = new ZipOutputStream(fos)) {
++      zipos.putNextEntry(new ZipEntry("parser_data"));
++      try (ObjectOutputStream oos = new ObjectOutputStream(zipos)) {
++        oos.writeObject(invalidData);
++      }
++    }
++
++    ProjectWorkspace workspace =
++        TestDataHelper.createProjectWorkspaceForScenario(this, "parser_with_cell", tmp);
++    workspace.setUp();
++
++    // Load the invalid parser cache data.
++    thrown.expect(InvalidClassException.class);
++    thrown.expectMessage("Can't deserialize this class");
++    workspace.runBuckCommand("parser-cache", "--load", tempFile.get().toString());
++  }
+ }

@@ -1,0 +1,17 @@
+geode software does not have poms.
+poi software does not have poms.
+thrift software does not have poms.ace software does not have poms.
+ant software does not have poms.
+chemistry software does not have poms.
+click software does not have poms.
+etch software does not have poms.
+fineract software does not have poms.
+harmony software does not have poms.
+iceberg software does not have poms.
+jmeter software does not have poms.
+kafka software does not have poms.
+netbeans software does not have poms.
+pig software does not have poms.
+qpid software does not have poms.
+tomcat software does not have poms.
+xalan-java software does not have poms.

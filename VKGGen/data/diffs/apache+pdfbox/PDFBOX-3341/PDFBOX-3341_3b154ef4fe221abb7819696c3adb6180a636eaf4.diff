@@ -1,0 +1,12 @@
+diff --git a/pdfbox/src/main/java/org/apache/pdfbox/pdmodel/encryption/StandardSecurityHandler.java b/pdfbox/src/main/java/org/apache/pdfbox/pdmodel/encryption/StandardSecurityHandler.java
+index 4b15e6d644..1271a977d7 100644
+--- a/pdfbox/src/main/java/org/apache/pdfbox/pdmodel/encryption/StandardSecurityHandler.java
++++ b/pdfbox/src/main/java/org/apache/pdfbox/pdmodel/encryption/StandardSecurityHandler.java
+@@ -237,6 +237,7 @@ else if( isUserPassword(password.getBytes(passwordCharset), userKey, ownerKey,
+                            dicLength, encryptMetadata) )
+         {
+             currentAccessPermission = new AccessPermission(dicPermissions);
++            currentAccessPermission.setReadOnly();
+             setCurrentAccessPermission(currentAccessPermission);
+             
+             encryptionKey =

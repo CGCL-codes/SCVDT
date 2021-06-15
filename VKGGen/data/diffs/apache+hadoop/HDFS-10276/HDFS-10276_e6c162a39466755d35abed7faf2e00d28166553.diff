@@ -1,0 +1,74 @@
+diff --git a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/FSPermissionChecker.java b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/FSPermissionChecker.java
+index 00e651d52aaa..6b596d60528f 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/FSPermissionChecker.java
++++ b/hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/namenode/FSPermissionChecker.java
+@@ -196,9 +196,9 @@ void checkPermission(INodesInPath inodesInPath, boolean doCheckOwner,
+    * Check whether exception e is due to an ancestor inode's not being
+    * directory.
+    */
+-  private void checkAncestorType(INode[] inodes, int ancestorIndex,
++  private void checkAncestorType(INode[] inodes, int checkedAncestorIndex,
+       AccessControlException e) throws AccessControlException {
+-    for (int i = 0; i <= ancestorIndex; i++) {
++    for (int i = 0; i <= checkedAncestorIndex; i++) {
+       if (inodes[i] == null) {
+         break;
+       }
+@@ -221,11 +221,8 @@ public void checkPermission(String fsOwner, String supergroup,
+       throws AccessControlException {
+     for(; ancestorIndex >= 0 && inodes[ancestorIndex] == null;
+         ancestorIndex--);
+-    try {
+-      checkTraverse(inodeAttrs, path, ancestorIndex);
+-    } catch (AccessControlException e) {
+-      checkAncestorType(inodes, ancestorIndex, e);
+-    }
++
++    checkTraverse(inodeAttrs, inodes, path, ancestorIndex);
+ 
+     final INodeAttributes last = inodeAttrs[inodeAttrs.length - 1];
+     if (parentAccess != null && parentAccess.implies(FsAction.WRITE)
+@@ -276,10 +273,15 @@ private void checkOwner(INodeAttributes inode
+   }
+ 
+   /** Guarded by {@link FSNamesystem#readLock()} */
+-  private void checkTraverse(INodeAttributes[] inodes, String path, int last
+-      ) throws AccessControlException {
+-    for(int j = 0; j <= last; j++) {
+-      check(inodes[j], path, FsAction.EXECUTE);
++  private void checkTraverse(INodeAttributes[] inodeAttrs, INode[] inodes,
++      String path, int last) throws AccessControlException {
++    int j = 0;
++    try {
++      for (; j <= last; j++) {
++        check(inodeAttrs[j], path, FsAction.EXECUTE);
++      }
++    } catch (AccessControlException e) {
++      checkAncestorType(inodes, j, e);
+     }
+   }
+ 
+diff --git a/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/TestDFSPermission.java b/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/TestDFSPermission.java
+index 80b2eb44122a..04771f7247b3 100644
+--- a/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/TestDFSPermission.java
++++ b/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/TestDFSPermission.java
+@@ -546,6 +546,19 @@ public FileSystem run() throws Exception {
+               + "a directory, when checked on /existing_file/non_existing_name",
+           e.getMessage().contains("is not a directory"));
+     }
++
++    rootFs.setPermission(p4, new FsPermission("600"));
++    try {
++      fs.exists(nfpath);
++      fail("The exists call should have failed.");
++    } catch (AccessControlException e) {
++      assertTrue("Permission denied messages must carry file path",
++          e.getMessage().contains(fpath.getName()));
++      assertFalse("Permission denied messages should not specify existing_file"
++              + " is not a directory, since the user does not have permission"
++              + " on /p4",
++          e.getMessage().contains("is not a directory"));
++    }
+   }
+ 
+   /* Check if namenode performs permission checking correctly

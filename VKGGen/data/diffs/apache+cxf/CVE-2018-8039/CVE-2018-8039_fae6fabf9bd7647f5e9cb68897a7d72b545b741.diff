@@ -1,0 +1,342 @@
+diff --git a/rt/transports/http/src/main/java/org/apache/cxf/transport/https/AllowAllHostnameVerifier.java b/rt/transports/http/src/main/java/org/apache/cxf/transport/https/AllowAllHostnameVerifier.java
+index b14ed9e794b..189bc382a97 100644
+--- a/rt/transports/http/src/main/java/org/apache/cxf/transport/https/AllowAllHostnameVerifier.java
++++ b/rt/transports/http/src/main/java/org/apache/cxf/transport/https/AllowAllHostnameVerifier.java
+@@ -39,4 +39,8 @@ public boolean verify(String host, SSLSession session) {
+             return false;
+         }
+     }
++
++    public boolean verify(final String host, final String certHostname) {
++        return certHostname != null && !certHostname.isEmpty();
++    }
+ }
+\ No newline at end of file
+diff --git a/rt/transports/http/src/main/java/org/apache/cxf/transport/https/HttpsURLConnectionFactory.java b/rt/transports/http/src/main/java/org/apache/cxf/transport/https/HttpsURLConnectionFactory.java
+index 82e62694493..057e6871b72 100644
+--- a/rt/transports/http/src/main/java/org/apache/cxf/transport/https/HttpsURLConnectionFactory.java
++++ b/rt/transports/http/src/main/java/org/apache/cxf/transport/https/HttpsURLConnectionFactory.java
+@@ -182,7 +182,7 @@ public Object invoke(Object proxy,
+                         try {
+                             return super.invoke(proxy, method, args);
+                         } catch (Exception ex) {
+-                            return true;
++                            return false;
+                         }
+                     }
+                 };
+diff --git a/rt/transports/http/src/main/java/org/apache/cxf/transport/https/httpclient/DefaultHostnameVerifier.java b/rt/transports/http/src/main/java/org/apache/cxf/transport/https/httpclient/DefaultHostnameVerifier.java
+index 00d5fef61a7..c9c58020848 100644
+--- a/rt/transports/http/src/main/java/org/apache/cxf/transport/https/httpclient/DefaultHostnameVerifier.java
++++ b/rt/transports/http/src/main/java/org/apache/cxf/transport/https/httpclient/DefaultHostnameVerifier.java
+@@ -130,6 +130,18 @@ public void verify(
+         }
+     }
+ 
++    public boolean verify(final String host, final String certHostname) {
++        try {
++            matchCN(host, certHostname, this.publicSuffixMatcher);
++            return true;
++        } catch (SSLException ex) {
++            if (LOG.isLoggable(Level.FINE)) {
++                LOG.log(Level.FINE, ex.getMessage(), ex);
++            }
++            return false;
++        }
++    }
++
+     static void matchIPAddress(final String host, final List<String> subjectAlts) throws SSLException {
+         for (int i = 0; i < subjectAlts.size(); i++) {
+             final String subjectAlt = subjectAlts.get(i);
+diff --git a/systests/transports/src/test/java/org/apache/cxf/systest/https/hostname/HostnameVerificationDeprecatedServer.java b/systests/transports/src/test/java/org/apache/cxf/systest/https/hostname/HostnameVerificationDeprecatedServer.java
+new file mode 100644
+index 00000000000..28c8d41f964
+--- /dev/null
++++ b/systests/transports/src/test/java/org/apache/cxf/systest/https/hostname/HostnameVerificationDeprecatedServer.java
+@@ -0,0 +1,47 @@
++/**
++ * Licensed to the Apache Software Foundation (ASF) under one
++ * or more contributor license agreements. See the NOTICE file
++ * distributed with this work for additional information
++ * regarding copyright ownership. The ASF licenses this file
++ * to you under the Apache License, Version 2.0 (the
++ * "License"); you may not use this file except in compliance
++ * with the License. You may obtain a copy of the License at
++ *
++ * http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing,
++ * software distributed under the License is distributed on an
++ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++ * KIND, either express or implied. See the License for the
++ * specific language governing permissions and limitations
++ * under the License.
++ */
++
++package org.apache.cxf.systest.https.hostname;
++
++import java.net.URL;
++
++import org.apache.cxf.Bus;
++import org.apache.cxf.BusFactory;
++import org.apache.cxf.bus.spring.SpringBusFactory;
++import org.apache.cxf.testutil.common.AbstractBusTestServerBase;
++
++public class HostnameVerificationDeprecatedServer extends AbstractBusTestServerBase {
++
++    public HostnameVerificationDeprecatedServer() {
++
++    }
++
++    protected void run()  {
++        URL busFile = HostnameVerificationDeprecatedServer.class.getResource("hostname-server-bethal.xml");
++        Bus busLocal = new SpringBusFactory().createBus(busFile);
++        BusFactory.setDefaultBus(busLocal);
++        setBus(busLocal);
++
++        try {
++            new HostnameVerificationDeprecatedServer();
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++    }
++}
+diff --git a/systests/transports/src/test/java/org/apache/cxf/systest/https/hostname/HostnameVerificationDeprecatedTest.java b/systests/transports/src/test/java/org/apache/cxf/systest/https/hostname/HostnameVerificationDeprecatedTest.java
+new file mode 100644
+index 00000000000..b464c2b5b4c
+--- /dev/null
++++ b/systests/transports/src/test/java/org/apache/cxf/systest/https/hostname/HostnameVerificationDeprecatedTest.java
+@@ -0,0 +1,121 @@
++/**
++ * Licensed to the Apache Software Foundation (ASF) under one
++ * or more contributor license agreements. See the NOTICE file
++ * distributed with this work for additional information
++ * regarding copyright ownership. The ASF licenses this file
++ * to you under the Apache License, Version 2.0 (the
++ * "License"); you may not use this file except in compliance
++ * with the License. You may obtain a copy of the License at
++ *
++ * http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing,
++ * software distributed under the License is distributed on an
++ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++ * KIND, either express or implied. See the License for the
++ * specific language governing permissions and limitations
++ * under the License.
++ */
++
++package org.apache.cxf.systest.https.hostname;
++
++import java.net.URL;
++
++import javax.xml.ws.BindingProvider;
++
++import org.apache.cxf.Bus;
++import org.apache.cxf.BusFactory;
++import org.apache.cxf.bus.spring.SpringBusFactory;
++import org.apache.cxf.testutil.common.AbstractBusClientServerTestBase;
++import org.apache.hello_world.Greeter;
++import org.apache.hello_world.services.SOAPService;
++
++import org.junit.AfterClass;
++import org.junit.BeforeClass;
++
++/**
++ * A test for hostname verification when the Java system property "java.protocol.handler.pkgs" is set to 
++ * "com.sun.net.ssl.internal.www.protocol". This means that com.sun.net.ssl.HostnameVerifier is used 
++ * instead of the javax version.
++ */
++public class HostnameVerificationDeprecatedTest extends AbstractBusClientServerTestBase {
++    static final String PORT = allocatePort(HostnameVerificationDeprecatedServer.class);
++    static final String PORT2 = allocatePort(HostnameVerificationDeprecatedServer.class, 2);
++
++    @BeforeClass
++    public static void startServers() throws Exception {
++        System.setProperty("java.protocol.handler.pkgs", "com.sun.net.ssl.internal.www.protocol");
++        assertTrue(
++            "Server failed to launch",
++            // run the server in the same process
++            // set this to false to fork
++            launchServer(HostnameVerificationDeprecatedServer.class, true)
++        );
++    }
++
++    @AfterClass
++    public static void cleanup() throws Exception {
++        System.clearProperty("java.protocol.handler.pkgs");
++        stopAllServers();
++    }
++
++    // Here we expect an exception, as the default hostname verifier contributed by CXF will object to the
++    // fact that the server certificate does not have "CN=localhost".
++    @org.junit.Test
++    public void testLocalhostNotMatching() throws Exception {
++        SpringBusFactory bf = new SpringBusFactory();
++        URL busFile = HostnameVerificationDeprecatedTest.class.getResource("hostname-client-bethal.xml");
++
++        Bus bus = bf.createBus(busFile.toString());
++        BusFactory.setDefaultBus(bus);
++        BusFactory.setThreadDefaultBus(bus);
++
++        URL url = SOAPService.WSDL_LOCATION;
++        SOAPService service = new SOAPService(url, SOAPService.SERVICE);
++        assertNotNull("Service is null", service);
++        final Greeter port = service.getHttpsPort();
++        assertNotNull("Port is null", port);
++
++        updateAddressPort(port, PORT);
++        
++        try {
++            port.greetMe("Kitty");
++            fail("Failure expected on the hostname verification");
++        } catch (Exception ex) {
++            // expected
++        }
++
++        ((java.io.Closeable)port).close();
++        bus.shutdown(true);
++    }
++    
++    // No Subject Alternative Name, but the CN matches ("localhost"), so the default HostnameVerifier
++    // should work fine
++    @org.junit.Test
++    public void testNoSubjectAlternativeNameCNMatch() throws Exception {
++        SpringBusFactory bf = new SpringBusFactory();
++        URL busFile = HostnameVerificationDeprecatedTest.class.getResource("hostname-client.xml");
++
++        Bus bus = bf.createBus(busFile.toString());
++        BusFactory.setDefaultBus(bus);
++        BusFactory.setThreadDefaultBus(bus);
++
++        URL url = SOAPService.WSDL_LOCATION;
++        SOAPService service = new SOAPService(url, SOAPService.SERVICE);
++        assertNotNull("Service is null", service);
++        final Greeter port = service.getHttpsPort();
++        assertNotNull("Port is null", port);
++
++        updateAddressPort(port, PORT2);
++
++        assertEquals(port.greetMe("Kitty"), "Hello Kitty");
++
++        // Enable Async
++        ((BindingProvider)port).getRequestContext().put("use.async.http.conduit", true);
++
++        assertEquals(port.greetMe("Kitty"), "Hello Kitty");
++
++        ((java.io.Closeable)port).close();
++        bus.shutdown(true);
++    }
++}
+diff --git a/systests/transports/src/test/resources/org/apache/cxf/systest/https/hostname/hostname-client-bethal.xml b/systests/transports/src/test/resources/org/apache/cxf/systest/https/hostname/hostname-client-bethal.xml
+new file mode 100644
+index 00000000000..87f359676c8
+--- /dev/null
++++ b/systests/transports/src/test/resources/org/apache/cxf/systest/https/hostname/hostname-client-bethal.xml
+@@ -0,0 +1,34 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!--
++ Licensed to the Apache Software Foundation (ASF) under one
++ or more contributor license agreements. See the NOTICE file
++ distributed with this work for additional information
++ regarding copyright ownership. The ASF licenses this file
++ to you under the Apache License, Version 2.0 (the
++ "License"); you may not use this file except in compliance
++ with the License. You may obtain a copy of the License at
++ 
++ http://www.apache.org/licenses/LICENSE-2.0
++ 
++ Unless required by applicable law or agreed to in writing,
++ software distributed under the License is distributed on an
++ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++ KIND, either express or implied. See the License for the
++ specific language governing permissions and limitations
++ under the License.
++-->
++<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:http="http://cxf.apache.org/transports/http/configuration" xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:cxf="http://cxf.apache.org/core" xmlns:p="http://cxf.apache.org/policy" xmlns:sec="http://cxf.apache.org/configuration/security" xsi:schemaLocation="           http://www.springframework.org/schema/beans           http://www.springframework.org/schema/beans/spring-beans-4.2.xsd           http://cxf.apache.org/jaxws                           http://cxf.apache.org/schemas/jaxws.xsd           http://cxf.apache.org/transports/http/configuration   http://cxf.apache.org/schemas/configuration/http-conf.xsd           http://cxf.apache.org/configuration/security          http://cxf.apache.org/schemas/configuration/security.xsd           http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd           http://cxf.apache.org/policy http://cxf.apache.org/schemas/policy.xsd">
++    
++    <cxf:bus>
++        <cxf:features>
++            <cxf:logging/>
++        </cxf:features>
++    </cxf:bus>
++    <http:conduit name="https://localhost:.*">
++        <http:tlsClientParameters>
++            <sec:trustManagers>
++                <sec:keyStore type="jks" password="password" resource="keys/Bethal.jks"/>
++            </sec:trustManagers>
++        </http:tlsClientParameters>
++    </http:conduit>
++</beans>
+diff --git a/systests/transports/src/test/resources/org/apache/cxf/systest/https/hostname/hostname-server-bethal.xml b/systests/transports/src/test/resources/org/apache/cxf/systest/https/hostname/hostname-server-bethal.xml
+new file mode 100644
+index 00000000000..9babe68aed1
+--- /dev/null
++++ b/systests/transports/src/test/resources/org/apache/cxf/systest/https/hostname/hostname-server-bethal.xml
+@@ -0,0 +1,66 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!--
++ Licensed to the Apache Software Foundation (ASF) under one
++ or more contributor license agreements. See the NOTICE file
++ distributed with this work for additional information
++ regarding copyright ownership. The ASF licenses this file
++ to you under the Apache License, Version 2.0 (the
++ "License"); you may not use this file except in compliance
++ with the License. You may obtain a copy of the License at
++ 
++ http://www.apache.org/licenses/LICENSE-2.0
++ 
++ Unless required by applicable law or agreed to in writing,
++ software distributed under the License is distributed on an
++ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++ KIND, either express or implied. See the License for the
++ specific language governing permissions and limitations
++ under the License.
++-->
++<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:http="http://cxf.apache.org/transports/http/configuration" xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration" xmlns:sec="http://cxf.apache.org/configuration/security" xmlns:cxf="http://cxf.apache.org/core" xmlns:p="http://cxf.apache.org/policy" xsi:schemaLocation="         http://www.springframework.org/schema/beans                     http://www.springframework.org/schema/beans/spring-beans-4.2.xsd         http://cxf.apache.org/jaxws                                     http://cxf.apache.org/schemas/jaxws.xsd         http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd         http://cxf.apache.org/policy http://cxf.apache.org/schemas/policy.xsd         http://cxf.apache.org/transports/http/configuration             http://cxf.apache.org/schemas/configuration/http-conf.xsd         http://cxf.apache.org/transports/http-jetty/configuration       http://cxf.apache.org/schemas/configuration/http-jetty.xsd         http://cxf.apache.org/configuration/security                    http://cxf.apache.org/schemas/configuration/security.xsd     ">
++    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
++    <cxf:bus>
++        <cxf:features>
++            <cxf:logging/>
++        </cxf:features>
++    </cxf:bus>
++   
++    <httpj:engine-factory id="non-localhost-match-settings">
++        <httpj:engine port="${testutil.ports.HostnameVerificationDeprecatedServer}">
++            <httpj:tlsServerParameters>
++                <sec:keyManagers keyPassword="password">
++                    <sec:keyStore type="jks" password="password" resource="keys/Bethal.jks"/>
++                </sec:keyManagers>
++                <sec:clientAuthentication want="false" required="false"/>
++            </httpj:tlsServerParameters>
++        </httpj:engine>
++    </httpj:engine-factory>
++    
++    <jaxws:endpoint xmlns:e="http://apache.org/hello_world/services" 
++                     xmlns:s="http://apache.org/hello_world/services" 
++                     id="NonLocalhostMatch"
++                     implementor="org.apache.cxf.systest.http.GreeterImpl" 
++                     address="https://localhost:${testutil.ports.HostnameVerificationDeprecatedServer}/SoapContext/HttpsPort" 
++                     serviceName="s:SOAPService" 
++                     endpointName="e:HttpsPort" depends-on="non-localhost-match-settings"/>
++                     
++    <httpj:engine-factory id="no-subject-alt-cn-match-settings">
++        <httpj:engine port="${testutil.ports.HostnameVerificationDeprecatedServer.2}">
++            <httpj:tlsServerParameters>
++                <sec:keyManagers keyPassword="security">
++                    <sec:keyStore type="jks" password="security" resource="keys/subjalt.jks"/>
++                </sec:keyManagers>
++                <sec:clientAuthentication want="false" required="false"/>
++                <sec:certAlias>nosubjaltcnmatch</sec:certAlias>
++            </httpj:tlsServerParameters>
++        </httpj:engine>
++    </httpj:engine-factory>
++    
++    <jaxws:endpoint xmlns:e="http://apache.org/hello_world/services" 
++                     xmlns:s="http://apache.org/hello_world/services" 
++                     id="NoSubjectAltCNMatch" 
++                     implementor="org.apache.cxf.systest.http.GreeterImpl" 
++                     address="https://localhost:${testutil.ports.HostnameVerificationDeprecatedServer.2}/SoapContext/HttpsPort" 
++                     serviceName="s:SOAPService" 
++                     endpointName="e:HttpsPort" depends-on="no-subject-alt-cn-match-settings"/>
++</beans>

@@ -1,0 +1,22 @@
+diff --git a/deployment-repository/src/main/java/org/jboss/as/repository/PathUtil.java b/deployment-repository/src/main/java/org/jboss/as/repository/PathUtil.java
+index d63988fabb9..7182ff383cc 100644
+--- a/deployment-repository/src/main/java/org/jboss/as/repository/PathUtil.java
++++ b/deployment-repository/src/main/java/org/jboss/as/repository/PathUtil.java
+@@ -147,7 +147,7 @@ public static final Path resolveSecurely(Path rootPath, String path) {
+             String relativePath = removeSuperflousSlashes(path);
+             resolvedPath = rootPath.resolve(relativePath).normalize();
+         }
+-        if(!resolvedPath.startsWith(rootPath))  {
++        if(!resolvedPath.startsWith(rootPath)) {
+             throw DeploymentRepositoryLogger.ROOT_LOGGER.forbiddenPath(path);
+         }
+         return resolvedPath;
+@@ -319,7 +319,7 @@ private static void unzip(final ZipFile zip, final Path targetDir) throws IOExce
+         while (entries.hasMoreElements()) {
+             final ZipEntry entry = entries.nextElement();
+             final String name = entry.getName();
+-            final Path current = targetDir.resolve(name);
++            final Path current = resolveSecurely(targetDir, name);
+             if (entry.isDirectory()) {
+                 if (!Files.exists(current)) {
+                     Files.createDirectories(current);

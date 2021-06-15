@@ -1,0 +1,119 @@
+From 0622e635d97cb17c5e1363e370bb8268cc3d2547 Mon Sep 17 00:00:00 2001
+From: Vincent Petry <pvince81@owncloud.com>
+Date: Wed, 6 Jul 2016 17:54:18 +0200
+Subject: [PATCH] Additional perm check in Webdav
+
+---
+ lib/private/connector/sabre/objecttree.php |  5 ++
+ tests/lib/connector/sabre/objecttree.php   | 82 ++++++++++++++++++++++
+ 2 files changed, 87 insertions(+)
+
+diff --git a/lib/private/connector/sabre/objecttree.php b/lib/private/connector/sabre/objecttree.php
+index 8aaf26f0cc0..ed67c3f2c16 100644
+--- a/lib/private/connector/sabre/objecttree.php
++++ b/lib/private/connector/sabre/objecttree.php
+@@ -270,6 +270,11 @@ public function copy($source, $destination) {
+ 			throw new InvalidPath($ex->getMessage());
+ 		}
+ 
++		// Webdav's copy will implicitly do a delete+create, so only create+delete permissions are required
++		if (!$this->fileView->isCreatable($destinationDir)) {
++			throw new \Sabre\DAV\Exception\Forbidden();
++		}
++
+ 		try {
+ 			$this->fileView->copy($source, $destination);
+ 		} catch (StorageNotAvailableException $e) {
+diff --git a/tests/lib/connector/sabre/objecttree.php b/tests/lib/connector/sabre/objecttree.php
+index 620a8538353..6d002f737f1 100644
+--- a/tests/lib/connector/sabre/objecttree.php
++++ b/tests/lib/connector/sabre/objecttree.php
+@@ -119,6 +119,88 @@ private function moveTest($source, $destination, $updatables, $deletables) {
+ 		$objectTree->move($source, $destination);
+ 	}
+ 
++	public function copyDataProvider() {
++		return [
++			// copy into same dir
++			['a', 'b', ''],
++			// copy into same dir
++			['a/a', 'a/b', 'a'],
++			// copy into another dir
++			['a', 'sub/a', 'sub'],
++		];
++	}
++
++	/**
++	 * @dataProvider copyDataProvider
++	 */
++	public function testCopy($sourcePath, $targetPath, $targetParent) {
++		$view = $this->getMock('\OC\Files\View');
++		$view->expects($this->once())
++			->method('verifyPath')
++			->with($targetParent)
++			->will($this->returnValue(true));
++		$view->expects($this->once())
++			->method('isCreatable')
++			->with($targetParent)
++			->will($this->returnValue(true));
++		$view->expects($this->once())
++			->method('copy')
++			->with($sourcePath, $targetPath)
++			->will($this->returnValue(true));
++
++		$info = new FileInfo('', null, null, array(), null);
++
++		$rootDir = new \OC\Connector\Sabre\Directory($view, $info);
++		$objectTree = $this->getMock('\OC\Connector\Sabre\ObjectTree',
++			array('nodeExists', 'getNodeForPath'),
++			array($rootDir, $view));
++
++		$objectTree->expects($this->once())
++			->method('getNodeForPath')
++			->with($this->identicalTo($sourcePath))
++			->will($this->returnValue(false));
++
++		/** @var $objectTree \OC\Connector\Sabre\ObjectTree */
++		$mountManager = \OC\Files\Filesystem::getMountManager();
++		$objectTree->init($rootDir, $view, $mountManager);
++		$objectTree->copy($sourcePath, $targetPath);
++	}
++
++	/**
++	 * @dataProvider copyDataProvider
++	 * @expectedException \Sabre\DAV\Exception\Forbidden
++	 */
++	public function testCopyFailNotCreatable($sourcePath, $targetPath, $targetParent) {
++		$view = $this->getMock('\OC\Files\View');
++		$view->expects($this->once())
++			->method('verifyPath')
++			->with($targetParent)
++			->will($this->returnValue(true));
++		$view->expects($this->once())
++			->method('isCreatable')
++			->with($targetParent)
++			->will($this->returnValue(false));
++		$view->expects($this->never())
++			->method('copy');
++
++		$info = new FileInfo('', null, null, array(), null);
++
++		$rootDir = new \OC\Connector\Sabre\Directory($view, $info);
++		$objectTree = $this->getMock('\OC\Connector\Sabre\ObjectTree',
++			array('nodeExists', 'getNodeForPath'),
++			array($rootDir, $view));
++
++		$objectTree->expects($this->once())
++			->method('getNodeForPath')
++			->with($this->identicalTo($sourcePath))
++			->will($this->returnValue(false));
++
++		/** @var $objectTree \OC\Connector\Sabre\ObjectTree */
++		$mountManager = \OC\Files\Filesystem::getMountManager();
++		$objectTree->init($rootDir, $view, $mountManager);
++		$objectTree->copy($sourcePath, $targetPath);
++	}
++
+ 	/**
+ 	 * @dataProvider nodeForPathProvider
+ 	 */

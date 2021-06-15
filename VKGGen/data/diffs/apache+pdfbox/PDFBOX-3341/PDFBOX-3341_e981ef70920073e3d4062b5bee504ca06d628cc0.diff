@@ -1,0 +1,12 @@
+diff --git a/pdfbox/src/main/java/org/apache/pdfbox/pdmodel/encryption/StandardSecurityHandler.java b/pdfbox/src/main/java/org/apache/pdfbox/pdmodel/encryption/StandardSecurityHandler.java
+index e71240ac72..d1f596f1f8 100644
+--- a/pdfbox/src/main/java/org/apache/pdfbox/pdmodel/encryption/StandardSecurityHandler.java
++++ b/pdfbox/src/main/java/org/apache/pdfbox/pdmodel/encryption/StandardSecurityHandler.java
+@@ -236,6 +236,7 @@ public void prepareForDecryption(PDEncryptionDictionary encDictionary, COSArray
+         if( isUserPassword )
+         {
+             currentAccessPermission = new AccessPermission( dicPermissions );
++            currentAccessPermission.setReadOnly();
+             encryptionKey =
+                 computeEncryptedKey(
+                     password.getBytes("ISO-8859-1"),

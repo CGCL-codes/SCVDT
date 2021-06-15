@@ -1,0 +1,47 @@
+diff --git a/artemis-selector/src/main/java/org/apache/activemq/artemis/selector/filter/XalanXPathEvaluator.java b/artemis-selector/src/main/java/org/apache/activemq/artemis/selector/filter/XalanXPathEvaluator.java
+index 315773e5e8a..007f5ff13ab 100644
+--- a/artemis-selector/src/main/java/org/apache/activemq/artemis/selector/filter/XalanXPathEvaluator.java
++++ b/artemis-selector/src/main/java/org/apache/activemq/artemis/selector/filter/XalanXPathEvaluator.java
+@@ -18,6 +18,7 @@
+ 
+ import javax.xml.parsers.DocumentBuilder;
+ import javax.xml.parsers.DocumentBuilderFactory;
++import javax.xml.parsers.ParserConfigurationException;
+ import java.io.StringReader;
+ 
+ import org.apache.xpath.CachedXPathAPI;
+@@ -56,9 +57,7 @@ protected boolean evaluate(InputSource inputSource)
+    {
+       try
+       {
+-         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+-         factory.setNamespaceAware(true);
+-         DocumentBuilder dbuilder = factory.newDocumentBuilder();
++         DocumentBuilder dbuilder = createDocumentBuilder();
+          Document doc = dbuilder.parse(inputSource);
+ 
+          //An XPath expression could return a true or false value instead of a node.
+@@ -75,11 +74,22 @@ protected boolean evaluate(InputSource inputSource)
+             NodeIterator iterator = cachedXPathAPI.selectNodeIterator(doc, xpath);
+             return (iterator.nextNode() != null);
+          }
+-
+       }
+       catch (Throwable e)
+       {
+          return false;
+       }
+    }
++
++   private DocumentBuilder createDocumentBuilder() throws ParserConfigurationException
++   {
++      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
++      factory.setNamespaceAware(true);
++
++      factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
++      factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
++      factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
++
++      return factory.newDocumentBuilder();
++   }
+ }

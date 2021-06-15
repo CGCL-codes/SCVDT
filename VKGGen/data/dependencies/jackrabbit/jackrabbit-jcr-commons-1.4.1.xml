@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                              http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+<!-- ====================================================================== -->
+<!-- P R O J E C T  D E S C R I P T I O N                                   -->
+<!-- ====================================================================== -->
+  <parent>
+    <groupId>org.apache.jackrabbit</groupId>
+    <artifactId>jackrabbit</artifactId>
+    <version>1.4</version>
+  </parent>
+  <artifactId>jackrabbit-jcr-commons</artifactId>
+  <name>Jackrabbit JCR Commons</name>
+  <version>1.4.1</version>
+  <description>General purpose classes for use with the JCR API</description>
+  <packaging>bundle</packaging>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/jackrabbit/tags/jackrabbit-jcr-commons-1.4.1</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/jackrabbit/tags/jackrabbit-jcr-commons-1.4.1</developerConnection>
+    <url>http://svn.apache.org/viewvc/jackrabbit/tags/jackrabbit-jcr-commons-1.4.1</url>
+  </scm>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>1.2.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Bundle-Category>jcr,jackrabbit</Bundle-Category>
+            <Bundle-DocURL>
+              http://jackrabbit.apache.org
+            </Bundle-DocURL>
+            <Export-Package>
+              org.apache.jackrabbit.*;version=${pom.version}
+            </Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.jcr</groupId>
+      <artifactId>jcr</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>cglib</groupId>
+      <artifactId>cglib</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>

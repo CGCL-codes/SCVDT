@@ -1,0 +1,76 @@
+diff --git a/src/java/org/apache/commons/collections/functors/InvokerTransformer.java b/src/java/org/apache/commons/collections/functors/InvokerTransformer.java
+index 2dcf09c42..580a22926 100644
+--- a/src/java/org/apache/commons/collections/functors/InvokerTransformer.java
++++ b/src/java/org/apache/commons/collections/functors/InvokerTransformer.java
+@@ -18,6 +18,7 @@
+ 
+ import java.io.IOException;
+ import java.io.ObjectInputStream;
++import java.io.ObjectOutputStream;
+ import java.io.Serializable;
+ import java.lang.reflect.InvocationTargetException;
+ import java.lang.reflect.Method;
+@@ -29,6 +30,17 @@
+ 
+ /**
+  * Transformer implementation that creates a new object instance by reflection.
++ * <p>
++ * <b>WARNING:</b> from v3.2.2 onwards this class will throw an
++ * {@link UnsupportedOperationException} when trying to de-serialize an
++ * instance from a {@link ObjectOutputStream} to prevent potential
++ * remote code execution exploits.
++ * <p>
++ * In order to re-enable de-serialization of {@code InvokerTransformer}
++ * instances, the following system property can be used (via -Dproperty=true):
++ * <pre>
++ * org.apache.commons.collections.invokertransformer.enableDeserialization
++ * </pre>
+  * 
+  * @since Commons Collections 3.0
+  * @version $Revision$ $Date$
+@@ -160,8 +172,10 @@ public Object run() {
+             deserializeProperty = null;
+         }
+ 
+-        if (deserializeProperty == null || !deserializeProperty.equalsIgnoreCase("true")) {
+-            throw new UnsupportedOperationException("Deserialization of InvokerTransformer is disabled, ");
++        if (!"true".equalsIgnoreCase(deserializeProperty)) {
++            throw new UnsupportedOperationException(
++                    "Deserialization of InvokerTransformer is disabled for security reasons. " +
++                    "To re-enable it set system property '" + DESERIALIZE + "' to 'true'");
+         }
+         
+         is.defaultReadObject();
+diff --git a/src/test/org/apache/commons/collections/functors/TestInvokerTransformer.java b/src/test/org/apache/commons/collections/functors/TestInvokerTransformer.java
+index 9129471d1..4b48a5929 100644
+--- a/src/test/org/apache/commons/collections/functors/TestInvokerTransformer.java
++++ b/src/test/org/apache/commons/collections/functors/TestInvokerTransformer.java
+@@ -44,17 +44,19 @@ public void testSerializationEnabled() throws Exception {
+         Assert.assertNull(System.getProperty(InvokerTransformer.DESERIALIZE));
+         System.setProperty(InvokerTransformer.DESERIALIZE, "true");
+ 
+-        InvokerTransformer transformer = new InvokerTransformer("toString", new Class[0], new Object[0]);
+-        byte[] data = serialize(transformer);
+-        Assert.assertNotNull(data);
+         try {
+-            Object obj = deserialize(data);
+-            Assert.assertTrue(obj instanceof InvokerTransformer);
+-        } catch (UnsupportedOperationException ex) {
+-            fail("de-serialization of InvokerTransformer should be enabled");
++            InvokerTransformer transformer = new InvokerTransformer("toString", new Class[0], new Object[0]);
++            byte[] data = serialize(transformer);
++            Assert.assertNotNull(data);
++            try {
++                Object obj = deserialize(data);
++                Assert.assertTrue(obj instanceof InvokerTransformer);
++            } catch (UnsupportedOperationException ex) {
++                fail("de-serialization of InvokerTransformer should be enabled");
++            }
++        } finally {
++            System.clearProperty(InvokerTransformer.DESERIALIZE);
+         }
+-        
+-        System.clearProperty(InvokerTransformer.DESERIALIZE);
+     }
+     
+     private byte[] serialize(InvokerTransformer transformer) throws IOException {

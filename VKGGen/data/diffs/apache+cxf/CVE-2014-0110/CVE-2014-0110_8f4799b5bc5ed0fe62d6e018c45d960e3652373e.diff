@@ -1,0 +1,65 @@
+diff --git a/core/src/main/java/org/apache/cxf/interceptor/OutgoingChainInterceptor.java b/core/src/main/java/org/apache/cxf/interceptor/OutgoingChainInterceptor.java
+index 21d84e188dc..88f8b18a68b 100644
+--- a/core/src/main/java/org/apache/cxf/interceptor/OutgoingChainInterceptor.java
++++ b/core/src/main/java/org/apache/cxf/interceptor/OutgoingChainInterceptor.java
+@@ -57,6 +57,10 @@ public OutgoingChainInterceptor() {
+     public void handleMessage(Message message) {
+         Exchange ex = message.getExchange();
+         BindingOperationInfo binding = ex.get(BindingOperationInfo.class);
++        //if we get this far, we're going to be outputting some valid content, but we COULD
++        //also be "echoing" some of the content from the input.   Thus, we need to 
++        //mark it as requiring the input to be cached.   
++        message.put("cxf.io.cacheinput", Boolean.TRUE);
+         if (null != binding && null != binding.getOperationInfo() && binding.getOperationInfo().isOneWay()) {
+             closeInput(message);
+             return;
+diff --git a/rt/transports/http/src/main/java/org/apache/cxf/transport/http/AbstractHTTPDestination.java b/rt/transports/http/src/main/java/org/apache/cxf/transport/http/AbstractHTTPDestination.java
+index d1f95c022ef..28bd6c36b96 100644
+--- a/rt/transports/http/src/main/java/org/apache/cxf/transport/http/AbstractHTTPDestination.java
++++ b/rt/transports/http/src/main/java/org/apache/cxf/transport/http/AbstractHTTPDestination.java
+@@ -542,21 +542,33 @@ private void cacheInput(Message outMessage) {
+         if (inMessage == null) {
+             return;
+         }
+-        Collection<Attachment> atts = inMessage.getAttachments();
+-        if (atts != null) {
+-            for (Attachment a : atts) {
+-                if (a.getDataHandler().getDataSource() instanceof AttachmentDataSource) {
+-                    try {
+-                        ((AttachmentDataSource)a.getDataHandler().getDataSource()).cache(inMessage);
+-                    } catch (IOException e) {
+-                        throw new Fault(e);
++        Object o = inMessage.get("cxf.io.cacheinput");
++        DelegatingInputStream in = inMessage.getContent(DelegatingInputStream.class);
++        if (MessageUtils.isTrue(o)) {
++            Collection<Attachment> atts = inMessage.getAttachments();
++            if (atts != null) {
++                for (Attachment a : atts) {
++                    if (a.getDataHandler().getDataSource() instanceof AttachmentDataSource) {
++                        try {
++                            ((AttachmentDataSource)a.getDataHandler().getDataSource()).cache(inMessage);
++                        } catch (IOException e) {
++                            throw new Fault(e);
++                        }
+                     }
+                 }
+             }
+-        }
+-        DelegatingInputStream in = inMessage.getContent(DelegatingInputStream.class);
+-        if (in != null) {
+-            in.cacheInput();
++            if (in != null) {
++                in.cacheInput();
++            }
++        } else if (in != null) {
++            //We don't need to cache it, but we may need to consume it in order for the client 
++            // to be able to receive a response. (could be blocked sending)
++            //However, also don't want to consume indefinitely.   We'll limit to 16M.
++            try {
++                IOUtils.consume(in, 16 * 1024 * 1024);
++            } catch (IOException ioe) {
++                //ignore
++            }
+         }
+     }
+     

@@ -1,0 +1,30 @@
+From bf0f1a50926a75a26a42a3da4d62e84a489ee77a Mon Sep 17 00:00:00 2001
+From: Lukas Reschke <lukas@owncloud.com>
+Date: Tue, 7 Apr 2015 15:12:10 +0200
+Subject: [PATCH] Revert custom patch that can cause problems
+
+---
+ apps/files_external/3rdparty/Dropbox/OAuth/Curl.php | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/apps/files_external/3rdparty/Dropbox/OAuth/Curl.php b/apps/files_external/3rdparty/Dropbox/OAuth/Curl.php
+index b75b27bb363..cfa33ed0e1a 100644
+--- a/apps/files_external/3rdparty/Dropbox/OAuth/Curl.php
++++ b/apps/files_external/3rdparty/Dropbox/OAuth/Curl.php
+@@ -72,8 +72,14 @@ public function fetch($uri, $arguments = array(), $method = 'GET', $httpHeaders
+ 		if (strtoupper($method) == 'POST') {
+ 			curl_setopt($ch, CURLOPT_URL, $uri);
+ 			curl_setopt($ch, CURLOPT_POST, true);
+-// 			if (is_array($arguments))
+-// 				$arguments=http_build_query($arguments);
++
++ 			//if (is_array($arguments))
++ 			//	$arguments=http_build_query($arguments);
++ 			foreach ($arguments as $key => $value) {
++ 				if($value[0] === '@') {
++					exit();
++				}
++			}
+ 			curl_setopt($ch, CURLOPT_POSTFIELDS, $arguments);
+ // 			$httpHeaders['Content-Length']=strlen($arguments);
+ 		} else {

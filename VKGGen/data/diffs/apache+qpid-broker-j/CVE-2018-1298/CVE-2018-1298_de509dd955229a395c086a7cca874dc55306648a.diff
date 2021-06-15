@@ -1,0 +1,185 @@
+diff --git a/broker-core/src/main/java/org/apache/qpid/server/security/auth/sasl/oauth2/OAuth2Negotiator.java b/broker-core/src/main/java/org/apache/qpid/server/security/auth/sasl/oauth2/OAuth2Negotiator.java
+index 955136c3cb..db2f262833 100644
+--- a/broker-core/src/main/java/org/apache/qpid/server/security/auth/sasl/oauth2/OAuth2Negotiator.java
++++ b/broker-core/src/main/java/org/apache/qpid/server/security/auth/sasl/oauth2/OAuth2Negotiator.java
+@@ -31,12 +31,18 @@
+ 
+ public class OAuth2Negotiator implements SaslNegotiator
+ {
++    enum State
++    {
++        INITIAL,
++        CHALLENGE_SENT,
++        COMPLETE
++    }
+ 
+     public static final String MECHANISM = "XOAUTH2";
+     private static final String BEARER_PREFIX = "Bearer ";
+     private final NamedAddressSpace _addressSpace;
+     private OAuth2AuthenticationProvider<?> _authenticationProvider;
+-    private volatile boolean _isComplete;
++    private volatile State _state = State.INITIAL;
+ 
+     public OAuth2Negotiator(OAuth2AuthenticationProvider<?> authenticationProvider,
+                             final NamedAddressSpace addressSpace)
+@@ -48,16 +54,24 @@ public OAuth2Negotiator(OAuth2AuthenticationProvider<?> authenticationProvider,
+     @Override
+     public AuthenticationResult handleResponse(final byte[] response)
+     {
+-        if (_isComplete)
++        if (_state == State.COMPLETE)
+         {
+             return new AuthenticationResult(AuthenticationResult.AuthenticationStatus.ERROR,
+-                                            new IllegalStateException(
+-                                                    "Multiple Authentications not permitted."));
++                                            new IllegalStateException("Multiple Authentications not permitted."));
+         }
+-        else
++        else if (_state == State.INITIAL && (response == null || response.length == 0))
++        {
++            _state = State.CHALLENGE_SENT;
++            return new AuthenticationResult(new byte[0], AuthenticationResult.AuthenticationStatus.CONTINUE);
++        }
++
++        _state = State.COMPLETE;
++        if (response == null || response.length == 0)
+         {
+-            _isComplete = true;
++            return new AuthenticationResult(AuthenticationResult.AuthenticationStatus.ERROR,
++                                            new IllegalArgumentException("Invalid OAuth2 client response."));
+         }
++
+         Map<String, String> responsePairs = splitResponse(response);
+ 
+         String auth = responsePairs.get("auth");
+diff --git a/broker-core/src/main/java/org/apache/qpid/server/security/auth/sasl/plain/PlainNegotiator.java b/broker-core/src/main/java/org/apache/qpid/server/security/auth/sasl/plain/PlainNegotiator.java
+index 065080f9bc..e56f8cae2e 100644
+--- a/broker-core/src/main/java/org/apache/qpid/server/security/auth/sasl/plain/PlainNegotiator.java
++++ b/broker-core/src/main/java/org/apache/qpid/server/security/auth/sasl/plain/PlainNegotiator.java
+@@ -29,11 +29,18 @@
+ 
+ public class PlainNegotiator implements SaslNegotiator
+ {
++    enum State
++    {
++        INITIAL,
++        CHALLENGE_SENT,
++        COMPLETE
++    }
++
+     public static final String MECHANISM = "PLAIN";
+     private static final String UTF8 = StandardCharsets.UTF_8.name();
+ 
+     private UsernamePasswordAuthenticationProvider _usernamePasswordAuthenticationProvider;
+-    private volatile boolean _isComplete;
++    private volatile State _state = State.INITIAL;
+     private volatile String _username;
+ 
+     public PlainNegotiator(final UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider)
+@@ -44,16 +51,25 @@ public PlainNegotiator(final UsernamePasswordAuthenticationProvider usernamePass
+     @Override
+     public AuthenticationResult handleResponse(final byte[] response)
+     {
+-        if (_isComplete)
++        if (_state == State.COMPLETE)
+         {
+             return new AuthenticationResult(AuthenticationResult.AuthenticationStatus.ERROR,
+-                                            new IllegalStateException(
+-                                                    "Multiple Authentications not permitted."));
++                                            new IllegalStateException("Multiple Authentications not permitted."));
++        }
++        else if (_state == State.INITIAL && (response == null || response.length == 0))
++        {
++            _state = State.CHALLENGE_SENT;
++            return new AuthenticationResult(new byte[0], AuthenticationResult.AuthenticationStatus.CONTINUE);
+         }
+-        else
++
++        _state = State.COMPLETE;
++        if (response == null || response.length == 0)
+         {
+-            _isComplete = true;
++            return new AuthenticationResult(AuthenticationResult.AuthenticationStatus.ERROR,
++                                            new IllegalArgumentException(
++                                                    "Invalid PLAIN encoding, authzid null terminator not found"));
+         }
++
+         int authzidNullPosition = findNullPosition(response, 0);
+         if (authzidNullPosition < 0)
+         {
+diff --git a/broker-core/src/test/java/org/apache/qpid/server/security/auth/sasl/oauth2/OAuth2NegotiatorTest.java b/broker-core/src/test/java/org/apache/qpid/server/security/auth/sasl/oauth2/OAuth2NegotiatorTest.java
+index 4dea6c4287..d1e1d2a9cb 100644
+--- a/broker-core/src/test/java/org/apache/qpid/server/security/auth/sasl/oauth2/OAuth2NegotiatorTest.java
++++ b/broker-core/src/test/java/org/apache/qpid/server/security/auth/sasl/oauth2/OAuth2NegotiatorTest.java
+@@ -21,6 +21,7 @@
+ package org.apache.qpid.server.security.auth.sasl.oauth2;
+ 
+ 
++import static org.junit.Assert.assertArrayEquals;
+ import static org.mockito.Matchers.any;
+ import static org.mockito.Matchers.eq;
+ import static org.mockito.Mockito.mock;
+@@ -29,7 +30,6 @@
+ 
+ import org.apache.qpid.server.security.auth.AuthenticationResult;
+ import org.apache.qpid.server.security.auth.manager.oauth2.OAuth2AuthenticationProvider;
+-
+ import org.apache.qpid.test.utils.QpidTestCase;
+ 
+ public class OAuth2NegotiatorTest extends QpidTestCase
+@@ -94,4 +94,17 @@ private void doHandleResponseWithValidResponse(final byte[] validResponse)
+                      secondResult.getStatus());
+     }
+ 
++    public void testHandleNoInitialResponse() throws Exception
++    {
++        final AuthenticationResult result = _negotiator.handleResponse(new byte[0]);
++        assertEquals("Unexpected authentication status", AuthenticationResult.AuthenticationStatus.CONTINUE, result.getStatus());
++        assertArrayEquals("Unexpected authentication challenge", new byte[0], result.getChallenge());
++    }
++
++    public void testHandleNoInitialResponseNull() throws Exception
++    {
++        final AuthenticationResult result = _negotiator.handleResponse(null);
++        assertEquals("Unexpected authentication status", AuthenticationResult.AuthenticationStatus.CONTINUE, result.getStatus());
++        assertArrayEquals("Unexpected authentication challenge", new byte[0], result.getChallenge());
++    }
+ }
+diff --git a/broker-core/src/test/java/org/apache/qpid/server/security/auth/sasl/plain/PlainNegotiatorTest.java b/broker-core/src/test/java/org/apache/qpid/server/security/auth/sasl/plain/PlainNegotiatorTest.java
+index 78229b610d..5162073bd4 100644
+--- a/broker-core/src/test/java/org/apache/qpid/server/security/auth/sasl/plain/PlainNegotiatorTest.java
++++ b/broker-core/src/test/java/org/apache/qpid/server/security/auth/sasl/plain/PlainNegotiatorTest.java
+@@ -20,6 +20,7 @@
+ 
+ package org.apache.qpid.server.security.auth.sasl.plain;
+ 
++import static org.junit.Assert.assertArrayEquals;
+ import static org.mockito.Matchers.eq;
+ import static org.mockito.Mockito.mock;
+ import static org.mockito.Mockito.verify;
+@@ -72,4 +73,24 @@ public void testMultipleAuthenticationAttempts() throws Exception
+         final AuthenticationResult secondResult = _negotiator.handleResponse(VALID_RESPONSE.getBytes());
+         assertEquals("Unexpected second authentication result", AuthenticationResult.AuthenticationStatus.ERROR, secondResult.getStatus());
+     }
++
++    public void testHandleNoInitialResponse() throws Exception
++    {
++        final AuthenticationResult result = _negotiator.handleResponse(new byte[0]);
++        assertEquals("Unexpected authentication status", AuthenticationResult.AuthenticationStatus.CONTINUE, result.getStatus());
++        assertArrayEquals("Unexpected authentication challenge", new byte[0], result.getChallenge());
++
++        final AuthenticationResult firstResult = _negotiator.handleResponse(VALID_RESPONSE.getBytes());
++        assertEquals("Unexpected first authentication result", _expectedResult, firstResult);
++    }
++
++    public void testHandleNoInitialResponseNull() throws Exception
++    {
++        final AuthenticationResult result = _negotiator.handleResponse(null);
++        assertEquals("Unexpected authentication status", AuthenticationResult.AuthenticationStatus.CONTINUE, result.getStatus());
++        assertArrayEquals("Unexpected authentication challenge", new byte[0], result.getChallenge());
++
++        final AuthenticationResult firstResult = _negotiator.handleResponse(VALID_RESPONSE.getBytes());
++        assertEquals("Unexpected first authentication result", _expectedResult, firstResult);
++    }
+ }
+\ No newline at end of file
