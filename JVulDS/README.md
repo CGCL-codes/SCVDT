@@ -1,6 +1,6 @@
 # JVulDS
 A system for using deep learning to detect vulnerabilities. 
-#
+### Introduction
 For this system, firstly, we generate pdg of Java program including vulnerability focuses. In this step, we store the pdg nodes in the Neo4j database. If this node is related to vulnerability, we set the attribute type of the node to 1 or 2, or 3. Secondly, we generate program slice according to PDG. Thirdly, we transform program slice to vector by word2vec. Finally, we use the vector as the input of the deep learning to train dataset and predict test dataset.
 ### Description
 
