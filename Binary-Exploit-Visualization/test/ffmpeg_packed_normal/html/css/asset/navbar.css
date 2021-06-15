@@ -1,0 +1,270 @@
+
+.flick.navbar .navbar-collapse {
+    border: none;
+}
+.flick.navbar {
+    background-color: #f8f8f8;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px solid #eeeeee;
+}
+.flick.navbar .navbar-brand {
+    line-height: 50px;
+    margin: 22px 0px 0px 15px;
+    padding: 0;
+}
+.flick.navbar li{
+    position: relative;
+    list-style: none;
+}
+.flick.navbar li.dropdown,
+.flick.navbar li a {
+    color: #191d25;
+    font-size: 16px;
+    padding: 32px 17px;
+    text-transform: capitalize;
+    cursor: pointer;
+}
+.flick.navbar li a:hover {
+    color: #247CFF;
+}
+
+
+/*-------dropdown---------*/
+.flick.navbar .dropdown>ul {
+    background: #fff;
+    left: 0px;
+    padding: 5px 8px;
+    min-width: 200px;
+    position: absolute;
+    border-radius: 3px;
+    border: 1px solid #c5cedd;
+    box-shadow: 0 0 21px rgba(58,68,88, 0.12);
+    transform: scale(1, 0.01) translateY(0px);
+    transform-origin: 50% 33px 0;
+    transition: all 0.5s cubic-bezier(0.5, 0, 0, 1.25) 0s, opacity 0.15s ease-out 0s;
+    opacity: 0;
+    z-index: 99;
+}
+.flick.navbar .dropdown.dropdown_open>ul {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1) translateY(32px);
+}
+.flick.navbar .dropdown>ul::before {
+    background: #fff;
+    border-left: 1px solid #c5cedd;
+    border-top: 1px solid #c5cedd;
+    content: "";
+    height: 16px;
+    left: 30px;
+    position: absolute;
+    top: -8.5px;
+    transform: rotate(45deg);
+    width: 16px;
+}
+.flick.navbar .dropdown>ul a {
+    padding: 13px 17px!important;
+    display: block;
+    border-radius: 3px;
+    border-right: none!important;
+    border-left: none!important;
+}
+.flick.navbar .dropdown>ul a:hover {
+    background: #258fe9;
+    color: #fff;
+}
+
+.flick.navbar .dropdown.dropdownHover2>ul a{
+    border-radius: 0px;
+}
+.flick.navbar .dropdown.dropdownHover2>ul a:hover {
+    background: none;
+    text-decoration: underline;
+    color: #258fe9;
+    border-radius: 0px;
+}
+
+/*---------------------dark version----------------------*/
+.flick.navbar.dark {
+  background-color: #222222;
+}
+.flick.navbar.dark .nav > li,
+.flick.navbar.dark .nav > li > a {
+  color: #fff;
+}
+.flick.navbar.dark .nav > li > a:hover {
+  color: #80DF3C;
+}
+.flick.navbar2.dark .social_contact li a {
+  color: #fff;
+}
+.flick.navbar2.dark .social_contact li a:hover {
+  color: #64c320;
+}
+.flick.navbar3.dark .navbar-collapse .navbar-right li:last-child a,
+.flick.navbar2.dark .navbar-collapse .navbar-right li:last-child a {
+    border-right-color: #3a3a3a;
+}
+.flick.navbar5.dark .navbar-collapse li:first-child a,
+.flick.navbar4.dark .navbar-collapse li:first-child a {
+    border-left-color: #3a3a3a
+}
+.flick.navbar5.dark .call li {
+  font-size: 16px;
+  color: #fff;
+}
+
+/*-------------------nav bar style-2---------------*/
+.flick.navbar2 .navbar-collapse .navbar-right {
+   padding-right: 136px;
+}
+.flick.navbar3 .navbar-collapse .navbar-right li:last-child a,
+.flick.navbar2 .navbar-collapse .navbar-right li:last-child a {
+    border-right: 1px solid #eeeeee;
+    padding-right: 25px;
+}
+.flick.navbar3 .purchase,
+.flick.navbar2 .social_contact {
+    margin-top: -11px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+}
+.flick.navbar3 .purchase li,
+.flick.navbar2 .social_contact li {
+    display: inline-block;
+}
+.flick.navbar2 .social_contact li a {
+    color: #191d25;
+    font-size: 17px;
+    padding: 0 8px;
+}
+
+
+
+/*--------------------navbar style-3-----------------------*/
+.flick.navbar3 .navbar-collapse .navbar-right {
+  padding-right: 150px;
+}
+.flick.navbar3 .purchase {
+    margin-top: -21px;
+}
+.flick.navbar3 .purchase li a {
+    font-size: 16px;
+    font-weight: 600;
+    background: #64c320;
+    display: block;
+    padding: 8px 20px 11px;
+    border-radius: 50px;
+    color: #fff;
+    text-transform: lowercase;
+}
+.flick.navbar3 .purchase li a:hover {
+    background: #80df3c;
+    font-weight: 400;
+    color: #000;
+}
+
+
+
+
+/*--------------------navbar style-4-----------------------*/
+.flick.navbar5 .navbar-brand,
+.flick.navbar4 .navbar-brand {
+    padding: 0 40px 0 0;
+}
+.flick.navbar5 .navbar-collapse li:first-child a,
+.flick.navbar4 .navbar-collapse li:first-child a {
+    border-left: 1px solid #eeeeee;
+    padding-left: 40px;
+}
+.flick.navbar5 .navbar-collapse .navbar-right li:last-child a,
+.flick.navbar4 .navbar-collapse .navbar-right li:last-child a{
+    border-left: none;
+}
+.flick.navbar4 .navbar-collapse .navbar-right li a {
+    background: #258fe9 none repeat scroll 0 0;
+    border-radius: 50px;
+    font-size: 16px;
+    margin-top: 15px;
+    padding: 17px 38px;
+    color: #fff;
+}
+.flick.navbar4 .navbar-collapse .navbar-right li a:hover{
+    color: #333;
+    background: #4fb9ff;
+}
+.flick.navbar4 .navbar-collapse .navbar-right li a:hover{
+    
+}
+
+
+/*--------------------navbar style-5-----------------------*/
+.flick.navbar5 .call li {
+    font-size: 16px;
+}
+.flick.navbar5 .call li a{
+    padding: 0;
+    color: #64c320;
+    display: inline-block;
+    margin-left: 3px;
+}
+.flick.navbar5 .call li a:hover{
+    text-decoration: underline;
+}
+.flick.navbar5 .call {
+    margin-top: -11px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+}
+
+
+/*--------------------navbar style-6-----------------------*/
+.flick.navbar6 {
+    padding-top: 66px;
+}
+.flick.navbar6 .navbar-collapse > ul {
+    text-align: center;
+}
+.flick.navbar6 .navbar-collapse li {
+    display: inline-block;
+}
+.flick.navbar6 .navbar-collapse li a:hover {
+    background: transparent;
+}
+.flick.navbar6 .navbar-collapse > ul li.dropdown {
+    text-align: left!important;
+}
+.flick.navbar6 .navbar-collapse .dropdown li {
+    display: block;
+}
+.flick.navbar6 .navbar-collapse .dropdown li a:hover {
+    background: #258FE9;
+}
+.flick.navbar6 .navbar-brand {
+    left: 50%;
+    line-height: 50px;
+    margin: 0 auto;
+    padding: 0;
+    position: absolute;
+    top: -41px;
+    transform: translateX(-50%);
+}
+.flick.navbar6 a:focus{
+    background: none!important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

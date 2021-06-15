@@ -1,0 +1,409 @@
+/*------------------- 22. start carousel section style ------------------*/
+/*--------carousel style-1--------*/
+
+.flick_carousel.carousel1 {
+    background: #f8f8f8 none repeat scroll 0 0;
+}
+
+.flick_carousel.carousel2 .carousel2_wrapper img,
+.flick_carousel.carousel1 .carousel1_wrapper img {
+    border-radius: 10px;
+}
+
+.carousel123 .carousel11_wrapper .owl-dots,
+.flick_testimonial.carousel6 .carousel6_wrapper .owl-dots,
+.flick_testimonial.carousel5 .carousel5_wrapper .owl-dots,
+.flick_testimonial.carousel4 .carousel4_wrapper .owl-dots,
+.flick_testimonial.carousel3 .carousel3_wrapper .owl-dots,
+.flick_carousel.carousel1 .carousel1_wrapper .owl-dots {
+    margin-top: 33px;
+    text-align: center;
+}
+
+.carousel123 .carousel11_wrapper .owl-dot,
+.flick_testimonial.carousel6 .carousel6_wrapper .owl-dot,
+.flick_testimonial.carousel5 .carousel5_wrapper .owl-dot,
+.flick_testimonial.carousel4 .carousel4_wrapper .owl-dot,
+.flick_testimonial.carousel3 .carousel3_wrapper .owl-dot,
+.flick_carousel.carousel1 .carousel1_wrapper .owl-dot {
+    background: #7ebdf8;
+    border-radius: 100%;
+    display: inline-block;
+    height: 12px;
+    margin: 0 4px;
+    width: 12px;
+}
+
+.carousel123 .carousel11_wrapper .owl-dot.active,
+.flick_testimonial.carousel6 .carousel6_wrapper .owl-dot.active,
+.flick_testimonial.carousel5 .carousel5_wrapper .owl-dot.active,
+.flick_testimonial.carousel4 .carousel4_wrapper .owl-dot.active,
+.flick_testimonial.carousel3 .carousel3_wrapper .owl-dot.active,
+.flick_carousel.carousel1 .carousel1_wrapper .owl-dot.active {
+    background: #0482f8;
+}
+
+
+/*--------carousel style-2--------*/
+
+.flick_carousel.carousel2 .carousel2_wrapper .owl-nav {
+    position: absolute;
+    right: 1px;
+    top: -64px;
+}
+
+.flick_carousel.carousel2 .carousel2_wrapper .owl-next,
+.flick_carousel.carousel2 .carousel2_wrapper .owl-prev {
+    background: #eeeeee none repeat scroll 0 0;
+    border-radius: 3px;
+    display: inline-block;
+    font-size: 25px;
+    height: 42px;
+    line-height: 44px;
+    margin-left: 9px;
+    text-align: center;
+    width: 42px;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.flick_carousel.carousel2 .carousel2_wrapper .owl-next:hover,
+.flick_carousel.carousel2 .carousel2_wrapper .owl-prev:hover {
+    background: #0482f8;
+    color: #fff;
+}
+
+
+/*--------carousel style-3--------*/
+
+.flick_testimonial.carousel6 .carousel6_wrapper .author_img::before,
+.flick_testimonial.carousel5 .carousel5_wrapper .author_img::before,
+.flick_testimonial.carousel4 .carousel4_wrapper .author_img::before,
+.flick_testimonial.carousel3 .carousel3_wrapper .author_img::before {
+    z-index: 1;
+}
+
+.flick_testimonial.carousel6 .carousel6_wrapper .single_testimonial,
+.flick_testimonial.carousel4 .carousel4_wrapper .single_testimonial,
+.flick_testimonial.carousel3 .carousel3_wrapper .single_testimonial {
+    padding-top: 15px;
+}
+
+
+.flick_testimonial {
+    border-bottom: 1px solid #eeeeee;
+}
+
+.flick_testimonial .author {
+    align-items: center;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+}
+
+.flick_testimonial .author_img::before {
+    background: #0482f8 none repeat scroll 0 0;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    color: #fff;
+    content: "\f10d";
+    font-family: fontawesome;
+    font-size: 10px;
+    height: 22px;
+    left: 5px;
+    padding: 2px;
+    position: absolute;
+    text-align: center;
+    top: -7px;
+    width: 23px;
+}
+
+.flick_testimonial.style6 .single_testimonial .authorr_img,
+.flick_testimonial .author .author_img>img {
+    border-radius: 100%;
+    height: 70px;
+    width: 70px;
+}
+
+.flick_testimonial .author .author_info>a {
+    color: #333333;
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.flick_testimonial .author .author_info>a:hover {
+    color: #0482f8;
+}
+
+.flick_testimonial .author .author_info>span {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.flick_testimonial .single_testimonial .author_comment {
+    background: #f8f8f8 none repeat scroll 0 0;
+    border-radius: 10px;
+    padding: 22px;
+    margin-top: 30px;
+}
+
+.flick_testimonial .single_testimonial .author_comment::before {
+    background: #f8f8f8;
+    content: "";
+    height: 15px;
+    left: 28px;
+    position: absolute;
+    top: -6px;
+    transform: rotate(45deg);
+    width: 15px;
+}
+
+.flick_testimonial.style4 .single_testimonial .author_info>p,
+.flick_testimonial .single_testimonial .author_comment>p {
+    color: #666666;
+    font-size: 15px;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 26px;
+}
+
+
+/*----------testimonial style-3-----------*/
+
+.flick_testimonial.style3 .single_testimonial .author_comment {
+    margin-bottom: 30px;
+    margin-top: 0;
+}
+
+.flick_testimonial.style3 .single_testimonial .author_comment::before {
+    top: initial;
+    bottom: -7px;
+}
+
+
+/*---------testimonial style-4------------*/
+
+.flick_testimonial.style4 .testimonial_wrapper {
+    margin-left: -65px;
+}
+
+.flick_testimonial.style4 .single_testimonial {
+    float: left;
+    margin-bottom: 55px;
+    margin-left: 65px;
+    width: 43.4%;
+}
+
+.flick_testimonial.style4 .single_testimonial .author_info>p {
+    margin-bottom: 11px;
+}
+
+.flick_testimonial.style4 .author {
+    align-items: flex-start;
+}
+
+
+
+
+/*--------carousel style-5--------*/
+
+.carousel123 .carousel12_wrapper .owl-next,
+.carousel123 .carousel12_wrapper .owl-prev,
+.flick_carousel.carousel10 .carousel10_wrapper .owl-next,
+.flick_carousel.carousel10 .carousel10_wrapper .owl-prev,
+.flick_testimonial.carousel9 .carousel9_wrapper .owl-next,
+.flick_testimonial.carousel9 .carousel9_wrapper .owl-prev {
+    background: #222 none repeat scroll 0 0;
+    border-radius: 100%;
+    color: #fff;
+    display: inline-block;
+    font-size: 25px;
+    height: 42px;
+    line-height: 44px;
+    margin-left: 9px;
+    text-align: center;
+    width: 42px;
+    margin-top: -24px;
+    position: absolute;
+    top: 50%;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.flick_testimonial.carousel5 .carousel5_wrapper .owl-next,
+.flick_testimonial.carousel5 .carousel5_wrapper .owl-prev {
+    background: #222 none repeat scroll 0 0;
+    border-radius: 5px;
+    color: #fff;
+    display: inline-block;
+    font-size: 25px;
+    height: 42px;
+    line-height: 44px;
+    margin-right: 20px;
+    text-align: center;
+    transition: all 0.3s ease 0s;
+    width: 42px;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.flick_testimonial.carousel5 .carousel5_wrapper .owl-nav {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.flick_carousel.carousel10 .carousel10_wrapper .owl-next:hover,
+.flick_carousel.carousel10 .carousel10_wrapper .owl-prev:hover,
+.flick_testimonial.carousel9 .carousel9_wrapper .owl-next:hover,
+.flick_testimonial.carousel9 .carousel9_wrapper .owl-prev:hover,
+.flick_testimonial.carousel5 .carousel5_wrapper .owl-next:hover,
+.flick_testimonial.carousel5 .carousel5_wrapper .owl-prev:hover {
+    background: #0482f8;
+    color: #fff;
+}
+
+
+/*--------carousel style-10--------*/
+
+.carousel123 .carousel11_wrapper img,
+.flick_carousel.carousel10 .carousel10_wrapper img {
+    border-radius: 10px;
+}
+
+.flick_carousel.carousel10 .carousel10_wrapper .owl-next,
+.flick_carousel.carousel10 .carousel10_wrapper .owl-prev {
+    border-radius: 0px;
+    margin-left: 0;
+    background: #1f1b22;
+    color: #fff;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.flick_carousel.carousel10 .carousel10_wrapper:hover .owl-next,
+.flick_carousel.carousel10 .carousel10_wrapper:hover .owl-prev {
+    opacity: 1;
+    visibility: visible;
+}
+
+.flick_carousel.carousel10 .carousel10_wrapper .owl-prev {
+    left: 0px;
+}
+
+.flick_carousel.carousel10 .carousel10_wrapper .owl-next {
+    right: 0px;
+}
+
+.flick_carousel.carousel10 .carousel10_wrapper .owl-dots {
+    position: absolute;
+    right: 20px;
+    bottom: 15px;
+}
+
+.flick_carousel.carousel10 .carousel10_wrapper .owl-dot {
+    border: 1px solid #fff;
+    border-radius: 100%;
+    display: inline-block;
+    height: 12px;
+    margin: 0 4px;
+    width: 12px;
+}
+
+.flick_carousel.carousel10 .carousel10_wrapper .owl-dot.active {
+    background: #fff;
+}
+
+
+/*------------carousel style-12------------*/
+
+.carousel123 .carousel12_wrapper .owl-next,
+.carousel123 .carousel12_wrapper .owl-prev {
+    background: #1985ed;
+    border-radius: 0px;
+    margin-left: 0;
+    font-size: 20px;
+    height: 32px;
+    line-height: 34px;
+    margin-top: -16px;
+    width: 32px;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.carousel123 .carousel12_wrapper:hover .owl-next,
+.carousel123 .carousel12_wrapper:hover .owl-prev {
+    opacity: 1;
+    visibility: visible;
+}
+
+.carousel123 .carousel12_wrapper .owl-prev {
+    left: 0px;
+}
+
+.carousel123 .carousel12_wrapper .owl-next {
+    right: 0px;
+}
+
+.carousel123 .carousel12_wrapper .img_area .base {
+    background: rgba(0, 0, 0, 0.8) none repeat scroll 0 0;
+    border-radius: 0 5px 5px 0;
+    bottom: 40px;
+    color: #fff;
+    display: inline-block;
+    font-size: 17px;
+    left: 0;
+    padding: 12px 35px;
+    position: absolute;
+    z-index: 1;
+    transform: translateX(-92px) scale(0, 1);
+}
+
+.carousel123 .carousel12_wrapper .img_area:hover .base {
+    transform: translateX(0px) scale(1, 1);
+}
+
+
+/*---------carousel style-14-----------*/
+
+.flick_carousel.carousel14 {
+    background: #f5f5f5;
+    padding: 40px 0;
+}
+
+.flick_carousel.carousel14 .carousel14_wrapper {
+    align-items: center;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+.flick_carousel.carousel14 h4.fw_500 {
+    margin-right: 20px;
+    width: 120px;
+}
+
+.flick_carousel.carousel14 .carousel14_wrapper ul {
+    width: 100%;
+}
+
+.flick_carousel.carousel14 .carousel14_wrapper li {
+    list-style: outside none none;
+}
+
+.flick_carousel.carousel14 .carousel14_wrapper .owl-carousel .owl-item img {
+    width: initial;
+}
+
+
+/*------------------- 22. end carousel section style --------------------*/

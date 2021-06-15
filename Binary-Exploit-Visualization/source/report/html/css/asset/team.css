@@ -1,0 +1,226 @@
+/*------------------- 18. start Team section style ------------------*/
+/*--------team style-1---------*/
+
+.flick_team {
+    border-bottom: 1px solid #ddd;
+}
+
+.flick_team .member_info>h2 {
+    color: #333333;
+    font-weight: 500;
+    line-height: 40px;
+}
+
+.flick_team .member_info span.title {
+    color: #888888;
+    font-size: 18px;
+}
+
+.flick_team .img_info_align {
+    align-items: center;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.flick_team .member_info p {
+    color: #888888;
+    font-size: 16px;
+    line-height: 30px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.flick_team .member_info .social_contact>li {
+    display: inline-block;
+    list-style: outside none none;
+}
+
+.flick_team .member_info .social_contact a {
+    color: #888888;
+    font-size: 17px;
+    padding: 2px 6px;
+}
+
+.flick_team .member_info .social_contact a:hover {
+    color: #0482F8;
+}
+
+.flick_team .smalldiv .member_img {
+    width: 385px;
+}
+
+.flick_team .smalldiv .member_info span.title {
+    font-size: 14px;
+}
+
+.flick_team .smalldiv .member_info p {
+    line-height: 26px;
+    margin-bottom: 12px;
+    margin-top: 12px;
+}
+
+.flick_team .smalldiv .member_info h4 {
+    line-height: 27px;
+}
+
+.flick_team .img_info_align {
+    margin-bottom: 60px;
+}
+
+.flick_team span.subtitl {
+    color: #888888;
+    display: block;
+    font-size: 16px;
+}
+
+
+/*-----------team style-2--------*/
+
+.flick_team.style2 .single_member>img {
+    border-radius: 100%;
+    max-width: 270px;
+    width: 100%;
+}
+
+.flick_team.style2 .team_wrapper {
+    margin-left: -100px;
+}
+
+.flick_team.style2 .single_member {
+    float: left;
+    margin-left: 100px;
+    width: 16.9%;
+}
+
+.flick_team.style2 .single_member a {
+    color: #333333;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.flick_team.style2 .single_member h4 {
+    line-height: 28px;
+    margin-top: 25px;
+}
+
+.flick_team.style2 .single_member a:hover {
+    color: #0482F8;
+}
+
+.flick_team.style2 .single_member span.title {
+    color: #888888;
+    display: inline-block;
+    font-size: 14px;
+}
+
+
+/*--------team style-3-----------*/
+
+.flick_team.style5 .team_wrapper,
+.flick_team.style3 .team_wrapper {
+    margin-left: -30px;
+}
+
+.flick_team.style5 .single_member,
+.flick_team.style3 .single_member {
+    margin-left: 30px;
+    width: 22.4%;
+}
+
+.flick_team.style3 .single_member>img {
+    border-radius: 10px;
+}
+
+
+/*---------team style-4-------*/
+
+.flick_team.style4 .img_info_align:nth-child(2n) {
+    flex-flow: row-reverse nowrap;
+}
+
+
+/*---------team style-5---------*/
+
+.flick_team.style5 .team_wrapper {
+    margin-left: -30px;
+}
+
+.flick_team.style5 .single_member {
+    margin-left: 30px;
+    width: 30.7%;
+}
+
+.flick_team.style5 {
+    background: #f1f1f1 none repeat scroll 0 0;
+}
+
+.flick_team.style5 .single_member .member_info p {
+    color: #888888;
+    font-size: 14px;
+    line-height: 26px;
+}
+
+.flick_team.style5 .single_member>img {
+    border-radius: 10px 10px 0 0;
+    max-width: 100%;
+}
+
+.flick_team.style5 .single_member {
+    background: #fff none repeat scroll 0 0;
+    border-radius: 10px;
+}
+
+.flick_team.style5 .single_member a {
+    font-weight: 300;
+}
+
+.flick_team.style5 .single_member h4 {
+    margin-top: 0px;
+}
+
+.flick_team.style5 .single_member .member_info {
+    padding: 25px;
+}
+
+.flick_team.style5 .single_member .member_info p {
+    margin-bottom: 0px;
+    margin-top: 0px;
+    line-height: 26px;
+}
+
+.flick_team.style5 .member_info .social_contact {
+    margin-bottom: 16px;
+    margin-top: 12px;
+}
+
+.flick_team.style5 .member_info .social_contact a {
+    color: #333333;
+}
+
+.flick_team.style5 .member_info .social_contact a:hover {
+    color: #0482F8;
+}
+
+
+/*----------team style-6----------*/
+
+.flick_team.style6 {
+    background: none;
+}
+
+.flick_team.style6 .single_member {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border-radius: 0;
+}
+
+.flick_team.style6 .single_member>img {
+    border-radius: 10px;
+}
+
+.flick_team.style6 .single_member .member_info {
+    padding: 25px 0 0;
+}
+
+
+/*------------------- 18. end Team section style --------------------*/

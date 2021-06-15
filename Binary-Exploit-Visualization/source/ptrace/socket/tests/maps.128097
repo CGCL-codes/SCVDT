@@ -1,0 +1,23 @@
+got bp: 0x7fffffffde90
+00400000-00401000 r--p 00000000 08:19 1307879                            /home/hkx/Desktop/upgraded-potato/source/ptrace/socket/tests/server
+00401000-00402000 r-xp 00001000 08:19 1307879                            /home/hkx/Desktop/upgraded-potato/source/ptrace/socket/tests/server
+00402000-00403000 r--p 00002000 08:19 1307879                            /home/hkx/Desktop/upgraded-potato/source/ptrace/socket/tests/server
+00403000-00404000 r--p 00002000 08:19 1307879                            /home/hkx/Desktop/upgraded-potato/source/ptrace/socket/tests/server
+00404000-00405000 rw-p 00003000 08:19 1307879                            /home/hkx/Desktop/upgraded-potato/source/ptrace/socket/tests/server
+7ffff7dba000-7ffff7ddf000 r--p 00000000 08:14 2101458                    /lib/x86_64-linux-gnu/libc-2.31.so
+7ffff7ddf000-7ffff7f57000 r-xp 00025000 08:14 2101458                    /lib/x86_64-linux-gnu/libc-2.31.so
+7ffff7f57000-7ffff7fa1000 r--p 0019d000 08:14 2101458                    /lib/x86_64-linux-gnu/libc-2.31.so
+7ffff7fa1000-7ffff7fa2000 ---p 001e7000 08:14 2101458                    /lib/x86_64-linux-gnu/libc-2.31.so
+7ffff7fa2000-7ffff7fa5000 r--p 001e7000 08:14 2101458                    /lib/x86_64-linux-gnu/libc-2.31.so
+7ffff7fa5000-7ffff7fa8000 rw-p 001ea000 08:14 2101458                    /lib/x86_64-linux-gnu/libc-2.31.so
+7ffff7fa8000-7ffff7fae000 rw-p 00000000 00:00 0 
+7ffff7fcb000-7ffff7fce000 r--p 00000000 00:00 0                          [vvar]
+7ffff7fce000-7ffff7fcf000 r-xp 00000000 00:00 0                          [vdso]
+7ffff7fcf000-7ffff7fd0000 r--p 00000000 08:14 2101454                    /lib/x86_64-linux-gnu/ld-2.31.so
+7ffff7fd0000-7ffff7ff3000 r-xp 00001000 08:14 2101454                    /lib/x86_64-linux-gnu/ld-2.31.so
+7ffff7ff3000-7ffff7ffb000 r--p 00024000 08:14 2101454                    /lib/x86_64-linux-gnu/ld-2.31.so
+7ffff7ffc000-7ffff7ffd000 r--p 0002c000 08:14 2101454                    /lib/x86_64-linux-gnu/ld-2.31.so
+7ffff7ffd000-7ffff7ffe000 rw-p 0002d000 08:14 2101454                    /lib/x86_64-linux-gnu/ld-2.31.so
+7ffff7ffe000-7ffff7fff000 rw-p 00000000 00:00 0 
+7ffffffde000-7ffffffff000 rw-p 00000000 00:00 0                          [stack]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]

@@ -1,0 +1,17 @@
+/*------------------- 10. start alert style ------------------*/
+.flick_alert .common_style .alert {
+    font-size: 14px;
+    line-height: 18px;
+    margin-bottom: 30px;
+}
+
+.flick_alert .common_style .alert i {
+    font-size: 18px;
+    margin-right: 15px;
+    vertical-align: middle;
+}
+
+.flick_alert .common_style.bg_none .alert {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+}
+/*------------------- 10. end alert style --------------------*/

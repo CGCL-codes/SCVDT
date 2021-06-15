@@ -1,0 +1,18 @@
+/*------------------- 11. start color section style ------------------*/
+.flick_color .bg_color p {
+    color: #fff;
+    height: 60px;
+    line-height: 62px;
+    margin-bottom: 30px;
+}
+
+.flick_color .bg_color p.bg_f5 {
+    color: #222;
+}
+
+.flick_color .txt_color p {
+    font-size: 24px;
+    line-height: 26px;
+    margin-bottom: 35px;
+}
+/*------------------- 11. end color section style --------------------*/

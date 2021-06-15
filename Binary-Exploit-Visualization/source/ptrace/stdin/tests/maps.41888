@@ -1,0 +1,20 @@
+got bp: 0x7fffffffdd50
+555555554000-555555555000 r--p 00000000 08:01 1971665                    /home/vis/Desktop/upgraded-potato/source/ptrace/stdin/tests/test
+555555555000-555555556000 r-xp 00001000 08:01 1971665                    /home/vis/Desktop/upgraded-potato/source/ptrace/stdin/tests/test
+555555556000-555555557000 r--p 00002000 08:01 1971665                    /home/vis/Desktop/upgraded-potato/source/ptrace/stdin/tests/test
+555555557000-555555558000 r--p 00002000 08:01 1971665                    /home/vis/Desktop/upgraded-potato/source/ptrace/stdin/tests/test
+555555558000-555555559000 rw-p 00003000 08:01 1971665                    /home/vis/Desktop/upgraded-potato/source/ptrace/stdin/tests/test
+7ffff7a0d000-7ffff7bcd000 r-xp 00000000 08:01 395049                     /lib/x86_64-linux-gnu/libc-2.23.so
+7ffff7bcd000-7ffff7dcd000 ---p 001c0000 08:01 395049                     /lib/x86_64-linux-gnu/libc-2.23.so
+7ffff7dcd000-7ffff7dd1000 r--p 001c0000 08:01 395049                     /lib/x86_64-linux-gnu/libc-2.23.so
+7ffff7dd1000-7ffff7dd3000 rw-p 001c4000 08:01 395049                     /lib/x86_64-linux-gnu/libc-2.23.so
+7ffff7dd3000-7ffff7dd7000 rw-p 00000000 00:00 0 
+7ffff7dd7000-7ffff7dfd000 r-xp 00000000 08:01 395060                     /lib/x86_64-linux-gnu/ld-2.23.so
+7ffff7fd6000-7ffff7fd9000 rw-p 00000000 00:00 0 
+7ffff7ff7000-7ffff7ffa000 r--p 00000000 00:00 0                          [vvar]
+7ffff7ffa000-7ffff7ffc000 r-xp 00000000 00:00 0                          [vdso]
+7ffff7ffc000-7ffff7ffd000 r--p 00025000 08:01 395060                     /lib/x86_64-linux-gnu/ld-2.23.so
+7ffff7ffd000-7ffff7ffe000 rw-p 00026000 08:01 395060                     /lib/x86_64-linux-gnu/ld-2.23.so
+7ffff7ffe000-7ffff7fff000 rw-p 00000000 00:00 0 
+7ffffffde000-7ffffffff000 rw-p 00000000 00:00 0                          [stack]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]

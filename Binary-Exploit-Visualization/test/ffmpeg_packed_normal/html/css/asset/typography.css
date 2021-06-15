@@ -1,0 +1,17 @@
+/*------------------- 7.1 start paragraph typhography style ------------------*/
+.flick_paragraph .single_paragraph p {
+    font-size: 16px;
+    line-height: 26px;
+    margin-top: 20px;
+}
+
+.flick_paragraph .single_paragraph {
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    padding: 40px 30px;
+}
+.flick_hedding .single_hedding .fw_700,
+.flick_hedding .single_hedding .fw_300 {
+  margin-bottom: 10px;
+}
+/*------------------- 7.1 end paragraph typhography style --------------------*/

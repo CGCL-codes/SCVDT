@@ -1,0 +1,56 @@
+/*------------------- 17. start Table section style ------------------*/
+
+.flick_table .table_style1 .table , .flick_table .table_style3 .table {
+    margin-bottom: 0;
+}
+
+.flick_table .table_style1 , .flick_table .table_style3{
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.flick_table .table_style1  .table>thead>tr , .flick_table .table_style3 .table>thead>tr {
+    background: #f8f8f8 none repeat scroll 0 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.flick_table .table_style1  .table>thead>tr>th , .flick_table .table_style3 .table>thead>tr>th {
+    border-bottom: none;
+}
+
+.flick_table .table_style1 .table td,
+.flick_table .table_style1 .table th,
+.flick_table .table_style3 .table th {
+    padding: 12px 8px;
+    text-align: center;
+    color: #222222;
+}
+
+
+
+.flick_table .table_style3 .table td,
+ {
+    padding: 12px 8px;
+    text-align: left;
+    color: #222222;
+}
+
+.flick_table .table_style1 .table td , .flick_table .table_style3 .table td {
+    font-size: 15px;
+}
+
+.flick_table .table_style1 .table th , .flick_table .table_style3 .table th {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.flick_table .table_style1 .table td , .flick_table .table_style3 .table td {
+    border: medium none;
+}
+
+.flick_table .table_style2 .table tbody tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+
+/*------------------- 17. end Table section style --------------------*/

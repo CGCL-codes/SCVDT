@@ -1,0 +1,401 @@
+/*--------------01. Start Resset Css------------------*/
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    padding: 0px;
+    font-size: 16px;
+    margin: 0px auto;
+    font-family: 'Roboto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figur,
+a {
+    margin: 0px;
+    font-weight: normal;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    -webkit-font-variant-ligatures: common-ligatures;
+    font-variant-ligatures: common-ligatures;
+    font-family: 'Roboto', sans-serif;
+}
+
+P,
+.p {
+    font-size: 16px;
+    line-height: 22px;
+    color: #333;
+}
+
+.clear {
+    clear: both;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+a:hover,
+a:focus,
+input:focus,
+button:focus,
+a:active {
+    text-decoration: none;
+    outline: none;
+    outline-offset: 0px;
+}
+
+ul {
+    margin-bottom: 0;
+}
+
+
+/*------------0.1 End Resset Css----------------------*/
+
+
+/*--------------------02. Typography------------------*/
+
+
+/*------------2.1 font weight Typogrpahy------------*/
+
+.fw_300 {
+    font-weight: 300;
+}
+
+.fw_400 {
+    font-weight: 400;
+}
+
+.fw_500 {
+    font-weight: 500;
+}
+
+.fw_600 {
+    font-weight: 600;
+}
+
+.fw_700 {
+    font-weight: 700;
+}
+
+.fw_900 {
+    font-weight: 900;
+}
+
+
+/*------------2.2 color Typogrpahy----------*/
+
+.color_fc {
+    color: #fcfcfc;
+}
+
+.color_22 {
+    color: #222222;
+}
+
+.bg_22 {
+    background-color: #222222;
+}
+
+.color_77 {
+    color: #777777;
+}
+
+.color_88 {
+    color: #888888;
+}
+
+.color_33 {
+    color: #333333;
+}
+
+.color_ff {
+    color: #ffffff;
+}
+
+.bg_ff {
+    background-color: #ffffff;
+}
+
+.border_color_ff {
+    border-color: #ffffff;
+}
+
+.color_048 {
+    color: #0482f8;
+}
+
+.bg_048 {
+    background-color: #0482f8;
+}
+
+.bg_f5 {
+    background-color: #f5f5f5;
+}
+
+.bg_f5f {
+    background-color: #f5f6f7;
+}
+
+.color_f5 {
+    color: #f5f5f5;
+}
+
+.bg_365 {
+    background-color: #365cff;
+}
+
+.bg_316 {
+    background-color: #31639c;
+}
+
+.bg_91c {
+    background-color: #91cc00;
+}
+
+.bg_f9b {
+    background-color: #f9bf3b;
+}
+
+.bg_171 {
+    background-color: #17171b;
+}
+
+.border_color_365 {
+    border-color: #365cff;
+}
+
+.border_color_316 {
+    border-color: #31639c;
+}
+
+.border_color_91c {
+    border-color: #91cc00;
+}
+
+.border_color_f9b {
+    border-color: #f9bf3b;
+}
+
+.border_color_171 {
+    border-color: #17171b;
+}
+
+.border_color_048 {
+    border-color: #0482f8;
+}
+
+.color_365 {
+    color: #365cff;
+}
+
+.color_316 {
+    color: #31639c;
+}
+
+.color_91c {
+    color: #91cc00;
+}
+
+.color_f9b {
+    color: #f9bf3b;
+}
+
+.color_171 {
+    color: #17171b;
+}
+
+.color_048 {
+    color: #0482f8;
+}
+
+
+/*-----------2.3 hedding tag Typogrpahy------------*/
+
+h1,
+.h1 {
+    font-size: 48px;
+    line-height: 60px;
+}
+
+h2,
+.h2 {
+    font-size: 36px;
+    line-height: 50px;
+}
+
+h3,
+.h3 {
+    font-size: 30px;
+    line-height: 45px;
+}
+
+h4,
+.h4 {
+    font-size: 24px;
+    line-height: 35px;
+}
+
+h5,
+.h5 {
+    font-size: 21px;
+    line-height: 26px;
+}
+
+h6,
+.h6 {
+    font-size: 18px;
+    line-height: 26px;
+}
+
+
+/*-------------03. scroll top css-----------*/
+
+.scroll_top {
+    background: #0482F8 none repeat scroll 0 0;
+    border-radius: 3px;
+    bottom: 50px;
+    cursor: pointer;
+    height: 40px;
+    position: fixed;
+    right: 30px;
+    text-align: center;
+    width: 40px;
+    z-index: 999;
+}
+
+.not_visible {
+    visibility: hidden;
+    display: none;
+}
+
+.scroll_top i {
+    color: #fff;
+    font-size: 24px;
+    line-height: 38px;
+}
+
+
+/*-------------04. Global style---------------*/
+
+.section_padding {
+    padding: 100px 0px;
+}
+
+.align_col_left_center {
+    align-items: flex-start;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+}
+
+.align_row_sBetween {
+    align-items: center;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.pos_relative {
+    position: relative;
+}
+
+.d_block {
+    display: block;
+}
+
+.overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.popins {
+    font-family: 'Poppins', sans-serif;
+}
+
+.radius_3 {
+    border-radius: 3px;
+}
+
+.radius_5 {
+    border-radius: 5px;
+}
+
+.radius_10 {
+    border-radius: 10px;
+}
+
+.section_tbl {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.section_tbl_cell {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.transition_5s {
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    -ms-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
+}
+
+a,
+button,
+input,
+select,
+textarea,
+.pricing_section .single_table,
+.pricing_section .single_table .tbl_header,
+.flick_accordion .panel .title i,
+.carousel123 .carousel12_wrapper .img_area .base,
+.flick_tab .tab_style1 .nav_menu li>a .tooltipp,
+.transition_3s {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+}
+
+.section_borderr {
+    border-bottom: 1px solid #ddd;
+}
+.radius_50{
+    border-radius: 50px!important;
+}
+
+/* --------04. End GLOBAL style css ------**/

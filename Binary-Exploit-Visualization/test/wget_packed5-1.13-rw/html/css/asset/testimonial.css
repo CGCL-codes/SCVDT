@@ -1,0 +1,226 @@
+/*------------------- 19. start testimonial section style ------------------*/
+.flick_testimonial {
+    border-bottom: 1px solid #eeeeee;
+}
+
+.flick_testimonial .author {
+    align-items: center;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+}
+
+.flick_testimonial .author_img::before {
+    background: #0482f8 none repeat scroll 0 0;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    color: #fff;
+    content: "\f10d";
+    font-family: fontawesome;
+    font-size: 10px;
+    height: 22px;
+    left: 5px;
+    padding: 2px;
+    position: absolute;
+    text-align: center;
+    top: -7px;
+    width: 23px;
+}
+
+.flick_testimonial.style6 .single_testimonial .authorr_img,
+.flick_testimonial .author .author_img>img {
+    border-radius: 100%;
+    height: 70px;
+    width: 70px;
+}
+
+.flick_testimonial .author .author_info>a {
+    color: #333333;
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.flick_testimonial .author .author_info>a:hover {
+    color: #0482f8;
+}
+
+.flick_testimonial .author .author_info>span {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.flick_testimonial .single_testimonial .author_comment {
+    background: #f8f8f8 none repeat scroll 0 0;
+    border-radius: 10px;
+    padding: 22px;
+    margin-top: 30px;
+}
+
+.flick_testimonial .single_testimonial .author_comment::before {
+    background: #f8f8f8;
+    content: "";
+    height: 15px;
+    left: 28px;
+    position: absolute;
+    top: -6px;
+    transform: rotate(45deg);
+    width: 15px;
+}
+
+.flick_testimonial.style4 .single_testimonial .author_info>p,
+.flick_testimonial .single_testimonial .author_comment>p {
+    color: #666666;
+    font-size: 15px;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 26px;
+}
+
+
+/*----------testimonial style-3-----------*/
+
+.flick_testimonial.style3 .single_testimonial .author_comment {
+    margin-bottom: 30px;
+    margin-top: 0;
+}
+
+.flick_testimonial.style3 .single_testimonial .author_comment::before {
+    top: initial;
+    bottom: -7px;
+}
+
+
+/*---------testimonial style-4------------*/
+
+.flick_testimonial.style4 .testimonial_wrapper {
+    margin-left: -65px;
+}
+
+.flick_testimonial.style4 .single_testimonial {
+    float: left;
+    margin-bottom: 55px;
+    margin-left: 65px;
+    width: 43.4%;
+}
+
+.flick_testimonial.style4 .single_testimonial .author_info>p {
+    margin-bottom: 11px;
+}
+
+.flick_testimonial.style4 .author {
+    align-items: flex-start;
+}
+
+
+/*---------tesimonial style-5------------*/
+
+.flick_testimonial.style5 .single_testimonial {
+    float: none;
+    margin-bottom: 0;
+    margin-left: 0;
+    width: 100%;
+}
+
+.flick_testimonial.style5 .author {
+    display: block;
+}
+
+.flick_testimonial.style5 .single_testimonial .author_info>p {
+    margin-top: 30px;
+}
+
+
+/*------------testimonial style-6---------------*/
+
+.flick_testimonial.style6 {
+    background: #0482f8 none repeat scroll 0 0;
+    padding-top: 90px;
+    padding-bottom: 95px;
+    overflow-x: hidden;
+    border-bottom: medium none;
+}
+
+.flick_testimonial.style6 .single_testimonial .authorr_img {
+    margin: 0 auto;
+}
+
+.flick_testimonial.style6 .single_testimonial .testimonial_txt {
+    color: #fff;
+    font-size: 18px;
+    font-style: italic;
+    line-height: 28px;
+    margin: 18px auto 3px;
+    max-width: 600px;
+}
+
+.flick_testimonial.style6 .single_testimonial .athr_name {
+    color: #dddddd;
+    font-size: 14px;
+}
+
+.flick_testimonial.style6 .testimonial_wrapper .owl-dots {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.flick_testimonial.style6 .testimonial_wrapper .owl-dot {
+    background: #50a8fa none repeat scroll 0 0;
+    border-radius: 100%;
+    display: inline-block;
+    height: 12px;
+    margin: 2px 6px;
+    width: 12px;
+}
+
+.flick_testimonial.style6 .testimonial_wrapper .owl-dot.active {
+    background: #fff;
+}
+
+
+/*---------testimonial style-7--------*/
+
+.flick_testimonial.style7 .container.border {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 98px 0 90px;
+    border-bottom-color: #0482f8;
+    border-bottom-width: 5px;
+}
+
+.flick_testimonial.style8,
+.flick_testimonial.style7 {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.flick_testimonial.style7 .single_testimonial .testimonial_txt {
+    color: #888888;
+}
+
+.flick_testimonial.style7 .single_testimonial .athr_name {
+    color: #222222;
+}
+
+.flick_testimonial.style7 .testimonial_wrapper .owl-dot {
+    background: #dbdbdb;
+}
+
+.flick_testimonial.style7 .testimonial_wrapper .owl-dot.active {
+    background: #838383;
+}
+
+
+/*----------testimonial style-8----------*/
+
+.flick_testimonial.style8 .row.bg {
+    background: url(../../images/testimonial-bg.jpg) no-repeat;
+    background-size: cover;
+    background-position: center center;
+    padding: 98px 0 90px;
+    border-radius: 10px;
+}
+
+
+/*------------------- 19. end testimonial section style --------------------*/

@@ -1,0 +1,193 @@
+/*------------------- 16. start Pricing section style ------------------*/
+/*------------pricing tbl style------------*/
+
+.pricing_section {
+    border-bottom: 1px solid #ddd;
+}
+
+.pricing_section .pricing_wrapper {
+    margin-left: -80px;
+}
+
+.pricing_section .single_table {
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    float: left;
+    margin-left: 80px;
+    width: 25.5%;
+}
+
+.pricing_section .single_table:hover {
+    border-color: #0482f8;
+}
+
+.pricing_section .single_table .tbl_header {
+    border-bottom: 1px solid #ddd;
+    padding: 45px 30px;
+}
+
+.pricing_section .single_table:hover .tbl_header {
+    border-bottom-color: #0482f8;
+}
+
+.pricing_section .single_table .tbl_body {
+    padding: 32px 15px 40px;
+}
+
+.pricing_section .single_table .tbl_header h1 {
+    color: #0482f8;
+    font-size: 60px;
+    font-weight: 300;
+}
+
+.pricing_section .single_table .tbl_header>p {
+    color: #222222;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.pricing_section .single_table .tbl_header>span {
+    color: #0482f8;
+    font-size: 16px;
+    margin-bottom: 14px;
+    display: block;
+}
+
+.pricing_section .single_table .tbl_body .list>li {
+    list-style: outside none none;
+}
+
+.pricing_section .single_table .tbl_body .list>li {
+    color: #888888;
+    font-size: 16px;
+    line-height: 36px;
+}
+
+.pricing_section .single_table .tbl_body .purchase {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 300;
+    height: 45px;
+    line-height: 43px;
+    margin-top: 35px;
+    width: 140px;
+}
+
+.pricing_section .single_table:hover .tbl_body .purchase {
+    background: #0482f8;
+    color: #fff;
+    border-color: #0482f8;
+}
+
+
+/*---------table style-2----------*/
+
+.pricing_section.style2 .single_table:hover .tbl_header {
+    background: #0482f8 none repeat scroll 0 0;
+}
+
+.pricing_section.style2 .single_table:hover .tbl_header h1 {
+    color: #fff;
+}
+
+.pricing_section.style2 .single_table:hover .tbl_header>span {
+    color: #fff;
+}
+
+.pricing_section.style2 .single_table:hover .tbl_header>p {
+    color: #ddd;
+}
+
+.pricing_section.style2 .single_table .tbl_header {
+    border-radius: 7px 7px 0 0;
+}
+
+
+/*---------table style-3--------*/
+
+.pricing_section.style3 .single_table .tbl_header i.fa.fa-heart {
+    background: #0482f8 none repeat scroll 0 0;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    bottom: -25px;
+    color: #fff;
+    font-size: 26px;
+    height: 50px;
+    left: 50%;
+    line-height: 50px;
+    margin-left: -25px;
+    position: absolute;
+    text-align: center;
+    width: 50px;
+}
+
+.pricing_section.style3 .single_table.special .tbl_header {
+    background: #0482f8 none repeat scroll 0 0;
+    border-bottom-color: #0482f8;
+    border-radius: 7px 7px 0 0;
+}
+
+.pricing_section.style3 .single_table.special {
+    border-color: #0482f8;
+    transform: translateY(-19px);
+}
+
+.pricing_section.style3 .single_table.special .tbl_header>p,
+.pricing_section.style3 .single_table.special .tbl_header h1 {
+    color: #fff;
+}
+
+.pricing_section.style3 .single_table.special .tbl_body .purchase {
+    border-color: #0482f8;
+    color: #fff;
+    background: #0482f8 none repeat scroll 0 0;
+}
+
+.pricing_section.style3 .single_table.special .tbl_header>span {
+    color: #ddd;
+    margin-bottom: 3px;
+}
+
+.pricing_section.style3 .single_table.special .tbl_body {
+    padding: 62px 15px 40px;
+}
+
+.pricing_section.style3 .single_table:hover .tbl_header,
+.pricing_section.style3 .single_table:hover {
+    border-color: #ddd;
+}
+
+.pricing_section.style3 .single_table.special:hover {
+    border-color: #0482f8;
+}
+
+.pricing_section.style3 .single_table:hover .tbl_body .purchase {
+    background: initial;
+    border-color: #ddd;
+    color: initial;
+}
+
+.pricing_section.style3 .single_table:hover .tbl_body .purchase,
+.pricing_section.style3 .single_table .tbl_body .purchase:hover {
+    background: #0482f8 none repeat scroll 0 0;
+    border-color: #0482f8;
+    color: #fff;
+}
+
+
+/*-----------table style-4, 5, 6-----------*/
+
+.pricing_section.col4 .pricing_wrapper {
+    margin-left: -30px;
+}
+
+.pricing_section.col4 .single_table {
+    width: 22.4%;
+    margin-left: 30px;
+}
+
+
+/*------------------- 16. end Pricing section style --------------------*/

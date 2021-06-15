@@ -1,0 +1,472 @@
+span.sectionSubtitle {
+    border-bottom: 1px solid #ddd;
+    color: #626974;
+    font-size: 17px;
+    margin-top: 10px;
+}
+
+.inputfield_section .input_style2 textarea,
+.inputfield_section .input_style2 input,
+.inputfield_section .input_style1 input {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    color: #222;
+    font-size: 15px;
+    height: 45px;
+    margin-right: 10px;
+    padding: 7px 10px 7px 17px;
+    width: 220px;
+}
+
+.inputfield_section .input_style1 input {
+    background: #f5f7f9;
+}
+
+.inputfield_section .input_style2 .input1,
+.inputfield_section .input_style1 .input1 {
+    border-color: #c5cedd;
+}
+
+.inputfield_section .input_style2 .input2,
+.inputfield_section .input_style1 .input2 {
+    border-color: #22be1a;
+}
+
+.input2::-webkit-placeholder {
+    color: #22be1a;
+}
+
+.input2::-moz-placeholder {
+    color: #22be1a;
+}
+
+.input2::-ms-placeholder {
+    color: #22be1a;
+}
+
+.inputfield_section .input_style2 .input3,
+.inputfield_section .input_style1 .input3 {
+    border-color: #ec2828;
+}
+
+.input3::-webkit-placeholder {
+    color: #ec2828;
+}
+
+.input3::-moz-placeholder {
+    color: #ec2828;
+}
+
+.input3::-ms-placeholder {
+    color: #ec2828;
+}
+
+.inputfield_section .input_style2 .group {
+    display: inline-block;
+}
+
+.inputfield_section .input_style2 .group.textarea {
+    display: block;
+}
+
+.inputfield_section .input_style2 textarea {
+    height: 140px;
+    resize: none;
+    width: 454px;
+}
+
+.inputfield_section .input_style2 label {
+    color: #414851;
+    display: block;
+    font-size: 15px;
+    font-weight: 400;
+}
+.inputfield_section textarea:focus {
+    box-shadow: none;
+    outline: 0px;
+}
+/*--------------select box style-------------*/
+
+.selectbox_section .selectStyle3 .nice-select,
+.selectbox_section .selectStyle2 .nice-select,
+.selectbox_section .selectStyle1 .nice-select {
+    border-radius: 3px;
+    height: 44px;
+    line-height: 44px;
+    width: 240px;
+    background: #f5f7f9;
+}
+
+.selectbox_section .selectStyle3 .nice-select .list,
+.selectbox_section .selectStyle2 .nice-select .list,
+.selectbox_section .selectStyle1 .nice-select .list {
+    border: 1px solid #c5cedd;
+    border-radius: 3px;
+    box-shadow: none;
+    width: 238px;
+}
+
+.selectbox_section .selectStyle2 .nice-select .list,
+.selectbox_section .selectStyle2 .nice-select {
+    background: #414851;
+    color: #fff;
+    border: none;
+}
+
+.selectbox_section .selectStyle3 .nice-select::after,
+.selectbox_section .selectStyle2 .nice-select::after {
+    border-bottom: 2px solid #fff;
+    border-right: 2px solid #fff;
+}
+
+.selectbox_section .selectStyle3 .nice-select .option,
+.selectbox_section .selectStyle2 .nice-select .option,
+.selectbox_section .selectStyle1 .nice-select .option {
+    color: #757f8d;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 45px;
+    min-height: 46px;
+}
+
+.selectbox_section .selectStyle2 .nice-select .option {
+    color: #abb4c0;
+}
+
+.selectbox_section .selectStyle3 .nice-select .option:hover,
+.selectbox_section .selectStyle2 .nice-select .option:hover,
+.selectbox_section .selectStyle1 .nice-select .option:hover {
+    background-color: #f5f7f9;
+    color: #222;
+}
+
+.selectStyle1,
+.selectStyle2,
+.selectStyle3 {
+    display: inline-block;
+    margin-right: 40px;
+}
+
+.selectStyle3 {
+    margin-right: 0px;
+}
+
+.selectbox_section .selectStyle3 .nice-select {
+    background: #2079ff;
+    color: #fff;
+    border: none;
+}
+
+
+/*----------------------------radio button style---------------------*/
+
+.special_input li.radiobutton_style1 {
+    display: inline-block;
+    list-style: outside none none;
+    margin-right: 150px;
+}
+.special_input li.radiobutton_style1:last-child {
+    margin-right: 0px;
+}
+
+.special_input .radiobutton_style1 label {
+    color: #414851;
+    font-size: 18px;
+    font-weight: 300;
+    margin-bottom: 14px;
+    cursor: pointer;
+}
+
+.special_input .radiobutton_style1 input[type="radio"] {
+    display: none;
+}
+
+.special_input .radiobutton_style1 input[type="radio"]+.special_input .radiobutton_style1 label {
+    color: #292321;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.special_input .radiobutton_style1 input[type="radio"]+label span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: -1px 15px 0 0;
+    vertical-align: middle;
+    cursor: pointer;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.special_input .radiobutton_style1 input[type="radio"]+label span {
+    border: 2px solid #a9b4c6;
+    position: relative;
+}
+
+.special_input .radiobutton_style1 input[type="radio"]+label span:before {
+    background: #2079ff none repeat scroll 0 0;
+    border-radius: 100%;
+    content: "";
+    height: 10px;
+    left: 3px;
+    position: absolute;
+    top: 3px;
+    width: 10px;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    -o-transform: scale(0);
+    transform: scale(0);
+    -webkit-transition: 0.2s;
+    -moz-transition: 0.2s;
+    -ms-transition: 0.2s;
+    -o-transition: 0.2s;
+    transition: 0.2s;
+}
+
+.special_input .radiobutton_style1 input[type="radio"]:checked+label span {
+    border-color: #2079ff;
+}
+
+.special_input .radiobutton_style1 input[type="radio"]:checked+label span:before {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+}
+
+.special_input .radiobutton_style1 input[type="radio"]+label span,
+.special_input .radiobutton_style1 input[type="radio"]:checked+label span {
+    -webkit-transition: background-color 0.2s linear;
+    -o-transition: background-color 0.2s linear;
+    -moz-transition: background-color 0.2s linear;
+    transition: background-color 0.2s linear;
+}
+
+
+.special_input .radiobutton_style1 .disable label {
+  color: #a7afb9;
+}
+.special_input .radiobutton_style1 .disable input[type="radio"] + label span::before {
+  background: #a9b4c6 none repeat scroll 0 0;
+}
+.special_input .radiobutton_style1 .disable input[type="radio"]:checked+label span {
+    border-color: #a9b4c6;
+}
+
+
+.special_input .radiobutton_style1.squre input[type="radio"] + label span {
+  border-radius: 5px;
+}
+.special_input .radiobutton_style1.squre input[type="radio"] + label span::before {
+  border-radius: 0;
+}
+
+
+
+/*----------------------------checkbox style-----------------------------*/
+
+.special_input li.checkbox_style {
+    display: inline-block;
+    list-style: outside none none;
+    margin-right: 150px;
+}
+.special_input li.checkbox_style:last-child {
+    margin-right: 0px;
+}
+
+.special_input .checkbox_style label {
+    color: #414851;
+    font-size: 18px;
+    font-weight: 300;
+    margin-bottom: 14px;
+    cursor: pointer;
+}
+
+.special_input .checkbox_style input[type="checkbox"] {
+    display: none;
+}
+
+.special_input .checkbox_style input[type="checkbox"]+.special_input .checkbox_style label {
+    color: #292321;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.special_input .checkbox_style input[type="checkbox"]+label span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: -1px 15px 0 0;
+    vertical-align: middle;
+    cursor: pointer;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.special_input .checkbox_style input[type="checkbox"]+label span {
+    border: 2px solid #a9b4c6;
+    position: relative;
+}
+
+.special_input .checkbox_style input[type="checkbox"]+label span:before {
+    border-radius: 100%;
+    color: #fff;
+    content: "\f00c";
+    font-family: FontAwesome;
+    font-size: 11px;
+    left: 3px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    -o-transform: scale(0);
+    transform: scale(0);
+    -webkit-transition: 0.2s;
+    -moz-transition: 0.2s;
+    -ms-transition: 0.2s;
+    -o-transition: 0.2s;
+    transition: 0.2s;
+}
+
+.special_input .checkbox_style input[type="checkbox"]:checked+label span {
+    background: #2079ff none repeat scroll 0 0;
+    border-color: #2079ff;
+}
+
+.special_input .checkbox_style input[type="checkbox"]:checked+label span:before {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+}
+
+.special_input .checkbox_style input[type="checkbox"]+label span,
+.special_input .checkbox_style input[type="checkbox"]:checked+label span {
+    -webkit-transition: background-color 0.2s linear;
+    -o-transition: background-color 0.2s linear;
+    -moz-transition: background-color 0.2s linear;
+    transition: background-color 0.2s linear;
+}
+
+
+.special_input .checkbox_style .disable label {
+  color: #a7afb9;
+}
+
+.special_input .checkbox_style .disable input[type="checkbox"]:checked+label span {
+   background: #a9b4c6 none repeat scroll 0 0;
+border-color: #a9b4c6;
+}
+
+
+.special_input .checkbox_style.squre input[type="checkbox"] + label span {
+  border-radius: 5px;
+}
+.special_input .checkbox_style.squre input[type="checkbox"] + label span::before {
+  border-radius: 0;
+}
+.radiobutton_style1 .group.disable label,
+.checkbox_style .group.disable label {
+    cursor: no-drop;
+}
+/*-------------------------------input switch-----------------------------*/
+.input_switch ul li {
+    display: inline-block;
+    margin-right: 30px;
+}
+.input_switch .rss>input#buttonTwo,
+.input_switch .rss>input#buttonOne {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+}
+.input_switch label {
+    background: #ddd none repeat scroll 0 0;
+    border-radius: 50px;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-style: normal;
+    font-weight: bold;
+    height: 45px;
+    line-height: 30px;
+    position: relative;
+    transition: all 200ms ease 0s;
+    width: 110px;
+}
+.input_switch input[type=checkbox]:checked ~ label.attention:hover:before  {
+	content: "on";
+	font-size: 14px
+}
+.input_switch label i {
+    background: #fff;
+    border-radius: 36px;
+    display: block;
+    height: 31px;
+    position: absolute;
+    right: 70px;
+    top: 6px;
+    transition: all 200ms ease 0s;
+    width: 31px;
+}
+.input_switch label:active i:before {
+	box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.3);
+}
+.input_switch label:before {
+    content: "off";
+    font-size: 16px;
+    position: absolute;
+    right: 20px;
+    text-transform: uppercase;
+    top: 7px;
+    transition: all 200ms ease 0s;
+}
+.input_switch input[type=checkbox]:checked~label:before {
+    content: "on";
+    left: 22px;
+    position: absolute;
+    text-transform: uppercase;
+    top: 7px;
+}
+.input_switch input[type=checkbox]:checked ~ label{
+	background: #2079ff;
+}
+.input_switch input[type=checkbox]:checked~label i {
+    right: 8px;
+    top: 7px;
+}
+
+
+/*-----switch style-2------*/
+.input_switch .style2 input[type="checkbox"]:checked~label::before {
+    content: "\f00c";
+    font-family: fontawesome;
+    left: 22px;
+    top: 7px;
+    font-size: 23px;
+}
+
+.input_switch .style2 label::before {
+    content: "\f00d";
+    font-family: fontawesome;
+    font-size: 25px;
+    right: 25px;
+    top: 7px;
+}
+
+
+
+
+
+
+
+
+
+
+
+

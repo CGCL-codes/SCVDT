@@ -1,0 +1,145 @@
+/*------------------- 13. start progress bar style ------------------*/
+.progress_bar .skill-bar {
+    margin-bottom: 30px;
+}
+
+.progress_bar .skill-progress .skill-bar:last-child {
+    margin-bottom: 0px;
+}
+
+.progress_bar .progress-title-holder {
+    position: relative;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.progress_bar .progress-title {
+    color: #222222;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 16px;
+    text-transform: none;
+    z-index: 100;
+}
+
+.progress_bar .percent {
+    margin-left: -29px;
+    background: #474d53;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 50px;
+    font-size: 11px;
+    position: relative;
+}
+
+.progress_bar .progress_style2 .percent {
+    border-radius: 0px;
+}
+
+.progress_bar .percent::before {
+    background: #474d53 none repeat scroll 0 0;
+    bottom: -4px;
+    content: "";
+    height: 10px;
+    left: 50%;
+    margin-left: -5px;
+    position: absolute;
+    transform: rotate(45deg);
+    width: 10px;
+}
+
+.progress_bar .progress-wrapper {
+    width: 100%;
+    z-index: 10;
+}
+
+.progress_bar .progress-mark {
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+}
+
+.progress_bar .progress-mark span,
+.progress_bar .progress-title-holder {
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+.progress_bar .progressbar5 .progress-outter,
+.progress_bar .progressbar4 .progress-outter,
+.progress_bar .progressbar3 .progress-outter,
+.progress_bar .progressbar2 .progress-outter,
+.progress_bar .progressbar1 .progress-outter {
+    background-color: #f2f3f9;
+}
+
+.progress_bar .progress-content {
+    width: 0%;
+    background: #474d53;
+}
+
+.progress_bar .progress-content,
+.progress_bar .progress-outter {
+    border-radius: 50px;
+    height: 10px;
+}
+
+.progress_bar .progress_style2 .progress-content,
+.progress_bar .progress_style2 .progress-outter {
+    border-radius: 0px;
+}
+
+.progress_bar .progress_style3 .progress-content,
+.progress_bar .progress_style3 .progress-outter {
+    border-radius: 0px;
+    height: 20px;
+}
+
+.progress_bar .progress_style3.radius .progress-content,
+.progress_bar .progress_style3.radius .progress-outter {
+    border-radius: 50px;
+}
+
+.progress_bar .progress_style3 .percent::before {
+    display: none;
+}
+
+.progress_bar .progress_style3 .skill-bar {
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.progress_bar .progress_style3 .percent {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    bottom: -31px;
+    color: #fff;
+    margin-bottom: 0;
+    position: absolute;
+    right: 10px;
+    line-height: 21px;
+    padding: 0;
+}
+
+.progress_bar .progress_style3 .progressbar1 .progress-outter .progress-content {
+    background-color: #0482f8;
+}
+
+.progress_bar .progress_style3 .progressbar2 .progress-outter .progress-content {
+    background-color: #4caf50;
+}
+
+.progress_bar .progress_style3 .progressbar3 .progress-outter .progress-content {
+    background-color: #ff5722;
+}
+
+.progress_bar .progress_style3 .progressbar4 .progress-content .progress-content {
+    background-color: #4d7c93;
+}
+
+.progress_bar .progress_style5 .progress-content,
+.progress_bar .progress_style5 .progress-outter {
+    height: 3px;
+}
+/*------------------- 13. end progress bar style --------------------*/

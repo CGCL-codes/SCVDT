@@ -1,0 +1,288 @@
+/*------------------- 20. start Tabs section style ------------------*/
+/*-----tab style-1--------*/
+
+.flick_tab .tab_style1 .nav_menu li {
+    display: inline-block;
+    list-style: outside none none;
+    margin-right: 10px;
+}
+
+.flick_tab .tab_style1 .nav_menu li>a {
+    background: #0482f8 none repeat scroll 0 0;
+    border-radius: 5px;
+    color: #fff;
+    display: inline-block;
+    height: 65px;
+    line-height: 63px;
+    text-align: center;
+    width: 65px;
+    position: relative;
+}
+
+.flick_tab .tab_style1 .nav_menu li>a i {
+    font-size: 25px;
+}
+
+.flick_tab .tab_style1 .nav_menu li.active>a {
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);
+}
+
+.flick_tab .tab_style1 .nav_menu li>a .tooltipp {
+    background: #0482f8 none repeat scroll 0 0;
+    border-radius: 3px;
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    left: 42px;
+    line-height: normal;
+    min-width: 96px;
+    padding: 3px 10px;
+    position: absolute;
+    text-align: center;
+    top: -47px;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.flick_tab .tab_style1 .nav_menu li>a:hover .tooltipp {
+    top: -42px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.flick_tab .tab_style1 .nav_menu li>a .tooltipp::before {
+    background: #0482f8 none repeat scroll 0 0;
+    bottom: -5px;
+    content: "";
+    height: 12px;
+    left: 7px;
+    position: absolute;
+    transform: rotate(45deg);
+    width: 12px;
+}
+
+.flick_tab .tab-content .tab-pane p {
+    color: #888888;
+    font-size: 16px;
+    line-height: 28px;
+}
+
+.flick_tab .tab-content .tab-pane h4 {
+    margin-bottom: 17px;
+    margin-top: 42px;
+}
+
+
+/*--------tab style-2--------*/
+
+.flick_tab .theight {
+    margin-bottom: 50px;
+    min-height: 330px;
+}
+
+.flick_tab .tab_style2 .nav_menu li>a {
+    font-size: 12px;
+    line-height: normal;
+    padding: 6px;
+    width: 75px;
+    height: 75px;
+}
+
+.flick_tab .tab_style2 .nav_menu li>a i {
+    display: block;
+}
+
+
+/*--------tab style-3--------*/
+
+.flick_tab .tab_style3 .nav_menu {
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.flick_tab .tab_style3 .nav_menu li {
+    float: left;
+    list-style: outside none none;
+}
+
+.flick_tab .tab_style3 .nav_menu li a {
+    border-right: 1px solid #ddd;
+    color: #222222;
+    display: inline-block;
+    font-size: 15px;
+    padding: 14px 35px;
+    text-transform: capitalize;
+}
+
+.flick_tab .tab_style3 .nav_menu li a:hover,
+.flick_tab .tab_style3 .nav_menu li.active a {
+    background: #0482f8;
+    color: #fff;
+}
+
+.flick_tab .tab_style3 .nav_menu li:last-child a {
+    border-right: none;
+    border-radius: 0 5px 5px 0;
+}
+
+.flick_tab .tab_style3 .nav_menu li:first-child a {
+    border-radius: 5px 0px 0px 5px;
+}
+
+
+/*------------tab style-4-------------*/
+
+.flick_tab .tab_style4 .nav_menu {
+    border: none
+}
+
+.flick_tab .tab_style4 .nav_menu li a:hover,
+.flick_tab .tab_style4 .nav_menu li.active a {
+    background: none;
+    color: #222;
+}
+
+.flick_tab .tab_style4 .nav_menu li:last-child a,
+.flick_tab .tab_style4 .nav_menu li a {
+    border: 1px solid #ddd;
+}
+
+.flick_tab .tab_style4 .nav_menu li a:hover,
+.flick_tab .tab_style4 .nav_menu li.active a {
+    border-color: #0482F8;
+    position: relative;
+}
+
+.flick_tab .tab_style4 .nav_menu li {
+    margin-left: -1px;
+}
+
+
+/*---------tab style-5---------*/
+
+.flick_tab .tab_style5 .nav_menu {
+    border: none;
+    border-radius: 0!important;
+}
+
+.flick_tab .tab_style5 .nav_menu li a {
+    border-right: medium none;
+    border-bottom: 2px solid #222;
+    border-radius: 0!important;
+    font-weight: 500;
+}
+
+.flick_tab .tab_style5 .nav_menu li a:hover,
+.flick_tab .tab_style5 .nav_menu li.active a {
+    background: none;
+    color: #0482f8;
+    border-color: #0482f8;
+}
+
+
+/*----------tab style-6-----------*/
+
+.flick_tab .tab_style9,
+.flick_tab .tab_style8,
+.flick_tab .tab_style7,
+.flick_tab .tab_style6 {
+    align-items: flex-start;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+}
+
+.flick_tab .tab_style9 .nav_menu li,
+.flick_tab .tab_style8 .nav_menu li,
+.flick_tab .tab_style7 .nav_menu li,
+.flick_tab .tab_style6 .nav_menu li {
+    display: block;
+    margin-right: 0;
+}
+
+.flick_tab .tab_style9 .tab-content .tab-pane h4,
+.flick_tab .tab_style8 .tab-content .tab-pane h4,
+.flick_tab .tab_style7 .tab-content .tab-pane h4,
+.flick_tab .tab_style6 .tab-content .tab-pane h4 {
+    margin-bottom: 17px;
+    margin-top: -6px;
+}
+
+.flick_tab .tab_style9 .nav_menu li>a,
+.flick_tab .tab_style8 .nav_menu li>a,
+.flick_tab .tab_style7 .nav_menu li>a,
+.flick_tab .tab_style6 .nav_menu li>a {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 0;
+    color: #222;
+    margin-top: -1px;
+    padding: 4px;
+}
+
+.flick_tab .tab_style9 .nav_menu li:first-child>a,
+.flick_tab .tab_style8 .nav_menu li:first-child>a,
+.flick_tab .tab_style7 .nav_menu li:first-child>a,
+.flick_tab .tab_style6 .nav_menu li:first-child>a {
+    border-radius: 5px 5px 0 0;
+}
+
+.flick_tab .tab_style9 .nav_menu li:last-child>a,
+.flick_tab .tab_style8 .nav_menu li:last-child>a,
+.flick_tab .tab_style7 .nav_menu li:last-child>a,
+.flick_tab .tab_style6 .nav_menu li:last-child>a {
+    border-radius: 0 0 5px 5px;
+}
+
+.flick_tab .tab_style6 .nav_menu li.active>a {
+    background: #0482f8;
+    color: #fff;
+    box-shadow: none;
+}
+.flick_tab .theight.tab_style9,
+.flick_tab .theight.tab_style8,
+.flick_tab .theight.tab_style7,
+.flick_tab .theight.tab_style6 {
+    margin-bottom: 0;
+    min-height: 230px;
+}
+
+/*----------tab styel-7------*/
+
+.flick_tab .tab_style9 .nav_menu li.active>a,
+.flick_tab .tab_style8 .nav_menu li.active>a,
+.flick_tab .tab_style7 .nav_menu li.active>a {
+    border-color: #0482f8;
+    box-shadow: none;
+    position: relative;
+    z-index: 1;
+}
+
+.flick_tab .tab_style6 .nav_menu li>a,
+.flick_tab .tab_style7 .nav_menu li>a {
+    text-transform: capitalize;
+}
+
+
+/*-------tab style-8----------*/
+
+.flick_tab .tab_style8 .nav_menu li>a {
+    line-height: 65px;
+}
+
+
+/*--------tab style-9-------*/
+
+.flick_tab .tab_style9 .nav_menu li>a {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    height: auto;
+    line-height: normal;
+    padding: 13px 20px;
+    width: 160px;
+}
+
+
+/*------------------- 20. end Tabs section style --------------------*/

@@ -1,0 +1,19 @@
+got bp: 0x7fffffffee00
+555555554000-555555556000 r-xp 00000000 08:19 1181465                    ./easy_heap
+555555755000-555555756000 r--p 00001000 08:19 1181465                    ./easy_heap
+555555756000-555555759000 rw-p 00002000 08:19 1181465                    ./easy_heap
+7ffff79e7000-7ffff7bce000 r-xp 00000000 08:19 1181467                    ./libc64.so
+7ffff7bce000-7ffff7dce000 ---p 001e7000 08:19 1181467                    ./libc64.so
+7ffff7dce000-7ffff7dd2000 r--p 001e7000 08:19 1181467                    ./libc64.so
+7ffff7dd2000-7ffff7dd4000 rw-p 001eb000 08:19 1181467                    ./libc64.so
+7ffff7dd4000-7ffff7dd8000 rw-p 00000000 00:00 0 
+7ffff7dd8000-7ffff7dfd000 r-xp 00000000 08:14 1479717                    ./ld-2.27.so
+7ffff7ff6000-7ffff7ff8000 rw-p 00000000 00:00 0 
+7ffff7ff8000-7ffff7ffb000 r--p 00000000 00:00 0                          [vvar]
+7ffff7ffb000-7ffff7ffc000 r-xp 00000000 00:00 0                          [vdso]
+7ffff7ffc000-7ffff7ffd000 r--p 00024000 08:14 1479717                    ./ld-2.27.so
+7ffff7ffd000-7ffff7ffe000 rw-p 00025000 08:14 1479717                    ./ld-2.27.so
+7ffff7ffe000-7ffff7fff000 rw-p 00000000 00:00 0 
+7ffffffde000-7ffffffff000 rw-p 00000000 00:00 0                          [stack]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]
+

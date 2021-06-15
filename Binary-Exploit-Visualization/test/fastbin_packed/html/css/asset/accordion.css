@@ -1,0 +1,137 @@
+/*------------------- 15. start Accordion style ------------------*/
+/*---------style-1----------*/
+
+.flick_accordion .style1 .panel {
+    border-radius: 0;
+    border-top: 1px solid #eeeeee;
+    box-shadow: none;
+    margin-top: 0;
+}
+
+.flick_accordion .style1 .panel:last-child {
+    border-bottom: 1px solid #eeeeee;
+}
+
+.flick_accordion .style2 .panel .title,
+.flick_accordion .style1 .panel .title {
+    color: #333333;
+    display: block;
+    font-size: 21px;
+    font-weight: 500;
+    position: relative;
+    padding: 15px 0 15px 30px;
+}
+
+.flick_accordion .style2 .panel .title {
+    padding: 15px 0 15px 40px;
+}
+
+.flick_accordion .style2 .panel .title i,
+.flick_accordion .style1 .panel .title i {
+    font-size: 24px;
+    left: 0;
+    position: absolute;
+    top: 18px;
+}
+
+.flick_accordion .style2 .panel .title i {
+    left: 15px;
+}
+
+.flick_accordion .style2 .panel .title.collapsed i,
+.flick_accordion .style1 .panel .title.collapsed i {
+    transform: rotate(-90deg);
+}
+
+.flick_accordion .style2 .panel-body,
+.flick_accordion .style1 .panel-body {
+    border-top: 1px solid #eeeeee;
+    color: #333333;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 28px;
+    padding: 15px 25px 25px 31px;
+}
+
+.flick_accordion .style2 .panel-body {
+    border-top: none;
+    padding: 15px 15px 15px 40px;
+}
+
+
+/*---------style-2----------*/
+
+.flick_accordion .style2 .panel {
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    box-shadow: none;
+    margin-top: 10px;
+}
+
+.flick_accordion .style2 .panel .title {
+    border-radius: 5px;
+    border-bottom: 1px solid #dddddd;
+}
+
+.flick_accordion .style2 .panel .title.collapsed {
+    border-bottom: none;
+}
+
+
+/*---------style-3----------*/
+
+.flick_accordion .style3 .panel .title {
+    padding: 12px 12px 12px 20px;
+    background: #0482f8;
+    color: #fff;
+    position: relative;
+}
+
+.flick_accordion .style3 .panel .title.collapsed:after,
+.flick_accordion .style3 .panel .title:after {
+    font-family: fontawesome;
+    font-size: 15px;
+    position: absolute;
+    right: 15px;
+    top: 17px;
+}
+
+.flick_accordion .style3 .panel .title:after {
+    content: "\f068";
+}
+
+.flick_accordion .style3 .panel .title.collapsed:after {
+    content: "\f067";
+}
+
+.flick_accordion .style2 .panel .title.collapsed {
+    background: none;
+    color: #333;
+}
+
+.flick_accordion .style3 .panel-body {
+    padding: 15px 15px 15px 20px;
+    font-size: 14px;
+    line-height: 26px;
+}
+
+
+/*------------style-4-------------*/
+
+.flick_accordion .style4 .panel {
+    border-top: none;
+}
+
+.flick_accordion .style4 .panel .title {
+    border-bottom: 1px solid #0482f8;
+}
+
+.flick_accordion .style4 .panel .title.collapsed {
+    border-bottom-color: #dddddd;
+}
+
+.flick_accordion .style4 .panel-body {
+    padding: 15px 15px 15px 0;
+    border-top: none;
+}
+/*------------------- 15. end Accordion style --------------------*/

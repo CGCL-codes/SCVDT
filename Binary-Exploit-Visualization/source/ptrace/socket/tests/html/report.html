@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+<head>
+
+	
+    <meta charset="utf-8">
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1" />
+    <title>Final Report</title>
+    <!--favicon icon-->
+    <link rel="icon" href="images/logo.png">
+    <!--google font-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+    <!-- font awesome css -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- iconmind icon css -->
+    <link rel="stylesheet" href="css/iconmind-line.css">
+    <!--bootstrap min css-->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!--owl carousel min css-->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <!--nice select css-->
+    <link rel="stylesheet" href="css/nice-select.css">
+    <!--Padding margin css-->
+    <link rel="stylesheet" href="css/padding.margin.css">
+    <!-- style css -->
+    <link rel="stylesheet" href="css/asset/shortcode-common.css">
+    <link rel="stylesheet" href="css/asset/typography.css">
+    <link rel="stylesheet" href="css/asset/accordion.css">
+    <link rel="stylesheet" href="css/asset/alert.css">
+    <link rel="stylesheet" href="css/asset/button.css">
+    <link rel="stylesheet" href="css/asset/input.css">
+    <link rel="stylesheet" href="css/asset/c2action.css">
+    <link rel="stylesheet" href="css/asset/testimonial.css">
+    <link rel="stylesheet" href="css/asset/carousel.css">
+    <link rel="stylesheet" href="css/asset/client.css">
+    <link rel="stylesheet" href="css/asset/color.css">
+    <link rel="stylesheet" href="css/asset/faq.css">
+    <link rel="stylesheet" href="css/asset/grid-systerm.css">
+    <link rel="stylesheet" href="css/asset/pricing.css">
+    <link rel="stylesheet" href="css/asset/progressbar.css">
+    <link rel="stylesheet" href="css/asset/table.css">
+    <link rel="stylesheet" href="css/asset/tab.css">
+    <link rel="stylesheet" href="css/asset/team.css">
+    <link rel="stylesheet" href="css/asset/testimonial.css">
+    <link rel="stylesheet" href="css/asset/navbar.css">
+
+    <!--responsive css-->
+    <link rel="stylesheet" href="css/asset/shortcode-responsive.css">
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="spresentation">
+    <!-- =========================================Start header section== =======================================-->
+    <header class="presentation_header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-2">
+                    <a href="#" class="logo"><img src="images/logo.png" alt="logo"></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- =========================================End header section=========================================-->
+
+
+    <!-- =========================================Start Sidebar section== =======================================-->
+    <div class="presentation_sidebar">
+        <div class="toggle_arrow">
+            <i class="fa fa-angle-right"></i>
+            <i class="fa fa-angle-left"></i>
+        </div>
+        <ul>
+            <li><a href="#information" class="anchor">Information</a></li>
+            <li><a href="#GOT_analysis" class="anchor">GOT Analysis</a></li>
+            <li><a href="#Heap_analysis" class="anchor">Heap Analysis</a></li>
+            <li><a href="#Leak_analysis" class="anchor">Leak Analysis</a></li>
+			<li><a href="#Call_analysis" class="anchor">Call Analysis</a></li>
+        </ul>
+    </div>
+    <!-- =========================================End Sidebar section=========================================-->
+
+
+    <!-- ========================================Start Accordion section=========================================-->
+    
+    <div id="accordion">
+        <section class="flick_accordion pt_90 pb_70 section_borderr">
+            <div class="container">
+				<div class="col-md-12">
+					<h1 class="fw_700">EXPLOIT ANALYSIS REPORT</h1>
+					<div class="panel-group style2 style3" role="tablist" id="accordion_3">
+						
+						<div class="panel">
+                                <a href="#information" class="collapsed title" data-toggle="collapse" data-parent="#accordion3">
+									Basic Information
+								</a>
+                                <div class="collapse panel-collapse" role="tabpanel" id="information">
+                                    <div class="panel-body"> 
+                                        <p class="fw_300 color_33"> checksec:<br>[*] '/home/hkx/Desktop/upgraded-potato/source/ptrace/socket/tests/server'<br/>    Arch:     amd64-64-little<br/>    RELRO:    Partial RELRO<br/>    Stack:    Canary found<br/>    NX:       NX enabled<br/>    PIE:      No PIE (0x400000)<br/>&nbsp;</p>
+                                        <p class="fw_300 color_33"> system:<br>Linux FLOATING 5.4.0-53-generic #59-Ubuntu SMP Wed Oct 21 09:38:44 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+ </p>
+                                        <p class="fw_300 color_33"> <br> report time: <br> 2020.11.19 </p>
+									</div>
+									<div class="panel-body">
+                                        
+
+<style>
+
+</style>
+
+<div id="fig_el1326501407371332399365012479767"></div>
+<script>
+function mpld3_load_lib(url, callback){
+  var s = document.createElement('script');
+  s.src = url;
+  s.async = true;
+  s.onreadystatechange = s.onload = callback;
+  s.onerror = function(){console.warn("failed to load library " + url);};
+  document.getElementsByTagName("head")[0].appendChild(s);
+}
+
+if(typeof(mpld3) !== "undefined" && mpld3._mpld3IsLoaded){
+   // already loaded: just create the figure
+   !function(mpld3){
+       
+       mpld3.draw_figure("fig_el1326501407371332399365012479767", {"width": 980.0, "height": 350.0, "axes": [{"bbox": [0.18, 0.10999999999999999, 0.81, 0.77], "xlim": [-0.40660047076454503, 8.406600470764545], "ylim": [-0.06944138661556905, 1.0694413866155694], "xdomain": [-0.40660047076454503, 8.406600470764545], "ydomain": [-0.06944138661556905, 1.0694413866155694], "xscale": "linear", "yscale": "linear", "axes": [{"position": "bottom", "nticks": 9, "tickvalues": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], "tickformat_formatter": "fixed", "tickformat": ["114", "123", "128", "133", "138", "143", "148", "153", "158"], "scale": "linear", "fontsize": 12.0, "grid": {"gridOn": false}, "visible": true}, {"position": "left", "nticks": 2, "tickvalues": [1.0, 0.0], "tickformat_formatter": "fixed", "tickformat": ["free", "malloc"], "scale": "linear", "fontsize": 12.0, "grid": {"gridOn": true, "color": "#808080", "dasharray": "6.4,1.6,1.0,1.6", "alpha": 0.7}, "visible": true}], "axesbg": "#FFFFFF", "axesbgalpha": null, "zoomable": true, "id": "el132650140737131693680", "lines": [], "paths": [], "markers": [], "texts": [{"text": "state timestamp", "position": [0.5, -0.07529375386518243], "coordinates": "axes", "h_anchor": "middle", "v_baseline": "hanging", "rotation": -0.0, "fontsize": 16.0, "color": "#262626", "alpha": 1, "zorder": 3, "id": "el132650140737119196736"}], "collections": [{"offsets": "data01", "xindex": 0, "yindex": 1, "paths": [[[[0.0, -0.5], [0.13260155, -0.5], [0.25978993539242673, -0.44731684579412084], [0.3535533905932738, -0.3535533905932738], [0.44731684579412084, -0.25978993539242673], [0.5, -0.13260155], [0.5, 0.0], [0.5, 0.13260155], [0.44731684579412084, 0.25978993539242673], [0.3535533905932738, 0.3535533905932738], [0.25978993539242673, 0.44731684579412084], [0.13260155, 0.5], [0.0, 0.5], [-0.13260155, 0.5], [-0.25978993539242673, 0.44731684579412084], [-0.3535533905932738, 0.3535533905932738], [-0.44731684579412084, 0.25978993539242673], [-0.5, 0.13260155], [-0.5, 0.0], [-0.5, -0.13260155], [-0.44731684579412084, -0.25978993539242673], [-0.3535533905932738, -0.3535533905932738], [-0.25978993539242673, -0.44731684579412084], [-0.13260155, -0.5], [0.0, -0.5]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]]], "pathtransforms": [[8.419691425682043, 0.0, 0.0, 8.419691425682043, 0.0, 0.0]], "alphas": [0.7], "edgecolors": ["rgba(178, 34, 34, 0.7)"], "facecolors": ["rgba(178, 34, 34, 0.7)"], "edgewidths": [1.0], "offsetcoordinates": "data", "pathcoordinates": "display", "zorder": 1, "id": "el132650140737131984256"}], "images": [], "sharex": [], "sharey": []}], "data": {"data01": [[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [3.0, 0.0], [4.0, 0.0], [5.0, 1.0], [6.0, 1.0], [7.0, 1.0], [8.0, 1.0]]}, "id": "el132650140737133239936", "plugins": [{"type": "reset"}, {"type": "zoom", "button": true, "enabled": false}, {"type": "boxzoom", "button": true, "enabled": false}]});
+   }(mpld3);
+}else if(typeof define === "function" && define.amd){
+   // require.js is available: use it to load d3/mpld3
+   require.config({paths: {d3: "https://d3js.org/d3.v5"}});
+   require(["d3"], function(d3){
+      window.d3 = d3;
+      mpld3_load_lib("https://mpld3.github.io/js/mpld3.v0.5.1.js", function(){
+         
+         mpld3.draw_figure("fig_el1326501407371332399365012479767", {"width": 980.0, "height": 350.0, "axes": [{"bbox": [0.18, 0.10999999999999999, 0.81, 0.77], "xlim": [-0.40660047076454503, 8.406600470764545], "ylim": [-0.06944138661556905, 1.0694413866155694], "xdomain": [-0.40660047076454503, 8.406600470764545], "ydomain": [-0.06944138661556905, 1.0694413866155694], "xscale": "linear", "yscale": "linear", "axes": [{"position": "bottom", "nticks": 9, "tickvalues": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], "tickformat_formatter": "fixed", "tickformat": ["114", "123", "128", "133", "138", "143", "148", "153", "158"], "scale": "linear", "fontsize": 12.0, "grid": {"gridOn": false}, "visible": true}, {"position": "left", "nticks": 2, "tickvalues": [1.0, 0.0], "tickformat_formatter": "fixed", "tickformat": ["free", "malloc"], "scale": "linear", "fontsize": 12.0, "grid": {"gridOn": true, "color": "#808080", "dasharray": "6.4,1.6,1.0,1.6", "alpha": 0.7}, "visible": true}], "axesbg": "#FFFFFF", "axesbgalpha": null, "zoomable": true, "id": "el132650140737131693680", "lines": [], "paths": [], "markers": [], "texts": [{"text": "state timestamp", "position": [0.5, -0.07529375386518243], "coordinates": "axes", "h_anchor": "middle", "v_baseline": "hanging", "rotation": -0.0, "fontsize": 16.0, "color": "#262626", "alpha": 1, "zorder": 3, "id": "el132650140737119196736"}], "collections": [{"offsets": "data01", "xindex": 0, "yindex": 1, "paths": [[[[0.0, -0.5], [0.13260155, -0.5], [0.25978993539242673, -0.44731684579412084], [0.3535533905932738, -0.3535533905932738], [0.44731684579412084, -0.25978993539242673], [0.5, -0.13260155], [0.5, 0.0], [0.5, 0.13260155], [0.44731684579412084, 0.25978993539242673], [0.3535533905932738, 0.3535533905932738], [0.25978993539242673, 0.44731684579412084], [0.13260155, 0.5], [0.0, 0.5], [-0.13260155, 0.5], [-0.25978993539242673, 0.44731684579412084], [-0.3535533905932738, 0.3535533905932738], [-0.44731684579412084, 0.25978993539242673], [-0.5, 0.13260155], [-0.5, 0.0], [-0.5, -0.13260155], [-0.44731684579412084, -0.25978993539242673], [-0.3535533905932738, -0.3535533905932738], [-0.25978993539242673, -0.44731684579412084], [-0.13260155, -0.5], [0.0, -0.5]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]]], "pathtransforms": [[8.419691425682043, 0.0, 0.0, 8.419691425682043, 0.0, 0.0]], "alphas": [0.7], "edgecolors": ["rgba(178, 34, 34, 0.7)"], "facecolors": ["rgba(178, 34, 34, 0.7)"], "edgewidths": [1.0], "offsetcoordinates": "data", "pathcoordinates": "display", "zorder": 1, "id": "el132650140737131984256"}], "images": [], "sharex": [], "sharey": []}], "data": {"data01": [[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [3.0, 0.0], [4.0, 0.0], [5.0, 1.0], [6.0, 1.0], [7.0, 1.0], [8.0, 1.0]]}, "id": "el132650140737133239936", "plugins": [{"type": "reset"}, {"type": "zoom", "button": true, "enabled": false}, {"type": "boxzoom", "button": true, "enabled": false}]});
+      });
+    });
+}else{
+    // require.js not available: dynamically load d3 & mpld3
+    mpld3_load_lib("https://d3js.org/d3.v5.js", function(){
+         mpld3_load_lib("https://mpld3.github.io/js/mpld3.v0.5.1.js", function(){
+                 
+                 mpld3.draw_figure("fig_el1326501407371332399365012479767", {"width": 980.0, "height": 350.0, "axes": [{"bbox": [0.18, 0.10999999999999999, 0.81, 0.77], "xlim": [-0.40660047076454503, 8.406600470764545], "ylim": [-0.06944138661556905, 1.0694413866155694], "xdomain": [-0.40660047076454503, 8.406600470764545], "ydomain": [-0.06944138661556905, 1.0694413866155694], "xscale": "linear", "yscale": "linear", "axes": [{"position": "bottom", "nticks": 9, "tickvalues": [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0], "tickformat_formatter": "fixed", "tickformat": ["114", "123", "128", "133", "138", "143", "148", "153", "158"], "scale": "linear", "fontsize": 12.0, "grid": {"gridOn": false}, "visible": true}, {"position": "left", "nticks": 2, "tickvalues": [1.0, 0.0], "tickformat_formatter": "fixed", "tickformat": ["free", "malloc"], "scale": "linear", "fontsize": 12.0, "grid": {"gridOn": true, "color": "#808080", "dasharray": "6.4,1.6,1.0,1.6", "alpha": 0.7}, "visible": true}], "axesbg": "#FFFFFF", "axesbgalpha": null, "zoomable": true, "id": "el132650140737131693680", "lines": [], "paths": [], "markers": [], "texts": [{"text": "state timestamp", "position": [0.5, -0.07529375386518243], "coordinates": "axes", "h_anchor": "middle", "v_baseline": "hanging", "rotation": -0.0, "fontsize": 16.0, "color": "#262626", "alpha": 1, "zorder": 3, "id": "el132650140737119196736"}], "collections": [{"offsets": "data01", "xindex": 0, "yindex": 1, "paths": [[[[0.0, -0.5], [0.13260155, -0.5], [0.25978993539242673, -0.44731684579412084], [0.3535533905932738, -0.3535533905932738], [0.44731684579412084, -0.25978993539242673], [0.5, -0.13260155], [0.5, 0.0], [0.5, 0.13260155], [0.44731684579412084, 0.25978993539242673], [0.3535533905932738, 0.3535533905932738], [0.25978993539242673, 0.44731684579412084], [0.13260155, 0.5], [0.0, 0.5], [-0.13260155, 0.5], [-0.25978993539242673, 0.44731684579412084], [-0.3535533905932738, 0.3535533905932738], [-0.44731684579412084, 0.25978993539242673], [-0.5, 0.13260155], [-0.5, 0.0], [-0.5, -0.13260155], [-0.44731684579412084, -0.25978993539242673], [-0.3535533905932738, -0.3535533905932738], [-0.25978993539242673, -0.44731684579412084], [-0.13260155, -0.5], [0.0, -0.5]], ["M", "C", "C", "C", "C", "C", "C", "C", "C", "Z"]]], "pathtransforms": [[8.419691425682043, 0.0, 0.0, 8.419691425682043, 0.0, 0.0]], "alphas": [0.7], "edgecolors": ["rgba(178, 34, 34, 0.7)"], "facecolors": ["rgba(178, 34, 34, 0.7)"], "edgewidths": [1.0], "offsetcoordinates": "data", "pathcoordinates": "display", "zorder": 1, "id": "el132650140737131984256"}], "images": [], "sharex": [], "sharey": []}], "data": {"data01": [[0.0, 0.0], [1.0, 0.0], [2.0, 0.0], [3.0, 0.0], [4.0, 0.0], [5.0, 1.0], [6.0, 1.0], [7.0, 1.0], [8.0, 1.0]]}, "id": "el132650140737133239936", "plugins": [{"type": "reset"}, {"type": "zoom", "button": true, "enabled": false}, {"type": "boxzoom", "button": true, "enabled": false}]});
+            })
+         });
+}
+</script>
+									</div>
+                                </div>
+                            </div>
+
+						<div class="panel">
+                                <a href="#GOT_analysis" class="collapsed title" data-toggle="collapse" data-parent="#accordion3">GOT Analysis</a>
+                                <div class="collapse panel-collapse" role="tabpanel" id="GOT_analysis">
+                                    <div class="panel-body">
+										<section class="flick_table">
+											<div class="container">
+												<div class="row">
+													
+													
+													<h3 class="fw_300">GOT Change</h3>
+													<div class="col-sm-11">
+											
+														
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	
+															<a data-toggle="collapse" data-parent="#accordion" href="#gotcollapse0">
+													
+																		<p class="fw_300 color_33">
+																			Not enabled or nothing to report.
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															
+															<div id="gotcollapse0" class="panel-collapse collapse">
+																<div class="panel-body">
+													
+																	<p class="fw_300 color_33">
+															
+																	
+																	</p>
+																</div>
+															</div>
+														</div>
+														
+													</div>
+												</div>
+											</div>
+										</section>
+									</div>
+                                </div>
+                            </div>
+
+						<div class="panel">
+                                <a href="#Heap_analysis" class="collapsed title" data-toggle="collapse" data-parent="#accordion3">Heap Analysis</a>
+                                <div class="collapse panel-collapse" role="tabpanel" id="Heap_analysis">
+                                    <div class="panel-body">
+										<section id="heapgraph">
+											<div class="container">
+												<div class="row">
+													<div class="col-md-11">
+														<h3 class="fw_300">Heap Transfer Gragh</h3>
+														<div class="panel panel-default">
+															<div class="panel-heading">
+																<h4 class="panel-title">
+																	<a data-toggle="collapse" data-parent="#accordion" href="#heapgraphcollapse">
+																		<p class="fw_300 ">
+																			click for large picture
+																		</p>
+																	</a>
+																</h4>
+															</div>
+
+															<div id="heapgraphcollapse" class="panel-collapse collapse">
+																<div class="panel-body">
+																		<a><img src="./HeapChange.svg", style="width:100%;height:auto;"></a>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</section>
+														
+														
+										<section id="heapanalysisoutput">
+											<div class="container">
+												<div class="row">
+													<div class="col-md-11">
+														<h3 class="fw_300">Heap Information</h3>
+														
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	
+															<a data-toggle="collapse" data-parent="#accordion" href="#heapcollapse0">
+														
+																		<p class="fw_300 color_33">
+																			[114] Memory allocate: malloc(0x2010) =&gt; 0x4052a0
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															
+															<div id="heapcollapse0" class="panel-collapse collapse">
+																<div class="panel-body">
+														
+																	<p class="fw_300 color_33">
+															
+																	
+																		<strong>Description:</strong> <tt>Calling (void*)malloc(size_t size) to allocate memory.</tt><br>
+																		
+																		<strong>Chunk size:</strong> <tt>0x2010</tt><br>
+																		
+																		<strong>Addr:</strong> <tt>0x4052a0</tt><br>
+																		
+																		<strong>State&nbsptimestamp:</strong> <tt>114</tt><br>
+																		
+																		<strong>Malloc state bins:</strong> <pre>fastbinsY:<br/>empty<br/>unsortedbin:<br/>empty<br/>smallbins:<br/>empty<br/>largebins:<br/>empty</pre>
+																		
+																		<strong>Tcache bins:</strong> <pre>tcachebins<br/>empty</pre>
+																		
+																	</p>
+																</div>
+															</div>
+														</div>
+														
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	
+															<a data-toggle="collapse" data-parent="#accordion" href="#heapcollapse1">
+														
+																		<p class="fw_300 color_33">
+																			[123] Memory allocate: malloc(0x30) =&gt; 0x4072b0
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															
+															<div id="heapcollapse1" class="panel-collapse collapse">
+																<div class="panel-body">
+														
+																	<p class="fw_300 color_33">
+															
+																	
+																		<strong>Description:</strong> <tt>Calling (void*)malloc(size_t size) to allocate memory.</tt><br>
+																		
+																		<strong>Chunk size:</strong> <tt>0x30</tt><br>
+																		
+																		<strong>Addr:</strong> <tt>0x4072b0</tt><br>
+																		
+																		<strong>State&nbsptimestamp:</strong> <tt>123</tt><br>
+																		
+																		<strong>Malloc state bins:</strong> <pre>fastbinsY:<br/>empty<br/>unsortedbin:<br/>empty<br/>smallbins:<br/>empty<br/>largebins:<br/>empty</pre>
+																		
+																		<strong>Tcache bins:</strong> <pre>tcachebins<br/>empty</pre>
+																		
+																	</p>
+																</div>
+															</div>
+														</div>
+														
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	
+															<a data-toggle="collapse" data-parent="#accordion" href="#heapcollapse2">
+														
+																		<p class="fw_300 color_33">
+																			[128] Memory allocate: malloc(0x40) =&gt; 0x4072e0
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															
+															<div id="heapcollapse2" class="panel-collapse collapse">
+																<div class="panel-body">
+														
+																	<p class="fw_300 color_33">
+															
+																	
+																		<strong>Description:</strong> <tt>Calling (void*)malloc(size_t size) to allocate memory.</tt><br>
+																		
+																		<strong>Chunk size:</strong> <tt>0x40</tt><br>
+																		
+																		<strong>Addr:</strong> <tt>0x4072e0</tt><br>
+																		
+																		<strong>State&nbsptimestamp:</strong> <tt>128</tt><br>
+																		
+																		<strong>Malloc state bins:</strong> <pre>fastbinsY:<br/>empty<br/>unsortedbin:<br/>empty<br/>smallbins:<br/>empty<br/>largebins:<br/>empty</pre>
+																		
+																		<strong>Tcache bins:</strong> <pre>tcachebins<br/>empty</pre>
+																		
+																	</p>
+																</div>
+															</div>
+														</div>
+														
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	
+															<a data-toggle="collapse" data-parent="#accordion" href="#heapcollapse3">
+														
+																		<p class="fw_300 color_33">
+																			[133] Memory allocate: malloc(0x50) =&gt; 0x407320
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															
+															<div id="heapcollapse3" class="panel-collapse collapse">
+																<div class="panel-body">
+														
+																	<p class="fw_300 color_33">
+															
+																	
+																		<strong>Description:</strong> <tt>Calling (void*)malloc(size_t size) to allocate memory.</tt><br>
+																		
+																		<strong>Chunk size:</strong> <tt>0x50</tt><br>
+																		
+																		<strong>Addr:</strong> <tt>0x407320</tt><br>
+																		
+																		<strong>State&nbsptimestamp:</strong> <tt>133</tt><br>
+																		
+																		<strong>Malloc state bins:</strong> <pre>fastbinsY:<br/>empty<br/>unsortedbin:<br/>empty<br/>smallbins:<br/>empty<br/>largebins:<br/>empty</pre>
+																		
+																		<strong>Tcache bins:</strong> <pre>tcachebins<br/>empty</pre>
+																		
+																	</p>
+																</div>
+															</div>
+														</div>
+														
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	
+															<a data-toggle="collapse" data-parent="#accordion" href="#heapcollapse4">
+														
+																		<p class="fw_300 color_33">
+																			[138] Memory allocate: malloc(0x30) =&gt; 0x407370
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															
+															<div id="heapcollapse4" class="panel-collapse collapse">
+																<div class="panel-body">
+														
+																	<p class="fw_300 color_33">
+															
+																	
+																		<strong>Description:</strong> <tt>Calling (void*)malloc(size_t size) to allocate memory.</tt><br>
+																		
+																		<strong>Chunk size:</strong> <tt>0x30</tt><br>
+																		
+																		<strong>Addr:</strong> <tt>0x407370</tt><br>
+																		
+																		<strong>State&nbsptimestamp:</strong> <tt>138</tt><br>
+																		
+																		<strong>Malloc state bins:</strong> <pre>fastbinsY:<br/>empty<br/>unsortedbin:<br/>empty<br/>smallbins:<br/>empty<br/>largebins:<br/>empty</pre>
+																		
+																		<strong>Tcache bins:</strong> <pre>tcachebins<br/>empty</pre>
+																		
+																	</p>
+																</div>
+															</div>
+														</div>
+														
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	
+															<a data-toggle="collapse" data-parent="#accordion" href="#heapcollapse5">
+														
+																		<p class="fw_300 color_33">
+																			[143] Memory free: free(0x4072b0) (size: 0x30)
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															
+															<div id="heapcollapse5" class="panel-collapse collapse">
+																<div class="panel-body">
+														
+																	<p class="fw_300 color_33">
+															
+																	
+																		<strong>Description:</strong> <tt>Calling free(void* addr) to free memory.</tt><br>
+																		
+																		<strong>Addr:</strong> <tt>0x4072b0</tt><br>
+																		
+																		<strong>Chunk size:</strong> <tt>0x30</tt><br>
+																		
+																		<strong>State&nbsptimestamp:</strong> <tt>143</tt><br>
+																		
+																		<strong>Malloc state bins:</strong> <pre>fastbinsY:<br/>empty<br/>unsortedbin:<br/>empty<br/>smallbins:<br/>empty<br/>largebins:<br/>empty</pre>
+																		
+																		<strong>Tcache bins:</strong> <pre>tcachebins<br/>[0x30][ 1]0x4072b0 -&gt; 0</pre>
+																		
+																	</p>
+																</div>
+															</div>
+														</div>
+														
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	
+															<a data-toggle="collapse" data-parent="#accordion" href="#heapcollapse6">
+														
+																		<p class="fw_300 color_33">
+																			[148] Memory free: free(0x4072e0) (size: 0x40)
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															
+															<div id="heapcollapse6" class="panel-collapse collapse">
+																<div class="panel-body">
+														
+																	<p class="fw_300 color_33">
+															
+																	
+																		<strong>Description:</strong> <tt>Calling free(void* addr) to free memory.</tt><br>
+																		
+																		<strong>Addr:</strong> <tt>0x4072e0</tt><br>
+																		
+																		<strong>Chunk size:</strong> <tt>0x40</tt><br>
+																		
+																		<strong>State&nbsptimestamp:</strong> <tt>148</tt><br>
+																		
+																		<strong>Malloc state bins:</strong> <pre>fastbinsY:<br/>empty<br/>unsortedbin:<br/>empty<br/>smallbins:<br/>empty<br/>largebins:<br/>empty</pre>
+																		
+																		<strong>Tcache bins:</strong> <pre>tcachebins<br/>[0x30][ 1]0x4072b0 -&gt; 0<br/>[0x40][ 1]0x4072e0 -&gt; 0</pre>
+																		
+																	</p>
+																</div>
+															</div>
+														</div>
+														
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	
+															<a data-toggle="collapse" data-parent="#accordion" href="#heapcollapse7">
+														
+																		<p class="fw_300 color_33">
+																			[153] Memory free: free(0x407320) (size: 0x50)
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															
+															<div id="heapcollapse7" class="panel-collapse collapse">
+																<div class="panel-body">
+														
+																	<p class="fw_300 color_33">
+															
+																	
+																		<strong>Description:</strong> <tt>Calling free(void* addr) to free memory.</tt><br>
+																		
+																		<strong>Addr:</strong> <tt>0x407320</tt><br>
+																		
+																		<strong>Chunk size:</strong> <tt>0x50</tt><br>
+																		
+																		<strong>State&nbsptimestamp:</strong> <tt>153</tt><br>
+																		
+																		<strong>Malloc state bins:</strong> <pre>fastbinsY:<br/>empty<br/>unsortedbin:<br/>empty<br/>smallbins:<br/>empty<br/>largebins:<br/>empty</pre>
+																		
+																		<strong>Tcache bins:</strong> <pre>tcachebins<br/>[0x30][ 1]0x4072b0 -&gt; 0<br/>[0x40][ 1]0x4072e0 -&gt; 0<br/>[0x50][ 1]0x407320 -&gt; 0</pre>
+																		
+																	</p>
+																</div>
+															</div>
+														</div>
+														
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	
+															<a data-toggle="collapse" data-parent="#accordion" href="#heapcollapse8">
+														
+																		<p class="fw_300 color_33">
+																			[158] Memory free: free(0x407370) (size: 0x30)
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															
+															<div id="heapcollapse8" class="panel-collapse collapse">
+																<div class="panel-body">
+														
+																	<p class="fw_300 color_33">
+															
+																	
+																		<strong>Description:</strong> <tt>Calling free(void* addr) to free memory.</tt><br>
+																		
+																		<strong>Addr:</strong> <tt>0x407370</tt><br>
+																		
+																		<strong>Chunk size:</strong> <tt>0x30</tt><br>
+																		
+																		<strong>State&nbsptimestamp:</strong> <tt>158</tt><br>
+																		
+																		<strong>Malloc state bins:</strong> <pre>fastbinsY:<br/>empty<br/>unsortedbin:<br/>empty<br/>smallbins:<br/>empty<br/>largebins:<br/>empty</pre>
+																		
+																		<strong>Tcache bins:</strong> <pre>tcachebins<br/>[0x30][ 2]0x407370 -&gt; 0x4072b0 -&gt; 0<br/>[0x40][ 1]0x4072e0 -&gt; 0<br/>[0x50][ 1]0x407320 -&gt; 0</pre>
+																		
+																	</p>
+																</div>
+															</div>
+														</div>
+														
+													</div>
+												</div>
+											</div>
+										</section>
+									</div>
+                                </div>
+                            </div>
+
+						<div class="panel">
+                                <a href="#Leak_analysis" class="collapsed title" data-toggle="collapse" data-parent="#accordion3">Leak Analysis</a>
+                                <div class="collapse panel-collapse" role="tabpanel" id="Leak_analysis">
+                                    <div class="panel-body">
+										<section class="flick_table">
+											<div class="container">
+												<div class="row">
+													
+													
+													<h3 class="fw_300">Leakage Information</h3>
+													<div class="col-sm-11">
+														
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	
+															<a data-toggle="collapse" data-parent="#accordion" href="#leakcollapse0">
+													
+																		<p class="fw_300 color_33">
+																			Not enabled or nothing to report.
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															
+															<div id="leakcollapse0" class="panel-collapse collapse">
+																<div class="panel-body">
+													
+																	<p class="fw_300 color_33">
+																
+																	
+																	</p>
+																</div>
+															</div>
+														</div>
+														
+													</div>
+												</div>
+											</div>
+										</section>
+
+									</div>
+                                </div>
+                            </div>
+
+                        <div class="panel">
+                                <a href="#Call_analysis" class="collapsed title" data-toggle="collapse" data-parent="#accordion3">Call Analysis</a>
+                                <div class="collapse panel-collapse" role="tabpanel" id="Call_analysis">
+                                    <div class="panel-body">
+										<section class="flick_table">
+											<div class="container">
+												<div class="row">
+													
+													
+													<h3 class="fw_300">Call Information</h3>
+													<div class="col-sm-11">
+														
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	
+															<a data-toggle="collapse" data-parent="#accordion" href="#callcollapse0">
+													
+																		<p class="fw_300 color_33">
+																			Not enabled or nothing to report.
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															
+															<div id="callcollapse0" class="panel-collapse collapse">
+																<div class="panel-body">
+													
+																	<p class="fw_300 color_33">
+																	
+																	
+																	</p>
+																</div>
+															</div>
+														</div>
+														
+													</div>
+												</div>
+											</div>
+										</section>
+									</div>
+                                </div>
+                            </div>
+                            <!--/panel-->
+					</div>
+				</div>
+            </div>
+        </section>
+    </div>
+    <!-- =========================================End Accordion section=========================================-->
+
+
+
+    <!-- ======================================= 
+        ==Start scroll top==  
+    =======================================-->
+    <div class="scroll_top not_visible"><i class="fa fa-angle-up"></i></div>
+    <!-- =======================================
+        ==End scroll top==  
+    =======================================-->
+
+    <!-- jQuary library -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/modernizr-2.6.2.min.js"></script>
+
+    <!--bootstrap min js-->
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <!--owl carousel min js-->
+    <script type="text/javascript" src="js/owl.carousel.min.js"></script>
+
+    <!--waypoint js-->
+    <script type="text/javascript" src="js/waypoints.min.js"></script>
+
+    <!--nice select js-->
+    <script type="text/javascript" src="js/jquery.nice-select.min.js"></script>
+
+    <!-- all jQuary activation code here and always it will be bottom of all script tag -->
+    <script type="text/javascript" src="js/main.js"></script>
+
+
+    <script>
+        $(".anchor").on("click", function(event) {
+            var target = $($(this).attr("href"));
+
+            if (target.length) {
+                event.preventDefault();
+                $("html, body").animate({
+                    scrollTop: target.offset().top - 90 + 'px'
+                }, 500);
+            }
+        });
+
+        //----------dropdown menu----------
+        $(".presentation_sidebar>ul>li").on("click", function() {
+            $(this).children(".dropdown").slideToggle();
+            $(this).siblings("li").children(".dropdown").slideUp();
+
+        });
+        $(".presentation_sidebar .dropdown li ").on("click", function(e) {
+            e.stopPropagation();
+        });
+
+        //---------presentation sidebar menu---------
+        $(".presentation_sidebar i.fa-angle-left").on("click", function() {
+            $(".presentation_sidebar").addClass("off");
+            $(this).css("display", "none");
+            $(".presentation_sidebar i.fa-angle-right").css("display", "block");
+
+        });
+        $(".presentation_sidebar i.fa-angle-right").on("click", function() {
+            $(".presentation_sidebar").removeClass("off");
+            $(this).css("display", "none");
+            $(".presentation_sidebar i.fa-angle-left").css("display", "block");
+
+        });
+
+
+    </script>
+
+</body>
+
+</html>

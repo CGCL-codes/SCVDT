@@ -1,0 +1,10 @@
+{"sysno": 41, "rdi": 0x2, "rsi": 0x1, "rdx": 0, "rbp": 0x7ffd32e49430, "rip": 0x7f964984877b}
+{"is_result": True, "sysno": 41, "rax": 0x3, "mem_changes": []}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x55c2bfbe52a0, "rdx": 0x1a, "rbp": 0x55c2bfbe52a0, "rip": 0x7f9649836057}
+{"is_result": True, "sysno": 1, "rax": 0x1a, "mem_changes": [{"addr": 0x55c2bfbe52a0, "size": 26, "content": "TGlzdGVuaW5nIG9uIHBvcnQgNjY2Ni4uLgo="}, ]}
+{"sysno": 43, "rdi": 0x3, "rsi": 0, "rdx": 0, "rbp": 0x7ffd32e49430, "rip": 0x7f96498480a7}
+{"is_result": True, "sysno": 43, "rax": 0x4, "mem_changes": []}
+{"sysno": 45, "rdi": 0x4, "rsi": 0x7ffd32e48420, "rdx": 0x1000, "rbp": 0x7ffd32e49430, "rip": 0x7f96498482e0}
+{"is_result": True, "sysno": 45, "rax": 0xe, "mem_changes": [{"addr": 0x7ffd32e48420, "size": 14, "content": "SGVsbG8sIHdvcmxkIQA="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x55c2bfbe52a0, "rdx": 0xe, "rbp": 0x55c2bfbe52a0, "rip": 0x7f9649836057}
+{"is_result": True, "sysno": 1, "rax": 0xe, "mem_changes": [{"addr": 0x55c2bfbe52a0, "size": 14, "content": "SGVsbG8sIHdvcmxkIQo="}, ]}

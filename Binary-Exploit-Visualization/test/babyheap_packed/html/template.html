@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+<head>
+
+	
+    <meta charset="utf-8">
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1" />
+    <title>Final Report</title>
+    <!--favicon icon-->
+    <link rel="icon" href="images/logo.png">
+    <!--google font-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+    <!-- font awesome css -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- iconmind icon css -->
+    <link rel="stylesheet" href="css/iconmind-line.css">
+    <!--bootstrap min css-->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!--owl carousel min css-->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <!--nice select css-->
+    <link rel="stylesheet" href="css/nice-select.css">
+    <!--Padding margin css-->
+    <link rel="stylesheet" href="css/padding.margin.css">
+    <!-- style css -->
+    <link rel="stylesheet" href="css/asset/shortcode-common.css">
+    <link rel="stylesheet" href="css/asset/typography.css">
+    <link rel="stylesheet" href="css/asset/accordion.css">
+    <link rel="stylesheet" href="css/asset/alert.css">
+    <link rel="stylesheet" href="css/asset/button.css">
+    <link rel="stylesheet" href="css/asset/input.css">
+    <link rel="stylesheet" href="css/asset/c2action.css">
+    <link rel="stylesheet" href="css/asset/testimonial.css">
+    <link rel="stylesheet" href="css/asset/carousel.css">
+    <link rel="stylesheet" href="css/asset/client.css">
+    <link rel="stylesheet" href="css/asset/color.css">
+    <link rel="stylesheet" href="css/asset/faq.css">
+    <link rel="stylesheet" href="css/asset/grid-systerm.css">
+    <link rel="stylesheet" href="css/asset/pricing.css">
+    <link rel="stylesheet" href="css/asset/progressbar.css">
+    <link rel="stylesheet" href="css/asset/table.css">
+    <link rel="stylesheet" href="css/asset/tab.css">
+    <link rel="stylesheet" href="css/asset/team.css">
+    <link rel="stylesheet" href="css/asset/testimonial.css">
+    <link rel="stylesheet" href="css/asset/navbar.css">
+
+    <!--responsive css-->
+    <link rel="stylesheet" href="css/asset/shortcode-responsive.css">
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="spresentation">
+    <!-- =========================================Start header section== =======================================-->
+    <header class="presentation_header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-2">
+                    <a href="#" class="logo"><img src="images/logo.png" alt="logo"></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- =========================================End header section=========================================-->
+
+
+    <!-- =========================================Start Sidebar section== =======================================-->
+    <div class="presentation_sidebar">
+        <div class="toggle_arrow">
+            <i class="fa fa-angle-right"></i>
+            <i class="fa fa-angle-left"></i>
+        </div>
+        <ul>
+            <li><a href="#Information" class="anchor">Information</a></li>
+            <li><a href="#GOT_analysis" class="anchor">GOT Analysis</a></li>
+            <li><a href="#Heap_analysis" class="anchor">Heap Analysis</a></li>
+            <li><a href="#Leak_analysis" class="anchor">Leak Analysis</a></li>
+			<li><a href="#Call_analysis" class="anchor">Call Analysis</a></li>
+			<li><a href="#Shell_analysis" calss="anchor">Shell Analysis</a></li>
+        </ul>
+    </div>
+    <!-- =========================================End Sidebar section=========================================-->
+
+
+    <!-- ========================================Start Accordion section=========================================-->
+    
+    <div id="accordion">
+        <section class="flick_accordion pt_90 pb_70 section_borderr">
+            <div class="container">
+				<div class="col-md-12">
+					<h1 class="fw_700">EXPLOIT ANALYSIS REPORT</h1>
+					<div class="panel-group style2 style3" role="tablist" id="accordion_3">
+						
+						<div class="panel">
+                                <a href="#information" class="collapsed title" data-toggle="collapse" data-parent="#accordion3">
+									Basic Information
+								</a>
+                                <div class="collapse panel-collapse" role="tabpanel" id="information">
+
+									<section id="basicinfo">
+										<div class="container">
+											<div class="row">
+												<div class="col-md-11">
+												<h3 class="fw_300">basic information</h3>
+													<div class="panel-body">
+														<p class="fw_300 color_33"> <strong>checksec:</strong><br><tt>{{checksecinfo}}</tt></p>
+														<p class="fw_300 color_33"> <br> <strong>system info:</strong><br> <tt>{{osinfo}}</tt> </p>
+														<p class="fw_300_color_33"> <br> <strong>memory layout:</strong><br><tt>{{memoryinfo}}</tt></p>
+														<p class="fw_300 color_33"> <br> <strong>report time:</strong><br> <tt>{{reporttime}}</tt> </p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</section>
+
+									<section id="warningpicture">
+										<div class="container">
+											<div class="row">
+												<div class="col-md-11">
+													<h3 class="fw_300">warning timepicture</h3>
+													<div class="panel-body">
+														{% include './timepic.html' %}
+													</div>
+												</div>
+											</div>
+										</div>
+									</section>
+									<section id="tracegraph">
+										<div class="container">
+											<div class="row">
+												<div class="col-md-11">
+													<h3 class="fw_300">trace gragh</h3>
+													<div class="panel panel-default">
+														<div class="panel-heading">
+															<h4 class="panel-title">
+																<a data-toggle="collapse" data-parent="#accordion" href="#tracegraphcollapse">
+																	<p class="fw_300 ">
+																		click for large picture
+																	</p>
+																</a>
+															</h4>
+														</div>
+
+														<div id="tracegraphcollapse" class="panel-collapse collapse">
+															<div class="panel-body">
+																	<a><img src="{{syscallimage}}", style="width:100%;height:auto;"></a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</section>
+                                </div>
+                            </div>
+
+						<div class="panel">
+                                <a href="#GOT_analysis" class="collapsed title" data-toggle="collapse" data-parent="#accordion3">GOT Analysis</a>
+                                <div class="collapse panel-collapse" role="tabpanel" id="GOT_analysis">
+                                    <div class="panel-body">
+										<section class="flick_table">
+											<div class="container">
+												<div class="row">
+													{% macro got_title(index) %}
+															<a data-toggle="collapse" data-parent="#accordion" href="#gotcollapse{{ index }}">
+													{% endmacro %}
+													{% macro got_innercontent(index) %}
+															<div id="gotcollapse{{ index }}" class="panel-collapse collapse">
+																<div class="panel-body">
+													{% endmacro %}
+													<h3 class="fw_300">GOT Change</h3>
+													<div class="col-sm-11">
+											
+														{% for item in gotoutput %}
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	{{ got_title(loop.index0) }}
+																		<p class="fw_300 color_33">
+																			{{ item.message|safe }}
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															{{ got_innercontent(loop.index0) }}
+																	<p class="fw_300 color_33">
+															
+																	{% for key, value in item.items() %}
+																	{%- if key!="message" and key!="type" -%}
+																		<strong>{{ key }}</strong>: <tt>{{ value | safe }}</tt><br>																		{%- endif -%}
+																	{% endfor %}
+																	</p>
+																</div>
+															</div>
+														</div>
+														{% endfor%}
+													</div>
+												</div>
+											</div>
+										</section>
+									</div>
+                                </div>
+                            </div>
+
+						<div class="panel">
+                                <a href="#Heap_analysis" class="collapsed title" data-toggle="collapse" data-parent="#accordion3">Heap Analysis</a>
+                                <div class="collapse panel-collapse" role="tabpanel" id="Heap_analysis">
+                                    <div class="panel-body">
+										<section id="heapgraph">
+											<div class="container">
+												<div class="row">
+													<div class="col-md-11">
+														<h3 class="fw_300">Heap Transfer Gragh</h3>
+														<div class="panel panel-default">
+															<div class="panel-heading">
+																<h4 class="panel-title">
+																	<a data-toggle="collapse" data-parent="#accordion" href="#heapgraphcollapse">
+																		<p class="fw_300 ">
+																			click for large picture
+																		</p>
+																	</a>
+																</h4>
+															</div>
+
+															<div id="heapgraphcollapse" class="panel-collapse collapse">
+																<div class="panel-body">
+																		<a><img src="{{heapimage}}", style="width:100%;height:auto;"></a>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</section>
+														{% macro heap_title(index) %}
+															<a data-toggle="collapse" data-parent="#accordion" href="#heapcollapse{{ index }}">
+														{% endmacro %}
+														{% macro heap_innercontent(index) %}
+															<div id="heapcollapse{{ index }}" class="panel-collapse collapse">
+																<div class="panel-body">
+														{% endmacro %}
+										<section id="heapanalysisoutput">
+											<div class="container">
+												<div class="row">
+													<div class="col-md-11">
+														<h3 class="fw_300">Heap Information</h3>
+														{% for item in heapoutput %}
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	{{ heap_title(loop.index0) }}
+																		<p class="fw_300 color_33">
+																			{{ item.message |safe }}
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															{{ heap_innercontent(loop.index0) }}
+																	<p class="fw_300 color_33">
+															
+																	{% for key, value in item.items() %}
+																		{%- if key!="message" and key!="type" -%}
+																		{% if key=="Malloc state bins" or key=="Tcache bins" %}
+																		<strong>{{ key }}:</strong> <pre>{{ value | safe }}</pre>
+																		{% else %}
+																		<strong>{{ key }}:</strong> <tt>{{ value | safe }}</tt><br>
+																		{% endif %}
+																		{%- endif -%}
+																	{% endfor %}
+																	</p>
+																</div>
+															</div>
+														</div>
+														{% endfor%}
+													</div>
+												</div>
+											</div>
+										</section>
+									</div>
+                                </div>
+                            </div>
+
+						<div class="panel">
+                                <a href="#Leak_analysis" class="collapsed title" data-toggle="collapse" data-parent="#accordion3">Leak Analysis</a>
+                                <div class="collapse panel-collapse" role="tabpanel" id="Leak_analysis">
+                                    <div class="panel-body">
+										<section class="flick_table">
+											<div class="container">
+												<div class="row">
+													{% macro leak_title(index) %}
+															<a data-toggle="collapse" data-parent="#accordion" href="#leakcollapse{{ index }}">
+													{% endmacro %}
+													{% macro leak_innercontent(index) %}
+															<div id="leakcollapse{{ index }}" class="panel-collapse collapse">
+																<div class="panel-body">
+													{% endmacro %}
+													<h3 class="fw_300">Leakage Information</h3>
+													<div class="col-sm-11">
+														{% for item in leakoutput %}
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	{{ leak_title(loop.index0) }}
+																		<p class="fw_300 color_33">
+																			{{ item.message|safe }}
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															{{ leak_innercontent(loop.index0) }}
+																	<p class="fw_300 color_33">
+																
+																	{% for key, value in item.items() %}
+																		{%- if key!="message" and key!="type" -%}
+																		<strong>{{ key }}:</strong> <tt>{{ value | safe }}</tt><br>																		{%- endif -%}																	{% endfor %}
+																	</p>
+																</div>
+															</div>
+														</div>
+														{% endfor%}
+													</div>
+												</div>
+											</div>
+										</section>
+
+									</div>
+                                </div>
+                            </div>
+
+                        <div class="panel">
+                                <a href="#Call_analysis" class="collapsed title" data-toggle="collapse" data-parent="#accordion3">Call Analysis</a>
+                                <div class="collapse panel-collapse" role="tabpanel" id="Call_analysis">
+                                    <div class="panel-body">
+										<section class="flick_table">
+											<div class="container">
+												<div class="row">
+													{% macro call_title(index) %}
+															<a data-toggle="collapse" data-parent="#accordion" href="#callcollapse{{ index }}">
+													{% endmacro %}
+													{% macro call_innercontent(index) %}
+															<div id="callcollapse{{ index }}" class="panel-collapse collapse">
+																<div class="panel-body">
+													{% endmacro %}
+													<h3 class="fw_300">Call Information</h3>
+													<div class="col-sm-11">
+														{% for item in calloutput %}
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	{{ call_title(loop.index0) }}
+																		<p class="fw_300 color_33">
+																			{{ item.message | safe }}
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															{{ call_innercontent(loop.index0) }}
+																	<p class="fw_300 color_33">
+																	
+																	{% for key, value in item.items() %}
+																		{%- if key!="message" and key!="type" -%}
+																		<strong>{{ key }}:</strong> <tt>{{ value | safe }}</tt><br>
+																		{%- endif -%}
+																	{% endfor %}
+																	</p>
+																</div>
+															</div>
+														</div>
+														{% endfor%}
+													</div>
+												</div>
+											</div>
+										</section>
+									</div>
+                                </div>
+                            </div>
+
+							<div class="panel">
+                                <a href="#Shell_analysis" class="collapsed title" data-toggle="collapse" data-parent="#accordion3">Shell Analysis</a>
+                                <div class="collapse panel-collapse" role="tabpanel" id="Shell_analysis">
+                                    <div class="panel-body">
+										<section class="flick_table">
+											<div class="container">
+												<div class="row">
+													{% macro shell_title(index) %}
+															<a data-toggle="collapse" data-parent="#accordion" href="#shellcollapse{{ index }}">
+													{% endmacro %}
+													{% macro shell_innercontent(index) %}
+															<div id="shellcollapse{{ index }}" class="panel-collapse collapse">
+																<div class="panel-body">
+													{% endmacro %}
+													<h3 class="fw_300">Shell Information</h3>
+													<div class="col-sm-11">
+														{% for item in shelloutput %}
+														<div class="panel panel-default">
+        													<div class="panel-heading">
+																<h4 class="panel-title">
+																	{{ shell_title(loop.index0) }}
+																		<p class="fw_300 color_33">
+																			{{ item.message | safe }}
+																		</p>
+																	</a>
+																</h4>
+															</div>
+															{{ shell_innercontent(loop.index0) }}
+																	<p class="fw_300 color_33">
+
+																	{% for key, value in item.items() %}
+																		{%- if key!="message" and key!="type" -%}
+																		<strong>{{ key }}:</strong> <tt>{{ value | safe }}</tt><br>
+																		{%- endif -%}
+																	{% endfor %}
+																	</p>
+																</div>
+															</div>
+														</div>
+														{% endfor%}
+													</div>
+												</div>
+											</div>
+										</section>
+									</div>
+                                </div>
+                            </div>
+                            <!--/panel-->
+					</div>
+				</div>
+            </div>
+        </section>
+    </div>
+    <!-- =========================================End Accordion section=========================================-->
+
+
+
+    <!-- ======================================= 
+        ==Start scroll top==  
+    =======================================-->
+    <div class="scroll_top not_visible"><i class="fa fa-angle-up"></i></div>
+    <!-- =======================================
+        ==End scroll top==  
+    =======================================-->
+
+    <!-- jQuary library -->
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/modernizr-2.6.2.min.js"></script>
+
+    <!--bootstrap min js-->
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <!--owl carousel min js-->
+    <script type="text/javascript" src="js/owl.carousel.min.js"></script>
+
+    <!--waypoint js-->
+    <script type="text/javascript" src="js/waypoints.min.js"></script>
+
+    <!--nice select js-->
+    <script type="text/javascript" src="js/jquery.nice-select.min.js"></script>
+
+    <!-- all jQuary activation code here and always it will be bottom of all script tag -->
+    <script type="text/javascript" src="js/main.js"></script>
+
+
+    <script>
+        $(".anchor").on("click", function(event) {
+            var target = $($(this).attr("href"));
+
+            if (target.length) {
+                event.preventDefault();
+                $("html, body").animate({
+                    scrollTop: target.offset().top - 90 + 'px'
+                }, 500);
+            }
+        });
+
+        //----------dropdown menu----------
+        $(".presentation_sidebar>ul>li").on("click", function() {
+            $(this).children(".dropdown").slideToggle();
+            $(this).siblings("li").children(".dropdown").slideUp();
+
+        });
+        $(".presentation_sidebar .dropdown li ").on("click", function(e) {
+            e.stopPropagation();
+        });
+
+        //---------presentation sidebar menu---------
+        $(".presentation_sidebar i.fa-angle-left").on("click", function() {
+            $(".presentation_sidebar").addClass("off");
+            $(this).css("display", "none");
+            $(".presentation_sidebar i.fa-angle-right").css("display", "block");
+
+        });
+        $(".presentation_sidebar i.fa-angle-right").on("click", function() {
+            $(".presentation_sidebar").removeClass("off");
+            $(this).css("display", "none");
+            $(".presentation_sidebar i.fa-angle-left").css("display", "block");
+
+        });
+
+
+    </script>
+
+</body>
+
+</html>

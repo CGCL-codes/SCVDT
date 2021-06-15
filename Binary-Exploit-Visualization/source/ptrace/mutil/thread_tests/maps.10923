@@ -1,0 +1,23 @@
+got bp: 0x7fffffffdd70
+00400000-00401000 r-xp 00000000 08:01 1971615                            /home/vis/Desktop/upgraded-potato/source/ptrace/mutil/thread_tests/thread
+00601000-00602000 r--p 00001000 08:01 1971615                            /home/vis/Desktop/upgraded-potato/source/ptrace/mutil/thread_tests/thread
+00602000-00603000 rw-p 00002000 08:01 1971615                            /home/vis/Desktop/upgraded-potato/source/ptrace/mutil/thread_tests/thread
+7ffff77f0000-7ffff79b0000 r-xp 00000000 08:01 395049                     /lib/x86_64-linux-gnu/libc-2.23.so
+7ffff79b0000-7ffff7bb0000 ---p 001c0000 08:01 395049                     /lib/x86_64-linux-gnu/libc-2.23.so
+7ffff7bb0000-7ffff7bb4000 r--p 001c0000 08:01 395049                     /lib/x86_64-linux-gnu/libc-2.23.so
+7ffff7bb4000-7ffff7bb6000 rw-p 001c4000 08:01 395049                     /lib/x86_64-linux-gnu/libc-2.23.so
+7ffff7bb6000-7ffff7bba000 rw-p 00000000 00:00 0 
+7ffff7bba000-7ffff7bd2000 r-xp 00000000 08:01 395050                     /lib/x86_64-linux-gnu/libpthread-2.23.so
+7ffff7bd2000-7ffff7dd1000 ---p 00018000 08:01 395050                     /lib/x86_64-linux-gnu/libpthread-2.23.so
+7ffff7dd1000-7ffff7dd2000 r--p 00017000 08:01 395050                     /lib/x86_64-linux-gnu/libpthread-2.23.so
+7ffff7dd2000-7ffff7dd3000 rw-p 00018000 08:01 395050                     /lib/x86_64-linux-gnu/libpthread-2.23.so
+7ffff7dd3000-7ffff7dd7000 rw-p 00000000 00:00 0 
+7ffff7dd7000-7ffff7dfd000 r-xp 00000000 08:01 395060                     /lib/x86_64-linux-gnu/ld-2.23.so
+7ffff7fd6000-7ffff7fd9000 rw-p 00000000 00:00 0 
+7ffff7ff7000-7ffff7ffa000 r--p 00000000 00:00 0                          [vvar]
+7ffff7ffa000-7ffff7ffc000 r-xp 00000000 00:00 0                          [vdso]
+7ffff7ffc000-7ffff7ffd000 r--p 00025000 08:01 395060                     /lib/x86_64-linux-gnu/ld-2.23.so
+7ffff7ffd000-7ffff7ffe000 rw-p 00026000 08:01 395060                     /lib/x86_64-linux-gnu/ld-2.23.so
+7ffff7ffe000-7ffff7fff000 rw-p 00000000 00:00 0 
+7ffffffde000-7ffffffff000 rw-p 00000000 00:00 0                          [stack]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]

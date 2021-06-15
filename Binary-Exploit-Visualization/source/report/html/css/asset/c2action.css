@@ -1,0 +1,246 @@
+/*------------------- 08. start call to action section style ------------------*/
+
+
+/*------------------- 8.1 style-1 ------------------*/
+
+.flick_cta1 .cta_content {
+    padding: 65px 100px;
+}
+
+.flick_cta1 .cta_content h2 {
+    width: 500px;
+}
+
+.flick_cta .cta_content a.purchase {
+    display: block;
+    height: 50px;
+    line-height: 47px;
+    text-align: center;
+    width: 200px;
+    font-size: 16px;
+}
+
+.flick_cta11 .cta_content a.purchase,
+.flick_cta1 .cta_content a.purchase {
+    border: 2px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.flick_cta1 .cta_content a.purchase:hover {
+    background: #fff;
+    color: #0482F8;
+}
+
+
+/*------------------- 8.1 style-1 ------------------*/
+
+
+/*------------------- 8.2 style-2 ------------------*/
+
+.flick_cta2 .cta_content p.small {
+    color: #aaa;
+    font-size: 20px;
+}
+
+.flick_cta2 .cta_content a.purchase {
+    color: #fff;
+    background: #4f4f4f;
+    margin: 0 auto;
+    line-height: 50px;
+}
+
+.flick_cta2 .cta_content a.purchase:hover {
+    background: #0482f8;
+}
+
+.flick_cta2 .cta_content {
+    padding: 76px 40px 80px;
+}
+
+.flick_cta2 .cta_content h2 {
+    margin-bottom: 26px;
+    margin-top: 8px;
+}
+
+
+/*------------------- 8.3 style-3 ------------------*/
+
+.flick_cta3 .cta_content a.purchase {
+    border: 2px solid #0482f8;
+}
+
+
+/*------------------- 8.4 style-4 ------------------*/
+
+.flick_cta4 {
+    background: url(../../images/cta-bg1.jpg) no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+
+.flick_cta4 .overlay {
+    background: rgba(17, 17, 17, 0.8) none repeat scroll 0 0;
+}
+
+.flick_cta4 .cta_content {
+    padding: 86px 40px 90px;
+}
+
+.flick_cta4 .cta_content p.small {
+    font-style: italic;
+}
+
+.flick_cta4 .cta_content h2 {
+    line-height: 43px;
+    margin: 16px auto 39px;
+    width: 500px;
+}
+
+.flick_cta4 .cta_content a.purchase {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 2px solid #fff;
+    line-height: 47px;
+}
+
+.flick_cta4 .cta_content a.purchase:hover {
+    border-color: #0482F8;
+}
+
+
+/*------------------- 8.5 style-5 ------------------*/
+
+.flick_cta11,
+.flick_cta5 {
+    padding: 64px 0 75px;
+}
+
+.flick_cta5 .cta_content h2 {
+    line-height: 45px;
+    margin-bottom: 38px;
+    width: 750px;
+}
+
+.flick_cta5 .cta_content a.purchase {
+    color: #fff;
+    font-size: 16px;
+    line-height: 50px;
+    text-transform: capitalize;
+}
+
+.flick_cta5 .cta_content a.purchase:hover {
+    background: #fff;
+    color: #0482f8;
+}
+
+
+/*------------------- 8.6 style-6 ------------------*/
+
+.flick_cta6 .cta_content h2 {
+    margin: 0 auto 38px;
+}
+
+.flick_cta6 .cta_content a.purchase {
+    margin: 0 auto;
+}
+
+.flick_cta6 .cta_content a.purchase:hover {
+    background: #222;
+    color: #fff;
+}
+
+
+/*------------------- 8.7 style-7 ------------------*/
+
+.flick_cta7 .cta_content .small.color_f5 {
+    font-size: 20px;
+    margin-top: 7px;
+}
+
+
+/*------------------- 8.8 style-8 ------------------*/
+
+.flick_cta8 .cta_content h2 {
+    width: initial;
+}
+
+.flick_cta8 .cta_content a.purchase {
+    margin: 0 auto;
+}
+
+.flick_cta8 .cta_content a.purchase:hover {
+    background: #222;
+    color: #fff;
+}
+
+.flick_cta8 .cta_content .recive_money {
+    color: #222222;
+    display: inline-block;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.flick_cta8 .cta_content .recive_money:hover {
+    color: #222222;
+    text-decoration: underline;
+}
+
+
+/*------------------- 8.9 style-9 ------------------*/
+
+.flick_cta10 .cta_content,
+.flick_cta9 .cta_content {
+    padding: 65px 0;
+}
+
+.flick_cta9 .cta_content p {
+    color: #f5f5f5;
+    font-size: 16px;
+}
+
+.flick_cta9 .cta_content .p2 {
+    font-size: 18px;
+}
+
+
+/*------------------- 8.10 style-10 ------------------*/
+
+.flick_cta10 .cta_content .p1 {
+    font-size: 16px;
+}
+
+.flick_cta10 .cta_content .p2 {
+    font-size: 18px;
+}
+
+.flick_cta10 .cta_content a.purchase {
+    border: medium none;
+    line-height: 50px;
+}
+
+.flick_cta10 .cta_content a.purchase:hover {
+    background: #222;
+    color: #fff;
+}
+
+
+/*------------------- 8.11 style-11 ------------------*/
+
+.flick_cta11 .cta_content>p {
+    color: #ddd;
+    font-size: 16px;
+    padding-bottom: 33px;
+    padding-top: 9px;
+}
+
+.flick_cta11 .cta_content a.purchase {
+    margin: 0 auto;
+}
+
+.flick_cta11 .cta_content a.purchase:hover {
+    background: #fff;
+    color: #0482F8;
+}
+
+
+/*------------------- 08. end call to action section style --------------------*/

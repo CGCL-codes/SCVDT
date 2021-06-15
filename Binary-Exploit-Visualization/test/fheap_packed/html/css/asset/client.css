@@ -1,0 +1,128 @@
+/*------------------- 14. start client section style ------------------*/
+.flick_client {
+    padding-bottom: 70px;
+}
+
+.flick_client.border {
+    border-bottom: 1px solid #eeeeee;
+}
+
+.flick_client .client_wrapper {
+    margin-left: -30px;
+}
+
+.flick_client .single_client {
+    float: left;
+    margin-left: 30px;
+    width: 17.4%;
+    margin-bottom: 30px;
+    border-radius: 5px;
+}
+
+.flick_client.client_style1 .single_client {
+    height: 140px;
+}
+
+.flick_client .single_client .img_area,
+.flick_client.client_style2 .single_client .img_area {
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+
+.flick_client.client_style1 .single_client .img_area:hover {
+    box-shadow: 0 0 10px rgba(17, 17, 17, 0.19);
+}
+
+.flick_client.client_style4 .single_client .img_area:hover,
+.flick_client.client_style3 .single_client .img_area:hover {
+    box-shadow: none;
+}
+
+.flick_client.client_style2 .single_client .img_area {
+    border: 1px solid #eeeeee;
+}
+
+.flick_client.client_style2 .single_client .img_area {
+    height: 140px;
+}
+
+.flick_client.client_style2 .single_client h6 {
+    margin-top: 22px;
+    text-align: center;
+}
+
+.flick_client.client_style2 .single_client span {
+    font-size: 14px;
+    color: #888;
+    display: block;
+    text-align: center;
+    margin-top: 2px;
+}
+
+.flick_client.client_style2 .single_client:hover .img_area {
+    border-color: #0482f8;
+}
+
+.flick_client.client_style2 .single_client h6 a:hover {
+    color: #0482f8;
+}
+
+.flick_client.client_style3 .single_client,
+.flick_client.client_style3 .single_client .img_area {
+    border-radius: 0px;
+}
+
+.flick_client.client_style3 .single_client {
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+.flick_client.client_style3 .client_wrapper {
+    margin-left: 0px;
+}
+
+.flick_client.client_style3 .single_client {
+    border-left: 1px solid #eeeeee;
+    border-top: 1px solid #eeeeee;
+}
+
+.flick_client.client_style3 .single_client:nth-child(1) {
+    border-top: 0;
+    border-left: 0;
+}
+
+.flick_client.client_style3 .single_client:nth-child(2),
+.flick_client.client_style3 .single_client:nth-child(3),
+.flick_client.client_style3 .single_client:nth-child(4),
+.flick_client.client_style3 .single_client:nth-child(5) {
+    border-top: 0;
+}
+
+.flick_client.client_style3 .single_client:nth-child(6) {
+    border-left: 0;
+}
+
+.flick_client.client_style4 .client_wrapper {
+    margin-left: 0;
+}
+
+.flick_client.client_style4 .single_client {
+    margin: 0;
+    border-radius: 0;
+    width: 20%;
+}
+
+.flick_client.client_style4 .single_client .img_area {
+    border-radius: 0;
+}
+
+.flick_client.client_style4 .single_client .img_area:hover,
+.flick_client.client_style3 .single_client .img_area:hover {
+    transform: scale(1.1);
+}
+/*------------------- 14. end client section style --------------------*/

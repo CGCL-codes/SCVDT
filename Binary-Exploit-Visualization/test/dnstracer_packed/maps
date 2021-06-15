@@ -1,0 +1,20 @@
+got bp: 0x7fffffffd970
+00400000-00406000 r-xp 00000000 08:01 458968                             ./dnstracer
+00605000-00606000 r-xp 00005000 08:01 458968                             ./dnstracer
+00606000-00607000 rwxp 00006000 08:01 458968                             ./dnstracer
+00607000-00609000 rwxp 00000000 00:00 0                                  [heap]
+7ffff7a0d000-7ffff7bcd000 r-xp 00000000 08:01 1057478                    ./libc-2.23.so
+7ffff7bcd000-7ffff7dcd000 ---p 001c0000 08:01 1057478                    ./libc-2.23.so
+7ffff7dcd000-7ffff7dd1000 r-xp 001c0000 08:01 1057478                    ./libc-2.23.so
+7ffff7dd1000-7ffff7dd3000 rwxp 001c4000 08:01 1057478                    ./libc-2.23.so
+7ffff7dd3000-7ffff7dd7000 rwxp 00000000 00:00 0 
+7ffff7dd7000-7ffff7dfd000 r-xp 00000000 08:01 1057500                    ./ld-2.23.so
+7ffff7fdb000-7ffff7fde000 rwxp 00000000 00:00 0 
+7ffff7ff7000-7ffff7ffa000 r--p 00000000 00:00 0                          [vvar]
+7ffff7ffa000-7ffff7ffc000 r-xp 00000000 00:00 0                          [vdso]
+7ffff7ffc000-7ffff7ffd000 r-xp 00025000 08:01 1057500                    ./ld-2.23.so
+7ffff7ffd000-7ffff7ffe000 rwxp 00026000 08:01 1057500                    ./ld-2.23.so
+7ffff7ffe000-7ffff7fff000 rwxp 00000000 00:00 0 
+7ffffffdd000-7ffffffff000 rwxp 00000000 00:00 0                          [stack]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+

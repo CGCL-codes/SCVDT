@@ -1,0 +1,1222 @@
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x6, "r8": 0x400c30, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x6, "r8": 0x400c30, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x6, "r8": 0x400c30, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x6, "r8": 0x400c30, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x6, "r8": 0x400c30, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x6, "r8": 0x400c30, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 12, "rdi": 0, "rsi": 0xfff, "rdx": 0x7ffff7dd4b98, "r10": 0x7ffff7dd4b78, "r8": 0x3, "rbp": 0x21000, "rip": 0x7ffff7b1b5b9}
+{"is_result": True, "sysno": 12, "rax": 0x603000, "mem_changes": []}
+{"sysno": 12, "rdi": 0x624000, "rsi": 0xfff, "rdx": 0x603000, "r10": 0x7ffff7dd4b78, "r8": 0x3, "rbp": 0x21000, "rip": 0x7ffff7b1b5b9}
+{"is_result": True, "sysno": 12, "rax": 0x624000, "mem_changes": []}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7dd4b78, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603010, "rdx": 0x10, "r10": 0x7ffff7dd4b78, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603010, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7dd4b78, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7dd4b78, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7dd4b78, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7dd4b78, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7dd4b78, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7dd4b78, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7dd4b78, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603030, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x10, "mem_changes": [{"addr": 0x603030, "size": 16, "content": "AAAAAAAAAAAhAAAAAAAAAA=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffed20, "size": 1, "content": "Cg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c68, "rdx": 0xf, "r10": 0x7ffff7b89f40, "r8": 0x7ffff7dd5420, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0xf, "mem_changes": [{"addr": 0x400c68, "size": 15, "content": "SW52YWxpZCBpbnB1dC4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7ffff7dd5420, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7ffff7dd5420, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7ffff7dd5420, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x7ffff7dd5420, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7ffff7dd5420, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7ffff7dd5420, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603050, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603050, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603070, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603070, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603090, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603090, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6030b0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6030b0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6030d0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6030d0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6030f0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6030f0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603110, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603110, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603130, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603130, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603150, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603150, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603170, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603170, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603190, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603190, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6031b0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6031b0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6031d0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6031d0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6031f0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6031f0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603210, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603210, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603230, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603230, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603250, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603250, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603270, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603270, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603290, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603290, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6032b0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6032b0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6032d0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6032d0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6032f0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6032f0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603310, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603310, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603330, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603330, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603350, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603350, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603370, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603370, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603390, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603390, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6033b0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6033b0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6033d0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6033d0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6033f0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6033f0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603410, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603410, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603430, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603430, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603450, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603450, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603470, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603470, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603490, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603490, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6034b0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6034b0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6034d0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6034d0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6034f0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6034f0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603510, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603510, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603530, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603530, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603550, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603550, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603570, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603570, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603590, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603590, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6035b0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6035b0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6035d0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6035d0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6035f0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6035f0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603610, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603610, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x3, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "Mwo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400ca8, "rdx": 0x4, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x4, "mem_changes": [{"addr": 0x400ca8, "size": 4, "content": "aWQ6IA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc0, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc0, "size": 1, "content": "NA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc1, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc1, "size": 1, "content": "Nw=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc2, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc2, "size": 1, "content": "Cg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400cc2, "rdx": 0x14, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x14, "mem_changes": [{"addr": 0x400cc2, "size": 20, "content": "ZGVsZXRlIHN1Y2Nlc3NmdWxseQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "Mwo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400ca8, "rdx": 0x4, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x4, "mem_changes": [{"addr": 0x400ca8, "size": 4, "content": "aWQ6IA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc0, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc0, "size": 1, "content": "MA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc1, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc1, "size": 1, "content": "Cg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400cc2, "rdx": 0x14, "r10": 0x7ffff7b89f40, "r8": 0x603010, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x14, "mem_changes": [{"addr": 0x400cc2, "size": 20, "content": "ZGVsZXRlIHN1Y2Nlc3NmdWxseQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x603010, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x603010, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x603010, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x603010, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x603010, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x603010, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "Mwo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400ca8, "rdx": 0x4, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x4, "mem_changes": [{"addr": 0x400ca8, "size": 4, "content": "aWQ6IA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc0, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc0, "size": 1, "content": "NA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc1, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc1, "size": 1, "content": "Ng=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc2, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc2, "size": 1, "content": "Cg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400cc2, "rdx": 0x14, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x14, "mem_changes": [{"addr": 0x400cc2, "size": 20, "content": "ZGVsZXRlIHN1Y2Nlc3NmdWxseQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x6035f0, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "Mwo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400ca8, "rdx": 0x4, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x4, "mem_changes": [{"addr": 0x400ca8, "size": 4, "content": "aWQ6IA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc0, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc0, "size": 1, "content": "NA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc1, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc1, "size": 1, "content": "Mg=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc2, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc2, "size": 1, "content": "OQ=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc3, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc3, "size": 1, "content": "NA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc4, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc4, "size": 1, "content": "OQ=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc5, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc5, "size": 1, "content": "Ng=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc6, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc6, "size": 1, "content": "Nw=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc7, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc7, "size": 1, "content": "Mg=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc8, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc8, "size": 1, "content": "OQ=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc9, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc9, "size": 1, "content": "Mw=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400cc2, "rdx": 0x14, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x14, "mem_changes": [{"addr": 0x400cc2, "size": 20, "content": "ZGVsZXRlIHN1Y2Nlc3NmdWxseQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "Mwo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400ca8, "rdx": 0x4, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x4, "mem_changes": [{"addr": 0x400ca8, "size": 4, "content": "aWQ6IA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc0, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc0, "size": 1, "content": "NA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc1, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc1, "size": 1, "content": "Mg=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc2, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc2, "size": 1, "content": "OQ=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc3, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc3, "size": 1, "content": "NA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc4, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc4, "size": 1, "content": "OQ=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc5, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc5, "size": 1, "content": "Ng=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc6, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc6, "size": 1, "content": "Nw=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc7, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc7, "size": 1, "content": "Mg=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc8, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc8, "size": 1, "content": "OQ=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc9, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc9, "size": 1, "content": "Mw=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400cc2, "rdx": 0x14, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x14, "mem_changes": [{"addr": 0x400cc2, "size": 20, "content": "ZGVsZXRlIHN1Y2Nlc3NmdWxseQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "Mwo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400ca8, "rdx": 0x4, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x4, "mem_changes": [{"addr": 0x400ca8, "size": 4, "content": "aWQ6IA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc0, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc0, "size": 1, "content": "NA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc1, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc1, "size": 1, "content": "Mg=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc2, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc2, "size": 1, "content": "OQ=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc3, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc3, "size": 1, "content": "NA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc4, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc4, "size": 1, "content": "OQ=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc5, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc5, "size": 1, "content": "Ng=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc6, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc6, "size": 1, "content": "Nw=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc7, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc7, "size": 1, "content": "Mg=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc8, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc8, "size": 1, "content": "OQ=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc9, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc9, "size": 1, "content": "Mw=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400cc2, "rdx": 0x14, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x14, "mem_changes": [{"addr": 0x400cc2, "size": 20, "content": "ZGVsZXRlIHN1Y2Nlc3NmdWxseQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6035f0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x9, "mem_changes": [{"addr": 0x6035f0, "size": 9, "content": "eCBgAAAAAAAK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603010, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x603010, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x6035f0, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0xc, "mem_changes": [{"addr": 0x6035f0, "size": 12, "content": "SInnMfZqO1iZDwUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x602088, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x8, "mem_changes": [{"addr": 0x602088, "size": 8, "content": "7////wAAAAA="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c92, "rdx": 0x15, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x15, "mem_changes": [{"addr": 0x400c92, "size": 21, "content": "Y3JlYXRlIHN1Y2Nlc3NmdWxseS4K"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "Mwo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400ca8, "rdx": 0x4, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x4, "mem_changes": [{"addr": 0x400ca8, "size": 4, "content": "aWQ6IA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc0, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc0, "size": 1, "content": "NA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc1, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc1, "size": 1, "content": "Mg=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc2, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc2, "size": 1, "content": "OQ=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc3, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc3, "size": 1, "content": "NA=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc4, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc4, "size": 1, "content": "OQ=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc5, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc5, "size": 1, "content": "Ng=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc6, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc6, "size": 1, "content": "Nw=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc7, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc7, "size": 1, "content": "Mg=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc8, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc8, "size": 1, "content": "OQ=="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffecc9, "rdx": 0x1, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffece0, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x1, "mem_changes": [{"addr": 0x7fffffffecc9, "size": 1, "content": "MQ=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400cc2, "rdx": 0x14, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x14, "mem_changes": [{"addr": 0x400cc2, "size": 20, "content": "ZGVsZXRlIHN1Y2Nlc3NmdWxseQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c44, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c44, "size": 9, "content": "MS5jcmVhdGUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c4e, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c4e, "size": 7, "content": "Mi5yZWFkCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c56, "rdx": 0x7, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x7, "mem_changes": [{"addr": 0x400c56, "size": 7, "content": "My5mcmVlCg=="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c5e, "rdx": 0x6, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x6, "mem_changes": [{"addr": 0x400c5e, "size": 6, "content": "NC5ieWUK"}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c65, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x2, "mem_changes": [{"addr": 0x400c65, "size": 2, "content": "PiA="}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x7fffffffed20, "rdx": 0x2, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed30, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x2, "mem_changes": [{"addr": 0x7fffffffed20, "size": 2, "content": "MQo="}, ]}
+{"sysno": 1, "rdi": 0x1, "rsi": 0x400c88, "rdx": 0x9, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16160}
+{"is_result": True, "sysno": 1, "rax": 0x9, "mem_changes": [{"addr": 0x400c88, "size": 9, "content": "Y29udGVudDog"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x603040, "rdx": 0x10, "r10": 0x7ffff7b89f40, "r8": 0x7fffffffed21, "rbp": 0x7fffffffed00, "rip": 0x7ffff7b16100}
+{"is_result": True, "sysno": 0, "rax": 0x10, "mem_changes": [{"addr": 0x603040, "size": 16, "content": "amhIuC9iaW4vLy9zUOshCg=="}, ]}
+{"sysno": 12, "rdi": 0, "rsi": 0x555555559cd0, "rdx": 0, "r10": 0x1000, "r8": 0x7fffffffee80, "rbp": 0x7ffff7fd15e0, "rip": 0x7ffff7fecf3b}
+{"is_result": True, "sysno": 12, "rax": 0x555555577000, "mem_changes": []}
+{"sysno": 9, "rdi": 0, "rsi": 0x1f3b5, "rdx": 0x1, "r10": 0x2, "r8": 0x3, "rbp": 0, "rip": 0x7ffff7fee176}
+{"is_result": True, "sysno": 9, "rax": 0x7ffff7fab000, "mem_changes": []}
+{"sysno": 0, "rdi": 0x3, "rsi": 0x7fffffffe148, "rdx": 0x340, "r10": 0, "r8": 0x80000, "rbp": 0x7fffffffe0d0, "rip": 0x7ffff7fee018}
+{"is_result": True, "sysno": 0, "rax": 0x340, "mem_changes": [{"addr": 0x7fffffffe148, "size": 832, "content": "f0VMRgIBAQMAAAAAAAAAAAMAPgABAAAA8HECAAAAAABAAAAAAAAAAGjlHgAAAAAAAAAAAEAAOAAOAEAARQBEAAYAAAAEAAAAQAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAEAMAAAAAAAAQAwAAAAAAAAgAAAAAAAAAAwAAAAQAAACgFhwAAAAAAKAWHAAAAAAAoBYcAAAAAAAcAAAAAAAAABwAAAAAAAAAEAAAAAAAAAABAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBJAgAAAAAAQEkCAAAAAAAAEAAAAAAAAAEAAAAFAAAAAFACAAAAAAAAUAIAAAAAAABQAgAAAAAAtHUXAAAAAAC0dRcAAAAAAAAQAAAAAAAAAQAAAAQAAAAA0BkAAAAAAADQGQAAAAAAANAZAAAAAABlnQQAAAAAAGWdBAAAAAAAABAAAAAAAAABAAAABgAAAAB2HgAAAAAAAIYeAAAAAAAAhh4AAAAAABBQAAAAAAAA2I4AAAAAAAAAEAAAAAAAAAIAAAAGAAAAgJseAAAAAACAqx4AAAAAAICrHgAAAAAA4AEAAAAAAADgAQAAAAAAAAgAAAAAAAAABAAAAAQAAABQAwAAAAAAAFADAAAAAAAAUAMAAAAAAAAgAAAAAAAAACAAAAAAAAAACAAAAAAAAAAEAAAABAAAAHADAAAAAAAAcAMAAAAAAABwAwAAAAAAAEQAAAAAAAAARAAAAAAAAAAEAAAAAAAAAAcAAAAEAAAAAHYeAAAAAAAAhh4AAAAAAACGHgAAAAAAEAAAAAAAAACQAAAAAAAAAAgAAAAAAAAAU+V0ZAQAAABQAwAAAAAAAFADAAAAAAAAUAMAAAAAAAAgAAAAAAAAACAAAAAAAAAACAAAAAAAAABQ5XRkBAAAALwWHAAAAAAAvBYcAAAAAAC8FhwAAAAAAMReAAAAAAAAxF4AAAAAAAAEAAAAAAAAAFHldGQGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAUuV0ZAQAAAAAdh4AAAAAAACGHgAAAAAAAIYeAAAAAAAAKgAAAAAAAA=="}, ]}
+{"sysno": 9, "rdi": 0, "rsi": 0x2000, "rdx": 0x3, "r10": 0x22, "r8": 0xffffffff, "rbp": 0, "rip": 0x7ffff7fee176}
+{"is_result": True, "sysno": 9, "rax": 0x7ffff7fa9000, "mem_changes": []}
+{"sysno": 9, "rdi": 0, "rsi": 0x1f14d8, "rdx": 0x1, "r10": 0x802, "r8": 0x3, "rbp": 0, "rip": 0x7ffff7fee176}
+{"is_result": True, "sysno": 9, "rax": 0x7ffff7db7000, "mem_changes": []}
+{"sysno": 9, "rdi": 0x7ffff7ddc000, "rsi": 0x178000, "rdx": 0x5, "r10": 0x812, "r8": 0x3, "rbp": 0x7ffff7ddc000, "rip": 0x7ffff7fee176}
+{"is_result": True, "sysno": 9, "rax": 0x7ffff7ddc000, "mem_changes": []}
+{"sysno": 9, "rdi": 0x7ffff7f54000, "rsi": 0x4a000, "rdx": 0x1, "r10": 0x812, "r8": 0x3, "rbp": 0x7ffff7f54000, "rip": 0x7ffff7fee176}
+{"is_result": True, "sysno": 9, "rax": 0x7ffff7f54000, "mem_changes": []}
+{"sysno": 9, "rdi": 0x7ffff7f9f000, "rsi": 0x6000, "rdx": 0x3, "r10": 0x812, "r8": 0x3, "rbp": 0x7ffff7f9f000, "rip": 0x7ffff7fee176}
+{"is_result": True, "sysno": 9, "rax": 0x7ffff7f9f000, "mem_changes": []}
+{"sysno": 9, "rdi": 0x7ffff7fa5000, "rsi": 0x34d8, "rdx": 0x3, "r10": 0x32, "r8": 0xffffffff, "rbp": 0x7ffff7fa5000, "rip": 0x7ffff7fee176}
+{"is_result": True, "sysno": 9, "rax": 0x7ffff7fa5000, "mem_changes": []}
+{"sysno": 12, "rdi": 0, "rsi": 0x21000, "rdx": 0x2b0, "r10": 0x7ffff7fa2be0, "r8": 0x7ffff7fa2be0, "rbp": 0x7ffff7fa6300, "rip": 0x7ffff7ece3eb}
+{"is_result": True, "sysno": 12, "rax": 0x555555577000, "mem_changes": []}
+{"sysno": 12, "rdi": 0x555555598000, "rsi": 0x21000, "rdx": 0x7ffff7fa6300, "r10": 0x7ffff7fa2be0, "r8": 0x7ffff7fa2be0, "rbp": 0x7ffff7fa6300, "rip": 0x7ffff7ece3eb}
+{"is_result": True, "sysno": 12, "rax": 0x555555598000, "mem_changes": []}
+{"sysno": 16, "rdi": 0, "rsi": 0x5401, "rdx": 0x7fffffffeba0, "r10": 0x7ffff7dd10b9, "r8": 0x7fffffffebe0, "rbp": 0x555555576cf2, "rip": 0x7ffff7ecdb7a}
+{"is_result": True, "sysno": 16, "rax": 0xffffffffffffffe7, "mem_changes": [{"addr": 0x7fffffffeba0, "size": 60, "content": "6Nn/9/9/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUpr4yN/4HGOL89/9/AADgnOz3"}, ]}
+{"sysno": 0, "rdi": 0, "rsi": 0x555555574aa0, "rdx": 0x2000, "r10": 0x8, "r8": 0x555555576ac8, "rbp": 0, "rip": 0x7ffff7ec8142}
+{"is_result": True, "sysno": 0, "rax": 0, "mem_changes": [{"addr": 0x555555574aa0, "size": 0, "content": ""}, ]}

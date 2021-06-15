@@ -1,0 +1,82 @@
+/*------------------- 21. start FAQ section style ------------------*/
+.faq_section .search_area {
+    margin: 0 auto 55px;
+    max-width: 500px;
+}
+
+.faq_section .search_area input {
+    border: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+    color: #888;
+    font-size: 14px;
+    height: 45px;
+    padding: 5px 20px;
+    width: 90%;
+    border-right: none;
+    float: left;
+}
+
+.faq_section .search_area button {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 1px solid #ddd;
+    border-radius: 0 5px 5px 0;
+    float: right;
+    height: 45px;
+    color: #222;
+    width: 10%;
+    border-left: none;
+}
+
+.faq_section .search_area button:hover {
+    color: #2075F4;
+}
+
+.faq_section .faq_tab_menu .nav {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-top: 23px;
+}
+
+.faq_section .faq_tab_menu .nav>li>a {
+    border-bottom: 1px solid #ddd;
+    color: #888888;
+    display: block;
+    font-size: 16px;
+    padding: 18px 15px;
+    position: relative;
+}
+
+.faq_section .faq_tab_menu .nav>li:last-child>a {
+    border-bottom: none;
+}
+
+.faq_section .faq_tab_menu .nav>li.active>a,
+.faq_section .faq_tab_menu .nav>li>a:focus,
+.faq_section .faq_tab_menu .nav>li>a:hover {
+    background-color: #2075F4;
+    color: #fff;
+    text-decoration: none;
+}
+
+.faq_section .faq_tab_content {
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.17);
+    margin-left: 20px;
+    margin-top: 53px;
+}
+
+.faq_section .faq_tab_content .tab-pane h4 {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 30px;
+}
+
+.faq_section .faq_tab_content .tab_text {
+    padding: 21px 30px 30px;
+}
+
+.faq_section .faq_tab_content .tab_text>p {
+    color: #888888;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 28px;
+}
+/*------------------- 21. end FAQ section style --------------------*/

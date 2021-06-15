@@ -1,0 +1,20 @@
+got bp: 0x7fffffffee10
+003ff000-00400000 rwxp 00000000 08:19 1194771                            ./fast
+00400000-00401000 r-xp 00001000 08:19 1194771                            ./fast
+00601000-00602000 r-xp 00002000 08:19 1194771                            ./fast
+00602000-00603000 rwxp 00003000 08:19 1194771                            ./fast
+7ffff7a3b000-7ffff7bd1000 r-xp 00000000 08:14 1860334                    ./libc-2.23.so
+7ffff7bd1000-7ffff7dd0000 ---p 00196000 08:14 1860334                    ./libc-2.23.so
+7ffff7dd0000-7ffff7dd4000 r-xp 00195000 08:14 1860334                    ./libc-2.23.so
+7ffff7dd4000-7ffff7dd6000 rwxp 00199000 08:14 1860334                    ./libc-2.23.so
+7ffff7dd6000-7ffff7dda000 rwxp 00000000 00:00 0 
+7ffff7dda000-7ffff7dfd000 r-xp 00000000 08:14 1861622                    ./ld-2.23.so
+7ffff7ff4000-7ffff7ff8000 rwxp 00000000 00:00 0 
+7ffff7ff8000-7ffff7ffb000 r--p 00000000 00:00 0                          [vvar]
+7ffff7ffb000-7ffff7ffc000 r-xp 00000000 00:00 0                          [vdso]
+7ffff7ffc000-7ffff7ffd000 r-xp 00022000 08:14 1861622                    ./ld-2.23.so
+7ffff7ffd000-7ffff7ffe000 rwxp 00023000 08:14 1861622                    ./ld-2.23.so
+7ffff7ffe000-7ffff7fff000 rwxp 00000000 00:00 0 
+7ffffffde000-7ffffffff000 rwxp 00000000 00:00 0                          [stack]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]
+

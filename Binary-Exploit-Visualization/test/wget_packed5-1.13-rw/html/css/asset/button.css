@@ -1,0 +1,165 @@
+/*------------------- 09. start button style ------------------*/
+
+
+/*--------9.1 button style-1-----------*/
+
+.flick_button_style .buttons>li {
+    display: inline-block;
+    list-style: outside none none;
+    vertical-align: middle;
+    margin-right: 30px;
+    margin-bottom: 40px;
+}
+
+.flick_button_style .buttons>li:nth-child(3) {
+    margin-right: 0px;
+}
+
+.flick_button_style .buttons button {
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.flick_button_style.style1 .buttons button {
+    border: medium none;
+}
+
+.flick_button_style .buttons .button1 {
+    height: 65px;
+    width: 240px;
+    padding-top: 4px;
+}
+
+.flick_button_style .buttons .button1:hover {
+    background: #4f75fd;
+}
+
+.flick_button_style .buttons .button2 {
+    height: 65px;
+    padding-top: 4px;
+    width: 220px;
+}
+
+.flick_button_style .buttons .button2:hover {
+    background: #0070d1;
+}
+
+.flick_button_style .buttons .button3 {
+    height: 50px;
+    padding-top: 3px;
+    width: 140px;
+}
+
+.flick_button_style .buttons .button3:hover {
+    background: #11437c;
+}
+
+.flick_button_style .buttons .button4 {
+    height: 55px;
+    padding-top: 4px;
+    width: 195px;
+}
+
+.flick_button_style .buttons .button4:hover {
+    background: #79b407;
+}
+
+.flick_button_style .buttons .button5 {
+    height: 55px;
+    padding-top: 3px;
+    width: 170px;
+}
+
+.flick_button_style .buttons .button5:hover {
+    background: #e6ac28;
+}
+
+.flick_button_style .buttons .button6 {
+    height: 45px;
+    padding-top: 2px;
+    width: 170px;
+}
+
+.flick_button_style .buttons .button6:hover {
+    background: #424242;
+}
+
+.flick_button_style .buttons_code_wrapper {
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    padding: 60px 30px;
+}
+
+.flick_button_style .buttons_code_wrapper p {
+    font-size: 14px;
+    margin-top: 9px;
+}
+
+
+/*------------style-2----------*/
+
+.flick_button_style.style2 .buttons button {
+    color: #222;
+    background: none;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.flick_button_style.style2 .buttons .button1:hover {
+    color: #fff;
+    background: #365cff;
+}
+
+.flick_button_style.style2 .buttons .button2:hover {
+    color: #fff;
+    background: #0482f8;
+}
+
+.flick_button_style.style2 .buttons .button3:hover {
+    color: #fff;
+    background: #31639c;
+}
+
+.flick_button_style.style2 .buttons .button4:hover {
+    color: #fff;
+    background: #91cc00;
+}
+
+.flick_button_style.style2 .buttons .button5:hover {
+    color: #fff;
+    background: #f9bf3b;
+}
+
+.flick_button_style.style2 .buttons .button6:hover {
+    color: #fff;
+    background: #17171b;
+}
+
+
+/*------dark bg-------*/
+
+.flick_button_style.dark_bg {
+    background: #17171b none repeat scroll 0 0;
+}
+
+.flick_button_style.style2.dark_bg .buttons button {
+    color: #fff;
+}
+
+.flick_button_style.style1.dark_bg .buttons .button6 {
+    color: #222;
+}
+
+.flick_button_style.style1.dark_bg .buttons .button6:hover {
+    color: #0482F8;
+    background: #fff;
+}
+
+.flick_button_style.style2.dark_bg .buttons .button6:hover {
+    color: #222;
+    background: #fff;
+}
+
+
+/*------------------- 09. end button style --------------------*/
