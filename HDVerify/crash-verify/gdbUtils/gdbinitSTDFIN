@@ -1,0 +1,3 @@
+run < /root/aflgo-fuzz/build/out/255/fuzzer_dir/crashes/id:000004,14317,sig:06,src:000009,op:int8,pos:3,val:+0
+backtrace
+quit

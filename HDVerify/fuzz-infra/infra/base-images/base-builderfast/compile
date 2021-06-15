@@ -1,0 +1,237 @@
+#!/bin/bash -eu
+# Copyright 2016 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+################################################################################
+
+echo "---------------------------------------------------------------"
+
+is_git=0
+is_svn=0
+pwd
+export SUBJECT=$PWD
+echo "subject:  $SUBJECT -----------------------"
+
+#if ! [ -z "$COMMIT" ]; then
+#
+#  pushd $SRC/$PROJECT >/dev/null
+#
+#  if [ -d .git ]; then
+#
+#    if [[ "$COMMIT" != master ]] || [[ "$FUZZING_ENGINE" == aflgo ]]; then
+#      echo "Checking out git history of $PROJECT .."
+#      if [ -f $(git rev-parse --git-dir)/shallow ]; then
+#        git pull --unshallow
+#      fi
+#      git checkout $COMMIT
+#    fi
+#    is_git=1
+#
+#  elif svn info .; then
+#
+#    if [[ "$COMMIT" == master ]]; then
+#      COMMIT=$(svnversion)
+#    else
+#      svn update --revision $COMMIT
+#    fi
+#
+#    cat << EOF > $SRC/diff.sh
+##!/bin/bash
+#git diff --no-index \$6 \$7 | sed -e "s~\$6~/\$(echo \$3 | cut -d" " -f1)~g"  -e "s~\$7~/\$(echo \$5 | cut -d" " -f1)~g"
+#EOF
+#    chmod +x $SRC/diff.sh
+#    is_svn=1
+#  else
+#    echo "[!] Don't know how to check out revision $COMMIT."
+#    exit 1
+#  fi
+#
+#  popd >/dev/null
+#fi
+
+if [ -z "${SANITIZER_FLAGS-}" ]; then
+  FLAGS_VAR="SANITIZER_FLAGS_${SANITIZER}"
+  export SANITIZER_FLAGS=${!FLAGS_VAR-}
+fi
+
+# compile script might override environment, use . to call it.
+#. compile_${FUZZING_ENGINE}
+
+if [[ $SANITIZER_FLAGS = *sanitize=memory* ]]
+then
+  # Take all libraries from lib/msan
+  # export CXXFLAGS_EXTRA="-L/usr/msan/lib $CXXFLAGS_EXTRA"
+  cp -R /usr/msan/lib/* /usr/lib/
+fi
+
+# Coverage flag overrides.
+COVERAGE_FLAGS_VAR="COVERAGE_FLAGS_$SANITIZER"
+if [[ -n ${!COVERAGE_FLAGS_VAR-} ]]
+then
+  export COVERAGE_FLAGS="${!COVERAGE_FLAGS_VAR}"
+fi
+
+#export CFLAGS="$CFLAGS $SANITIZER_FLAGS $COVERAGE_FLAGS"
+#export CXXFLAGS="$CFLAGS $CXXFLAGS_EXTRA"
+export CFLAGS="$CFLAGS "
+export CXXFLAGS="$CFLAGS "
+
+# Skip AFLGO preprocessing if fuzzing engine is afl
+if ! [[ "$FUZZING_ENGINE" == aflgo ]]; then
+  DO_POSTPROCESS=0
+  export CC=$SRC/afl/afl-clang-fast
+  export CXX=$SRC/afl/afl-clang-fast++
+
+# Do AFLGO preprocessing
+else
+  export CC=$SRC/aflgo/afl-clang-fast
+  export CXX=$SRC/aflgo/afl-clang-fast++
+
+
+  # Skip AFLGO preprocessing if distance.cfg.txt exists already
+  if [ -f $OUT/distance.cfg.txt ]; then
+    DO_POSTPROCESS=0
+
+    export CFLAGS="$CFLAGS -distance=$OUT/distance.cfg.txt"
+    export CXXFLAGS="$CXXFLAGS -distance=$OUT/distance.cfg.txt"
+  else
+
+    DO_POSTPROCESS=1
+
+    TMP_DIR=$WORK/tmp
+#    i=0
+#    while [ -d $TMP_DIR ]; do
+#      TMP_DIR=$WORK/tmp.$i
+#      i=$((i + 1))
+#    done
+    mkdir -p $TMP_DIR
+
+    COPY_CFLAGS=$CFLAGS
+    COPY_CXXFLAGS=$CXXFLAGS
+
+    ADDITIONAL="-targets=$TMP_DIR/BBtargets.txt -outdir=$TMP_DIR -flto -fuse-ld=gold -Wl,-plugin-opt=save-temps"
+
+    export CFLAGS="$CFLAGS $ADDITIONAL"
+    export CXXFLAGS="$CXXFLAGS $ADDITIONAL"
+
+#    chmod +x $SRC/showlinenum.awk
+#
+#    pushd $SRC/$PROJECT > /dev/null
+#
+#    sleep 0.5 #Workaround for "Text file busy"
+#    if [ $is_git -eq 1 ]; then
+#      git diff -U0 HEAD^ HEAD > $SRC/commit.diff
+#    else
+#      svn diff -r PREV:$COMMIT --diff-cmd=$SRC/diff.sh | grep -v -e "^=========================.*$" -e "^Index: .*$" > $SRC/commit.diff
+#    fi
+#    cat $SRC/commit.diff |  $SRC/showlinenum.awk show_header=0 path=1 | grep -e "\.[ch]:[0-9]*:+" -e "\.cpp:[0-9]*:+" -e "\.cc:[0-9]*:+" | cut -d+ -f1 | rev | cut -c2- | rev > $TMP_DIR/BBtargets.txt
+#    cat $TMP_DIR/BBtargets.txt
+#    popd > /dev/null
+     cat $SRC/BBtargets.txt >  $TMP_DIR/BBtargets.txt
+     echo -e "BBtargets's content is as follow\n"
+     cat $TMP_DIR/BBtargets.txt
+
+#    if [ $(cat $TMP_DIR/BBtargets.txt | wc -l) -eq 0 ]; then
+#      echo    "############################################################################"
+#      echo -e "# \e[1;31mAborting ..\e[0m -- No changed source <files> in commit of $PROJECT."
+#      echo    "############################################################################"
+#      rm -rf $TMP_DIR
+#      exit 1
+#    fi
+  fi
+fi
+
+echo "CC=$CC"
+echo "CXX=$CXX"
+echo "CFLAGS=$CFLAGS"
+echo "CXXFLAGS=$CXXFLAGS"
+
+echo "build: ---------------------------------------------------------------"
+
+BUILD_CMD="bash -eux $SRC/build.sh"
+if [ "${BUILD_UID-0}" -ne "0" ]; then
+  adduser -u $BUILD_UID --disabled-password --gecos '' builder
+  chown -R builder $SRC $OUT $WORK
+  su -c "$BUILD_CMD" builder
+else
+  $BUILD_CMD
+fi
+
+
+if [ $DO_POSTPROCESS -eq 1 ]; then
+
+  if [ $(grep -Ev "^$" $TMP_DIR/Ftargets.txt | wc -l) -eq 0 ]; then
+    echo    "############################################################################"
+    echo -e "# \e[1;31mAborting ..\e[0m -- Ftargets.txt No changed source code <lines> in commit  of $PROJECT."
+    echo    "############################################################################"
+#    rm $OUT/*
+#    rm -rf $TMP_DIR
+    exit 1
+  fi
+
+  #Clean up. Ignore non-zero exit codes.
+#  set +eu
+#    rm -rf $WORK/$PROJECT
+#    pushd $SRC/$PROJECT >/dev/null
+#    make clean
+#    make distclean
+#    popd > /dev/null
+#  set -eu
+
+
+  #FILTER BBnames and Fnames
+  sleep 0.5
+  cat $TMP_DIR/BBnames.txt | rev | cut -d: -f2- | rev | sort | uniq > $TMP_DIR/BBnames2.txt && mv $TMP_DIR/BBnames2.txt $TMP_DIR/BBnames.txt
+  cat $TMP_DIR/BBcalls.txt | sort | uniq > $TMP_DIR/BBcalls2.txt && mv $TMP_DIR/BBcalls2.txt $TMP_DIR/BBcalls.txt
+
+  echo "genDistance :---------------------------------------------------------------"
+#  $SRC/aflgo/scripts/genDistance.sh $SUBJECT $TMP_DIR $FUZZER
+  echo "executor python3 $SRC/aflgo/scripts/gen_distance_fast.py $SUBJECT/$SOURCE_DIR $TMP_DIR $FUZZER"
+  python3 $SRC/aflgo/scripts/gen_distance_fast.py $SUBJECT/$SOURCE_DIR $TMP_DIR $FUZZER
+  echo "genDistance Finish :---------------------------------------------------------------"
+
+  #Clean up
+#  rm $OUT/*
+  cp $TMP_DIR/distance.cfg.txt $OUT
+#  rm -rf $TMP_DIR
+
+  export CFLAGS="$COPY_CFLAGS -distance=$OUT/distance.cfg.txt"
+  export CXXFLAGS="$COPY_CXXFLAGS -distance=$OUT/distance.cfg.txt"
+
+  if [ "${BUILD_UID-0}" -ne "0" ]; then
+    su -c "$BUILD_CMD" builder
+  else
+    $BUILD_CMD
+  fi
+
+fi
+
+
+
+echo "compile for gcc debug no instrument"
+mkdir -p $OUT/noinstrument
+export OUT=$OUT/noinstrument
+export CC=/usr/bin/gcc
+export CXX=/usr/bin/g++
+export CFLAGS="-g "
+export CXXFLAGS="-g "
+if [ "${BUILD_UID-0}" -ne "0" ]; then
+    su -c "$BUILD_CMD" builder
+else
+    $BUILD_CMD
+fi
+
+echo    "#######################################################"
+echo -e "# \e[1;32mSUCCESSFUL\e[0m"
+echo    "#######################################################"

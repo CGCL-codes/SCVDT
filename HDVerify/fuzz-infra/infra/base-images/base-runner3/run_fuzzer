@@ -1,0 +1,44 @@
+#!/bin/bash -eu
+# Copyright 2016 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+################################################################################
+
+# Fuzzer runner. Appends .options arguments and seed corpus to users args.
+# Usage: $0 <fuzzer_name> <fuzzer_args>
+
+export PATH=$OUT:$PATH
+export PATH=$WORK:$PATH
+#export AFL_NO_FORKSRV=1
+cd $OUT
+
+FUZZER=$1
+shift
+
+export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
+export AFL_SKIP_CPUFREQ=1
+
+
+    # https://chromium.googlesource.com/chromium/src/+/master/third_party/afl/src/docs/env_variables.txt
+  #  export ASAN_OPTIONS="$ASAN_OPTIONS:abort_on_error=1:symbolize=0"
+  #  export MSAN_OPTIONS="$MSAN_OPTIONS:exit_code=86:symbolize=0"
+  #  export UBSAN_OPTIONS="$UBSAN_OPTIONS:symbolize=0"
+banner="$PROCESSID"
+CMD_LINE="$SRC/aflgo/afl-fuzz $AFL_FUZZER_ARGS -T $banner -i $IN -o $OUT  $WORK/$FUZZER $@"
+
+
+
+echo $CMD_LINE
+echo "====start fuzzing ===="
+bash -c "$CMD_LINE"

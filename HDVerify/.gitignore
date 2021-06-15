@@ -1,0 +1,20 @@
+# vim
+*.swp
+*.swo
+
+# setup.py
+*.egg-info
+/dist
+/build
+/venv
+/.cache
+.idea
+
+# pytest
+.pytest_cache
+
+
+build/
+projects/
+out/
+.idea

@@ -1,0 +1,43 @@
+#!/bin/bash -eu
+# Copyright 2016 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+################################################################################
+
+
+# afl needs its special coverage flags
+export COVERAGE_FLAGS="-fsanitize-coverage=trace-pc-guard"
+
+echo ""
+echo "Checking out aflgo .."
+pushd $SRC >/dev/null
+#git clone  https://github.com/aflgo/aflgo.git
+#git clone  https://gitee.com/onecoderMan/aflgo11.git aflgo
+git clone https://gitee.com/onecoderMan/aflgo11-release.git aflgo
+cd aflgo
+#git checkout c9efa4f
+#git checkout cf5c7ab0eafead7f697e48e676ba6bab6c8d9958
+cd ..
+cd aflgo && CFLAGS="" CXXFLAGS="" make clean all
+cd llvm_mode && CFLAGS="" CXXFLAGS="" make clean all
+cd ..
+cd distance_calculator
+cmake -G Ninja ./
+cmake --build ./
+
+popd > /dev/null
+
+
+
+echo "compile done."
