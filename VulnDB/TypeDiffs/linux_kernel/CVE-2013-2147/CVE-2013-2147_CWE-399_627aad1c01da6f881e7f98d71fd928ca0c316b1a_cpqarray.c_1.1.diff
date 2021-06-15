@@ -1,0 +1,12 @@
+diff --git a/drivers/block/cpqarray.c b/drivers/block/cpqarray.c
+index 639d26b90b91..2b9440384536 100644
+--- a/drivers/block/cpqarray.c
++++ b/drivers/block/cpqarray.c
+@@ -1193,6 +1193,7 @@ static int ida_locked_ioctl(struct block_device *bdev, fmode_t mode, unsigned in
+ 		ida_pci_info_struct pciinfo;
+ 
+ 		if (!arg) return -EINVAL;
++		memset(&pciinfo, 0, sizeof(pciinfo));
+ 		pciinfo.bus = host->pci_dev->bus->number;
+ 		pciinfo.dev_fn = host->pci_dev->devfn;
+ 		pciinfo.board_id = host->board_id;

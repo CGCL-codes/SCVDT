@@ -1,0 +1,15 @@
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index bec88c81244e..72f402cc9c9a 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -161,6 +161,10 @@ static struct mempolicy *mpol_new(int mode, nodemask_t *nodes)
+ 	switch (mode) {
+ 	case MPOL_INTERLEAVE:
+ 		policy->v.nodes = *nodes;
++		if (nodes_weight(*nodes) == 0) {
++			kmem_cache_free(policy_cache, policy);
++			return ERR_PTR(-EINVAL);
++		}
+ 		break;
+ 	case MPOL_PREFERRED:
+ 		policy->v.preferred_node = first_node(*nodes);

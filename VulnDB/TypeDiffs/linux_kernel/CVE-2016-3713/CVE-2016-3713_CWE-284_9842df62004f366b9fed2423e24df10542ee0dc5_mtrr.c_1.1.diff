@@ -1,0 +1,13 @@
+diff --git a/arch/x86/kvm/mtrr.c b/arch/x86/kvm/mtrr.c
+index 3f8c732117ec..c146f3c262c3 100644
+--- a/arch/x86/kvm/mtrr.c
++++ b/arch/x86/kvm/mtrr.c
+@@ -44,8 +44,6 @@ static bool msr_mtrr_valid(unsigned msr)
+ 	case MSR_MTRRdefType:
+ 	case MSR_IA32_CR_PAT:
+ 		return true;
+-	case 0x2f8:
+-		return true;
+ 	}
+ 	return false;
+ }

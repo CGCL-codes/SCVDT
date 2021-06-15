@@ -1,0 +1,16 @@
+diff --git a/drivers/hid/hid-steelseries.c b/drivers/hid/hid-steelseries.c
+index d16491192112..29f328f411fb 100644
+--- a/drivers/hid/hid-steelseries.c
++++ b/drivers/hid/hid-steelseries.c
+@@ -249,6 +249,11 @@ static int steelseries_srws1_probe(struct hid_device *hdev,
+ 		goto err_free;
+ 	}
+ 
++	if (!hid_validate_values(hdev, HID_OUTPUT_REPORT, 0, 0, 16)) {
++		ret = -ENODEV;
++		goto err_free;
++	}
++
+ 	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
+ 	if (ret) {
+ 		hid_err(hdev, "hw start failed\n");

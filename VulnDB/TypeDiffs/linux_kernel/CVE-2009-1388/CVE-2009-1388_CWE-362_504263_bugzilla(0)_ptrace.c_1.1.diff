@@ -1,0 +1,18 @@
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -937,6 +937,15 @@ ptrace_start(long pid, long request,
+ 			__ptrace_state_free(state);
+ 			goto out_tsk;
+ 		}
++
++		task_lock(child);
++		if (child->mm && child->mm->core_waiters) {
++			task_unlock(child);
++			__ptrace_state_free(state);
++			goto out_tsk;
++		}
++		task_unlock(child);
++
+ 		/*
+ 		 * This is a dismal kludge, but it only comes up on ia64.
+ 		 * It might be blocked inside regset->writeback() called

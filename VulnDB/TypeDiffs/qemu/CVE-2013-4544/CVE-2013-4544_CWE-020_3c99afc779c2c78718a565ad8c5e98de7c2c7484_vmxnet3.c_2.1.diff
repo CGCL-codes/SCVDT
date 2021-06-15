@@ -1,0 +1,13 @@
+diff --git a/hw/net/vmxnet3.c b/hw/net/vmxnet3.c
+index 4fefc7bb49..a0723c057d 100644
+--- a/hw/net/vmxnet3.c
++++ b/hw/net/vmxnet3.c
+@@ -2391,6 +2391,8 @@ static int vmxnet3_post_load(void *opaque, int version_id)
+         }
+     }
+ 
++    vmxnet3_validate_interrupts(s);
++
+     return 0;
+ }
+ 

@@ -1,0 +1,12 @@
+diff -rup binutils-2.23.52.0.1.orig/bfd/ihex.c binutils-2.23.52.0.1/bfd/ihex.c
+--- binutils-2.23.52.0.1.orig/bfd/ihex.c	2015-06-26 16:42:28.555216948 +0100
++++ binutils-2.23.52.0.1/bfd/ihex.c	2015-06-26 16:51:34.466607406 +0100
+@@ -322,7 +322,7 @@ ihex_scan (bfd *abfd)
+ 	    {
+ 	      if (! ISHEX (buf[i]))
+ 		{
+-		  ihex_bad_byte (abfd, lineno, hdr[i], error);
++		  ihex_bad_byte (abfd, lineno, buf[i], error);
+ 		  goto error_return;
+ 		}
+ 	    }

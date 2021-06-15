@@ -1,0 +1,14 @@
+diff --git a/slirp/bootp.c b/slirp/bootp.c
+index 5a4646c182..5dd1a415b5 100644
+--- a/slirp/bootp.c
++++ b/slirp/bootp.c
+@@ -123,6 +123,9 @@ static void dhcp_decode(const struct bootp_t *bp, int *pmsg_type,
+             if (p >= p_end)
+                 break;
+             len = *p++;
++            if (p + len > p_end) {
++                break;
++            }
+             DPRINTF("dhcp: tag=%d len=%d\n", tag, len);
+ 
+             switch(tag) {

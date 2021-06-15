@@ -1,0 +1,14 @@
+diff --git a/mm/madvise.c b/mm/madvise.c
+index af3d573b0141..4e196155a0c3 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -168,6 +168,9 @@ static long madvise_remove(struct vm_area_struct *vma,
+ 			return -EINVAL;
+ 	}
+ 
++	if ((vma->vm_flags & (VM_SHARED|VM_WRITE)) != (VM_SHARED|VM_WRITE))
++		return -EACCES;
++
+ 	mapping = vma->vm_file->f_mapping;
+ 
+ 	offset = (loff_t)(start - vma->vm_start)

@@ -1,0 +1,14 @@
+diff --git a/drivers/block/floppy.c b/drivers/block/floppy.c
+index 48f622728ce6..f2b6f4da1034 100644
+--- a/drivers/block/floppy.c
++++ b/drivers/block/floppy.c
+@@ -3467,6 +3467,9 @@ static int fd_locked_ioctl(struct block_device *bdev, fmode_t mode, unsigned int
+ 					  (struct floppy_struct **)&outparam);
+ 		if (ret)
+ 			return ret;
++		memcpy(&inparam.g, outparam,
++				offsetof(struct floppy_struct, name));
++		outparam = &inparam.g;
+ 		break;
+ 	case FDMSGON:
+ 		UDP->flags |= FTD_MSG;

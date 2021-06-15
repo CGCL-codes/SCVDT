@@ -1,0 +1,14 @@
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index cf917139de6b..8c9369151e9f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3504,6 +3504,9 @@ static void kvm_steal_time_set_preempted(struct kvm_vcpu *vcpu)
+ 	if (!(vcpu->arch.st.msr_val & KVM_MSR_ENABLED))
+ 		return;
+ 
++	if (vcpu->arch.st.steal.preempted)
++		return;
++
+ 	vcpu->arch.st.steal.preempted = KVM_VCPU_PREEMPTED;
+ 
+ 	kvm_write_guest_offset_cached(vcpu->kvm, &vcpu->arch.st.stime,

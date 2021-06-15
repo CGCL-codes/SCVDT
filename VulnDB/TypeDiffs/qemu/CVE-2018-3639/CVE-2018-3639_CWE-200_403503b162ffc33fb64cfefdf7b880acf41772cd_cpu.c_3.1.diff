@@ -1,0 +1,13 @@
+diff --git a/target/i386/cpu.c b/target/i386/cpu.c
+index a1185b17d1..d95310ffd4 100644
+--- a/target/i386/cpu.c
++++ b/target/i386/cpu.c
+@@ -836,7 +836,7 @@ static FeatureWordInfo feature_word_info[FEATURE_WORDS] = {
+             "ibpb", NULL, NULL, NULL,
+             NULL, NULL, NULL, NULL,
+             NULL, NULL, NULL, NULL,
+-            NULL, NULL, NULL, NULL,
++            NULL, "virt-ssbd", NULL, NULL,
+             NULL, NULL, NULL, NULL,
+         },
+         .cpuid_eax = 0x80000008,

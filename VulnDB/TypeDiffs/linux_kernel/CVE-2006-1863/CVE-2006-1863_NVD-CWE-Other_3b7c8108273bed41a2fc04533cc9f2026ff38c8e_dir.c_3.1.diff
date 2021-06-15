@@ -1,0 +1,16 @@
+diff --git a/fs/smbfs/dir.c b/fs/smbfs/dir.c
+index 34c7a11d91f0..70d9c5a37f5a 100644
+--- a/fs/smbfs/dir.c
++++ b/fs/smbfs/dir.c
+@@ -434,6 +434,11 @@ smb_lookup(struct inode *dir, struct dentry *dentry, struct nameidata *nd)
+ 	if (dentry->d_name.len > SMB_MAXNAMELEN)
+ 		goto out;
+ 
++	/* Do not allow lookup of names with backslashes in */
++	error = -EINVAL;
++	if (memchr(dentry->d_name.name, '\\', dentry->d_name.len))
++		goto out;
++
+ 	lock_kernel();
+ 	error = smb_proc_getattr(dentry, &finfo);
+ #ifdef SMBFS_PARANOIA

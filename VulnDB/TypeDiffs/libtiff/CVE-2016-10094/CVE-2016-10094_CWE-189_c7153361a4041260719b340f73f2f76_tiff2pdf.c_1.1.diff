@@ -1,0 +1,13 @@
+diff --git a/tools/tiff2pdf.c b/tools/tiff2pdf.c
+index 47d76298..db196e04 100644
+--- a/tools/tiff2pdf.c
++++ b/tools/tiff2pdf.c
+@@ -2895,7 +2895,7 @@ tsize_t t2p_readwrite_pdf_image_tile(T2P* t2p, TIFF* input, TIFF* output, ttile_
+ 				return(0);
+ 			}
+ 			if(TIFFGetField(input, TIFFTAG_JPEGTABLES, &count, &jpt) != 0) {
+-				if (count >= 4) {
++				if (count > 4) {
+                                         int retTIFFReadRawTile;
+                     /* Ignore EOI marker of JpegTables */
+ 					_TIFFmemcpy(buffer, jpt, count - 2);

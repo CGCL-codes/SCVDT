@@ -1,0 +1,13 @@
+diff --git a/security/keys/gc.c b/security/keys/gc.c
+index addf060399e0..9cb4fe4478a1 100644
+--- a/security/keys/gc.c
++++ b/security/keys/gc.c
+@@ -46,7 +46,7 @@ static unsigned long key_gc_flags;
+  * immediately unlinked.
+  */
+ struct key_type key_type_dead = {
+-	.name = "dead",
++	.name = ".dead",
+ };
+ 
+ /*

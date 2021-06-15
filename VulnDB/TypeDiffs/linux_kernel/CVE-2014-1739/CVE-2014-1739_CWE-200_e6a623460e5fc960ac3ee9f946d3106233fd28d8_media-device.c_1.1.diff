@@ -1,0 +1,12 @@
+diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
+index d5a7a135f75d..703560fa5e73 100644
+--- a/drivers/media/media-device.c
++++ b/drivers/media/media-device.c
+@@ -93,6 +93,7 @@ static long media_device_enum_entities(struct media_device *mdev,
+ 	struct media_entity *ent;
+ 	struct media_entity_desc u_ent;
+ 
++	memset(&u_ent, 0, sizeof(u_ent));
+ 	if (copy_from_user(&u_ent.id, &uent->id, sizeof(u_ent.id)))
+ 		return -EFAULT;
+ 

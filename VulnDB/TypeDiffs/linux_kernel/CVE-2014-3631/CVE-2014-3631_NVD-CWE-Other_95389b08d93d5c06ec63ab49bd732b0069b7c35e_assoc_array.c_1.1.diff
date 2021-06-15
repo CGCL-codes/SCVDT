@@ -1,0 +1,19 @@
+diff --git a/lib/assoc_array.c b/lib/assoc_array.c
+index ae146f0734eb..2404d03e251a 100644
+--- a/lib/assoc_array.c
++++ b/lib/assoc_array.c
+@@ -1723,11 +1723,13 @@ int assoc_array_gc(struct assoc_array *array,
+ 		shortcut = assoc_array_ptr_to_shortcut(ptr);
+ 		slot = shortcut->parent_slot;
+ 		cursor = shortcut->back_pointer;
++		if (!cursor)
++			goto gc_complete;
+ 	} else {
+ 		slot = node->parent_slot;
+ 		cursor = ptr;
+ 	}
+-	BUG_ON(!ptr);
++	BUG_ON(!cursor);
+ 	node = assoc_array_ptr_to_node(cursor);
+ 	slot++;
+ 	goto continue_node;

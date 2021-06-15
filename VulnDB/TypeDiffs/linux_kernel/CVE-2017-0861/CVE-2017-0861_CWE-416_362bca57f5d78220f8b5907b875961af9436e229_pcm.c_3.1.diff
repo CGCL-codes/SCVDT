@@ -1,0 +1,14 @@
+diff --git a/sound/core/pcm.c b/sound/core/pcm.c
+index 9070f277f8db..09ee8c6b9f75 100644
+--- a/sound/core/pcm.c
++++ b/sound/core/pcm.c
+@@ -153,7 +153,9 @@ static int snd_pcm_control_ioctl(struct snd_card *card,
+ 				err = -ENXIO;
+ 				goto _error;
+ 			}
++			mutex_lock(&pcm->open_mutex);
+ 			err = snd_pcm_info_user(substream, info);
++			mutex_unlock(&pcm->open_mutex);
+ 		_error:
+ 			mutex_unlock(&register_mutex);
+ 			return err;

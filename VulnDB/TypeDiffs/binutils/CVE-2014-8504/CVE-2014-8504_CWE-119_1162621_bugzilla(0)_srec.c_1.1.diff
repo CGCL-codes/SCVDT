@@ -1,0 +1,12 @@
+diff -rup binutils-2.23.52.0.1.orig/bfd/srec.c binutils-2.23.52.0.1/bfd/srec.c
+--- binutils-2.23.52.0.1.orig/bfd/srec.c	2015-06-26 16:42:28.563216999 +0100
++++ binutils-2.23.52.0.1/bfd/srec.c	2015-06-26 17:13:59.978902080 +0100
+@@ -454,7 +454,7 @@ srec_scan (bfd *abfd)
+ 	case 'S':
+ 	  {
+ 	    file_ptr pos;
+-	    char hdr[3];
++	    unsigned char hdr[3];
+ 	    unsigned int bytes;
+ 	    bfd_vma address;
+ 	    bfd_byte *data;

@@ -1,0 +1,13 @@
+diff --git a/kernel/sys.c b/kernel/sys.c
+index dbb3b9c7ea64..e236f98f7ec5 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -1983,7 +1983,7 @@ asmlinkage long sys_prctl(int option, unsigned long arg2, unsigned long arg3,
+ 			error = current->mm->dumpable;
+ 			break;
+ 		case PR_SET_DUMPABLE:
+-			if (arg2 < 0 || arg2 > 2) {
++			if (arg2 < 0 || arg2 > 1) {
+ 				error = -EINVAL;
+ 				break;
+ 			}

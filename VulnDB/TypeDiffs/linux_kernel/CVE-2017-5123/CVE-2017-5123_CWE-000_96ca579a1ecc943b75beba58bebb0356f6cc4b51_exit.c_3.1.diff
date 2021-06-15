@@ -1,0 +1,24 @@
+diff --git a/kernel/exit.c b/kernel/exit.c
+index f2cd53e92147..cf28528842bc 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -1610,6 +1610,9 @@ SYSCALL_DEFINE5(waitid, int, which, pid_t, upid, struct siginfo __user *,
+ 	if (!infop)
+ 		return err;
+ 
++	if (!access_ok(VERIFY_WRITE, infop, sizeof(*infop)))
++		goto Efault;
++
+ 	user_access_begin();
+ 	unsafe_put_user(signo, &infop->si_signo, Efault);
+ 	unsafe_put_user(0, &infop->si_errno, Efault);
+@@ -1735,6 +1738,9 @@ COMPAT_SYSCALL_DEFINE5(waitid,
+ 	if (!infop)
+ 		return err;
+ 
++	if (!access_ok(VERIFY_WRITE, infop, sizeof(*infop)))
++		goto Efault;
++
+ 	user_access_begin();
+ 	unsafe_put_user(signo, &infop->si_signo, Efault);
+ 	unsafe_put_user(0, &infop->si_errno, Efault);

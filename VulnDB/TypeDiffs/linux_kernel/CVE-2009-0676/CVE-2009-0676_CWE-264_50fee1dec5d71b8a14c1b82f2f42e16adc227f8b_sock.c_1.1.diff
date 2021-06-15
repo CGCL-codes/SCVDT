@@ -1,0 +1,13 @@
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 6e4f14d1ef81..5f97caa158e8 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -696,7 +696,7 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
+ 	if (len < 0)
+ 		return -EINVAL;
+ 
+-	v.val = 0;
++	memset(&v, 0, sizeof(v));
+ 
+ 	switch(optname) {
+ 	case SO_DEBUG:

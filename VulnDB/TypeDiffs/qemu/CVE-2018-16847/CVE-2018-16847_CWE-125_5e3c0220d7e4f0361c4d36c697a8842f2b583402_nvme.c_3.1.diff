@@ -1,0 +1,25 @@
+diff --git a/hw/block/nvme.c b/hw/block/nvme.c
+index 09d7c90259..d0226e7fdc 100644
+--- a/hw/block/nvme.c
++++ b/hw/block/nvme.c
+@@ -1175,6 +1175,10 @@ static void nvme_cmb_write(void *opaque, hwaddr addr, uint64_t data,
+     unsigned size)
+ {
+     NvmeCtrl *n = (NvmeCtrl *)opaque;
++
++    if (addr + size > NVME_CMBSZ_GETSIZE(n->bar.cmbsz)) {
++        return;
++    }
+     memcpy(&n->cmbuf[addr], &data, size);
+ }
+ 
+@@ -1183,6 +1187,9 @@ static uint64_t nvme_cmb_read(void *opaque, hwaddr addr, unsigned size)
+     uint64_t val;
+     NvmeCtrl *n = (NvmeCtrl *)opaque;
+ 
++    if (addr + size > NVME_CMBSZ_GETSIZE(n->bar.cmbsz)) {
++        return 0;
++    }
+     memcpy(&val, &n->cmbuf[addr], size);
+     return val;
+ }

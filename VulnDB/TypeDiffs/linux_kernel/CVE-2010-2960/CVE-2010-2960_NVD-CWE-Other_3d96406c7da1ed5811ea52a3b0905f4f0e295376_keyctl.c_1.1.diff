@@ -1,0 +1,14 @@
+diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
+index 3868c6700b58..60924f6a52db 100644
+--- a/security/keys/keyctl.c
++++ b/security/keys/keyctl.c
+@@ -1305,7 +1305,8 @@ long keyctl_session_to_parent(void)
+ 		goto not_permitted;
+ 
+ 	/* the keyrings must have the same UID */
+-	if (pcred->tgcred->session_keyring->uid != mycred->euid ||
++	if ((pcred->tgcred->session_keyring &&
++	     pcred->tgcred->session_keyring->uid != mycred->euid) ||
+ 	    mycred->tgcred->session_keyring->uid != mycred->euid)
+ 		goto not_permitted;
+ 

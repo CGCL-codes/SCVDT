@@ -1,0 +1,13 @@
+diff --git a/drivers/hid/hid-picolcd_core.c b/drivers/hid/hid-picolcd_core.c
+index b48092d0e139..acbb021065ec 100644
+--- a/drivers/hid/hid-picolcd_core.c
++++ b/drivers/hid/hid-picolcd_core.c
+@@ -290,7 +290,7 @@ static ssize_t picolcd_operation_mode_store(struct device *dev,
+ 		buf += 10;
+ 		cnt -= 10;
+ 	}
+-	if (!report)
++	if (!report || report->maxfield != 1)
+ 		return -EINVAL;
+ 
+ 	while (cnt > 0 && (buf[cnt-1] == '\n' || buf[cnt-1] == '\r'))

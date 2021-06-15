@@ -1,0 +1,13 @@
+diff --git a/security/keys/process_keys.c b/security/keys/process_keys.c
+index a571fad91010..42defae1e161 100644
+--- a/security/keys/process_keys.c
++++ b/security/keys/process_keys.c
+@@ -57,7 +57,7 @@ int install_user_keyrings(void)
+ 
+ 	kenter("%p{%u}", user, uid);
+ 
+-	if (user->uid_keyring) {
++	if (user->uid_keyring && user->session_keyring) {
+ 		kleave(" = 0 [exist]");
+ 		return 0;
+ 	}
