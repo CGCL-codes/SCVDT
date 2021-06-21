@@ -20,3 +20,7 @@ The vulnerable code database (VulnDB) is a database for vulnerability patch file
 # Function-level vulnerability samples
 `FuncSamples.zip` is a collection of vulnerable function-level sample files and non-vulnerable function-level sample files. A file that ends with `.OLD` represents the vulnerable function-level sample file. A file that ends with `.NEW` represents the non-vulnerable function-level sample file.
 
+# Vuldeepecker: A deep learning-based system for vulnerability detection
+Z. Li, D. Zou, S. Xu, X. Ou, H. Jin, S. Wang, Z. Deng, and Y. Zhong, “Vuldeepecker: A deep learning-based system for vulnerability detection,” in Proceedings of the 25th Annual Network and Distributed System Security Symposium (NDSS), San Diego, California, USA, February 18-21, 2018. The Internet Society, 2018. https://arxiv.org/abs/1801.01681.
+
+This paper does deep learning based on the dataset.
